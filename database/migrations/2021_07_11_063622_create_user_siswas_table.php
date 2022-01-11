@@ -20,7 +20,7 @@ class CreateUserSiswasTable extends Migration
             $table->integer('master_kelas_id')->unsigned();
             $table->string('nisn',10)->nullable();
             $table->string('nama_wali')->nullable();
-            $table->string('telp_wali',14)->nullable();
+            $table->string('email_wali')->nullable();
             $table->timestamps();
         });
     }

@@ -22,7 +22,7 @@ class UserSiswa extends Model
         'master_kelas_id',
         'nisn',
         'nama_wali',
-        'telp_wali',
+        'email_wali',
     ];
 
     public function users()
@@ -33,5 +33,10 @@ class UserSiswa extends Model
     public function kelas()
     {
     	return $this->belongsTo('App\MasterKelas');
+    }
+
+    public function nilai_ujians()
+    {
+    	return $this->hasMany('App\NilaiUjian');
     }
 }

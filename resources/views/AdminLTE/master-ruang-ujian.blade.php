@@ -95,7 +95,7 @@
       <div class="col-12">
         <div class="card">
           
-          <div class="card-header border-0">
+          <div class="card-header">
             <h3 class="card-title"><b>{{'List Ruang Ujian'}}</b></h3>
 
             <div class="card-tools">
@@ -127,11 +127,9 @@
                   <input type="hidden" id="status_guru" value="1">
                   <th style="width: 1%;">Sekolah</th>
                   @endif
-                  <th style="width: 25%;">Ruang Ujian</th>
-                  <th style="width: 25%;">Nama {{$text ?? ""}}</th>
-                  <th style="width: 25%;">Nama Paket Soal</th>
-                  <th style="width: 18%;">Pelaksanaan</th>
-                  <th style="width: 6%; text-align: center;">Aksi</th>
+                  <th style="width: 55%;">Detail Ruang Ujian</th>
+                  <th style="width: 32%;">Pelaksanaan</th>
+                  <th style="width: 7%; text-align: center;">Aksi</th>
                 </tr>
               </thead>
               <tbody>
@@ -151,7 +149,25 @@
                   @if (Auth::user()->hasRole('guru') or Auth::user()->hasRole('siswa'))
                   <td>{{$ruang_ujian->nama}}</td>
                   @endif
-                  <td>{{$ruang_ujian->ruang_ujian}}<br>
+                  <td>
+                    {{$ruang_ujian->ruang_ujian}}<small><b>{{'  (Mata Pelajaran: '.ucwords($ruang_ujian->mapel).')'}}</b></small><br>
+                    {{'Tahun Ajaran '.$ruang_ujian->tahun_awal.'/'.$ruang_ujian->tahun_akhir.' -  Semester '.ucwords($ruang_ujian->semester)}}
+
+                    <!-- <b>{{$text.': '}}</b>{{$ruang_ujian->deskripsi}}
+                    @if (Auth::user()->hasRole('adm_instansi') or Auth::user()->hasRole('guru'))
+                      <a href="{{route('kelas-program.show',$ruang_ujian->id_kelas_program)}}" class="ml-2 btn btn-xs bg-secondary shadow-sm" >Lihat {{$text ?? "siswa"}}</a>
+                    @endif <br> -->
+
+                    <!-- <b>Paket Soal: </b>{{$ruang_ujian->paket_soal}}
+                    @if (Auth::user()->hasRole('adm_instansi') || Auth::user()->hasRole('guru'))
+                      <a href="{{route('paket_soal.show',$ruang_ujian->id_master_paket_soal)}}" class="ml-2 btn btn-xs bg-secondary shadow-sm" >Lihat soal</a>
+                    @endif -->
+                  </td>
+
+                  <td>
+                    {{Carbon\Carbon::parse($ruang_ujian->waktu_mulai)->isoFormat('dddd, D MMMM Y')}}<small><b>{{' (Pukul: '.Carbon\Carbon::parse($ruang_ujian->waktu_mulai)->isoFormat('hh:mm').' WITA)'}}</b></small><br>
+
+                    <!-- <b>Waktu: </b>{{Carbon\Carbon::parse($ruang_ujian->waktu_mulai)->isoFormat('hh:mm').' WITA'.' - '.Carbon\Carbon::parse($ruang_ujian->waktu_selesai)->isoFormat('hh:mm').' WITA ('.$ruang_ujian->durasi.' menit)'}}<br> -->
                     @if(\Carbon\Carbon::now()->lt($ruang_ujian->waktu_mulai))
                       <span class="badge badge-warning">Ujian belum dimulai</span>
                     @elseif(\Carbon\Carbon::now()->gte($ruang_ujian->waktu_mulai) && \Carbon\Carbon::now()->lte($ruang_ujian->waktu_selesai))
@@ -159,25 +175,6 @@
                     @elseif(\Carbon\Carbon::now()->gt($ruang_ujian->waktu_selesai))
                       <span class="badge badge-danger">Ujian telah berakhir</span>
                     @endif
-                  </td>
-                  <td>
-                    @if (Auth::user()->hasRole('siswa'))
-                      <b>{{$text.' '.$ruang_ujian->deskripsi}}</b><br>
-                      {{$ruang_ujian->mapel}}
-                    @elseif (Auth::user()->hasRole('adm_instansi') or Auth::user()->hasRole('guru'))
-                      <b>{{$text.' '.$ruang_ujian->deskripsi}}</b>{{' ('.ucwords($ruang_ujian->mapel.')')}}<br>
-                      <a href="{{route('kelas-program.show',$ruang_ujian->id_kelas_program)}}" class="btn btn-xs bg-secondary shadow-sm" >Lihat {{$text ?? "siswa"}}</a>
-                    @endif
-                  </td>
-                  <td><b>{{$ruang_ujian->paket_soal}}</b><br>
-                    @if (Auth::user()->hasRole('siswa'))
-                      {{ucwords($ruang_ujian->mapel)}}<br>
-                    @elseif (Auth::user()->hasRole('adm_instansi') || Auth::user()->hasRole('guru'))
-                      <a href="{{route('paket_soal.show',$ruang_ujian->id_master_paket_soal)}}" class="btn btn-xs bg-secondary shadow-sm" >Lihat soal</a>
-                    @endif
-                  </td>
-                  <td>
-                    {{Carbon\Carbon::parse($ruang_ujian->waktu_mulai)->isoFormat('dddd, D MMMM Y')}}<br>{{Carbon\Carbon::parse($ruang_ujian->waktu_mulai)->isoFormat('hh:mm').' WITA ('.$ruang_ujian->durasi.' menit)'}}
                   </td>
                   <td style="text-align: center;">
                     @if (Auth::user()->hasRole('adm_instansi') || Auth::user()->hasRole('guru'))
@@ -209,7 +206,7 @@
       @if (Auth::user()->hasRole('adm_instansi'))
       <!-- Modal AddEdit Data -->
       <div class="modal fade" id="modal-default">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog">
           <div class="modal-content">
 
             <div class="modal-header">
@@ -244,29 +241,44 @@
                     <select id="kelas_program" class="form-control select2 @error('kelas_program') is-invalid @enderror" name="kelas_program" required>
                       <option value="" selected disabled>{{'Pilih '.strtolower($text).'nya ya'}}</option>
                       @foreach($kelas_programs as $kelas_program)
-                        @if($kelas_program->jurusan!=null) @php($tanda=' - ')
-                        @else @php($tanda=' ')
-                        @endif
-                        @if($kelas_program->materi!=null) @php($tandaa=' - ')
-                        @else @php($tandaa=' ')
-                        @endif
 
-                        <option {{old('kelas_program') =="$kelas_program->id" ? "selected" : ""}} value="{{$kelas_program->id_kelas_program}}">
-                        @if($tipe=='Lembaga Kursus')
-                          {{'Program '.$kelas_program->deskripsi.' ('.$kelas_program->kelas.' '.$kelas_program->tingkat.'/Sederajat)'.$tanda.ucwords($kelas_program->jurusan).' | '.ucwords($kelas_program->nama).$tandaa.ucwords($kelas_program->materi)}}
-                        @else
-                            {{'Kelas '.$kelas_program->deskripsi.' ('.$kelas_program->kelas.' '.$kelas_program->tingkat.'/Sederajat)'.$tanda.ucwords($kelas_program->jurusan).' | '.ucwords($kelas_program->nama).$tandaa.ucwords($kelas_program->materi)}}
-                        @endif
-                        </option>
+                        <option {{old('kelas_program') =="$kelas_program->id" ? "selected" : ""}} value="{{$kelas_program->id_kelas_program}}">{{$kelas_program->deskripsi}}</option>
+                          <!-- {{$kelas_program->kelas.' '.$kelas_program->tingkat.'/Sederajat '.$tanda.ucwords($kelas_program->jurusan).' | Mapel '.ucwords($kelas_program->nama).' - '}} -->
                       @endforeach
                     </select>
                   </div>
+
+                  <!-- Keterangan kelas/program -->
+                  @foreach($kelas_programs as $kelas_program)
+                  
+                  @if($kelas_program->jurusan!=null) @php($tanda=' - Jurusan ')
+                  @else @php($tanda='')
+                  @endif
+                  
+                  <div id="{{'ket_'.$kelas_program->id_kelas_program}}" class="ket_kelas_program form-group col-12 ml-1" style="margin-top:-10px;" hidden>
+                    <small><b>{{'Keterangan:'}}</b></small>
+                    <small>{{'Kelas '.$kelas_program->kelas.' '.$kelas_program->tingkat.'/sederajat'.$tanda.ucwords($kelas_program->jurusan).' | Mapel '.ucwords($kelas_program->nama)}}</small>
+                  </div>
+                  @endforeach
 
                   <!-- paket soal -->
                   <div class="form-group col-12">
                     <label>Paket Soal</label>
                     <select id="paket_soal" class="form-control select2 @error('paket_soal') is-invalid @enderror" name="paket_soal" required>
-                      <option value="" selected disabled>Pilih paket soalnya ya</option>
+                      <option value="" selected disabled>Pilih paket soal ya</option>
+                    </select>
+                  </div>
+
+                  <!-- tahun ajaran -->
+                  <div class="form-group col-12">
+                    <label>Tahun Ajaran</label>
+                    <select id="tahun_ajaran" class="form-control select2 @error('tahun_ajaran') is-invalid @enderror" name="tahun_ajaran" required>
+                      <option value="" selected disabled>Pilih tahun ajaran ya</option>
+                      @foreach($tahun_ajarans as $tahun_ajaran)
+                        <option {{old('tahun_ajaran') =="$tahun_ajaran->id" ? "selected" : ""}} value="{{$tahun_ajaran->id}}">
+                          {{'T.A. '.$tahun_ajaran->tahun_awal.'/'.$tahun_ajaran->tahun_akhir.' - Semester '.ucwords($tahun_ajaran->semester)}}
+                        </option>
+                      @endforeach
                     </select>
                   </div>
 
@@ -452,7 +464,8 @@
 
   // tampilkan paket soal
   $('#kelas_program').on('change', function () {
-
+    $(".ket_kelas_program").attr('hidden',true);
+    $("#ket_"+$(this).val()).attr('hidden',false);
     $.ajax({
       url: "{{ route('show.paket') }}",
       type:'POST',
@@ -466,10 +479,10 @@
         $("#paket_soal").append('<option value=""selected disabled>Pilih paket soalnya ya</option>');
         
         $.each(resultData,function(index,row){
-          // console.log('row'+row.deskripsi);
+          // console.log('id_master_paket_soal'+id_master_paket_soal);
 
           $("#paket_soal").append('<option value="'+row.id+'">'+row.deskripsi+'</option>');
-          $('#modal-default #paket_soal').val(id_master_paket_soal).change();
+          // $('#modal-default #paket_soal').val(id_master_paket_soal).change();
 
         })
 

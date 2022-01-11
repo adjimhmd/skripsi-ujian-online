@@ -98,7 +98,10 @@ class PaketSoalController extends Controller
             ->get();
             // return$paket_soals;
 
-        return view('AdminLTE/master-paket-soal', compact('nama_instansis','foto_profil','user_admin_instansis','last_update_paket', 'jumlah_paket', 'paket_soals','list_kelas','program_mapels','kelass','paket_soals'));
+        $jml_soals = PaketSoal::select('master_paket_soal_id', DB::raw('count(*) as total'))->groupBy('master_paket_soal_id')->get();
+        // return$jml_soals;
+
+        return view('AdminLTE/master-paket-soal', compact('nama_instansis','foto_profil','user_admin_instansis','last_update_paket', 'jumlah_paket', 'paket_soals','list_kelas','program_mapels','kelass','paket_soals','jml_soals'));
     }
 
     /**

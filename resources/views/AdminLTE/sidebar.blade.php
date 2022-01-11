@@ -122,9 +122,9 @@
           
           <li class="nav-item">
             <a href="{{ route('ruang-ujian.index') }}" class="nav-link {{ Route::currentRouteNamed('ruang-ujian.index') || Route::currentRouteNamed('ruang-ujian.show') ? 'active' : '' }}">
-              <i class="nav-icon fas fa-clipboard"></i>
+              <i class="nav-icon fas fa-tasks"></i>
               <p>
-                Jadwal Ujian
+                Ruang Ujian
               </p>
             </a>
           </li>
@@ -230,8 +230,8 @@
 
           <li class="nav-item">
             <a href="{{ route('ruang-ujian.index') }}" class="nav-link {{ Route::currentRouteNamed('ruang-ujian.index') || Route::currentRouteNamed('ruang-ujian.show') || Route::currentRouteNamed('hasil.ujian') ? 'active' : '' }}">
-              <i class="nav-icon fas fa-clipboard"></i>
-              <p>Jadwal Ujian</p>
+              <i class="nav-icon fas fa-tasks"></i>
+              <p>Ruang Ujian</p>
             </a>
           </li>
           
@@ -293,15 +293,22 @@
 
           <li class="nav-item">
             <a href="{{ route('paket_soal.index') }}" class="nav-link {{ Route::currentRouteNamed('paket_soal.index') || Route::currentRouteNamed('paket_soal.show') ? 'active' : '' }}">
-              <i class="nav-icon fas fa-book"></i>
+              <i class="nav-icon fas fa-folder-open"></i>
               <p>Paket Soal</p>
             </a>
           </li>
 
           <li class="nav-item">
             <a href="{{ route('ruang-ujian.index') }}" class="nav-link {{ Route::currentRouteNamed('ruang-ujian.index') || Route::currentRouteNamed('ruang-ujian.show') || Route::currentRouteNamed('hasil.ujian') ? 'active' : '' }}">
-              <i class="nav-icon fas fa-clipboard"></i>
-              <p>Jadwal Ujian</p>
+              <i class="nav-icon fas fa-tasks"></i>
+              <p>Ruang Ujian</p>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="{{ route('nilai-ujian.index') }}" class="nav-link {{ Route::currentRouteNamed('nilai-ujian.index') || Route::currentRouteNamed('nilai-ujian.show') || Route::currentRouteNamed('nilai-ujian.store') ? 'active' : '' }}">
+              <i class="nav-icon fas fa-file-alt"></i>
+              <p>Nilai Ujian</p>
             </a>
           </li>
 
@@ -347,14 +354,14 @@
               </p>
             </a>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a href="{{ route('home') }}" class="nav-link {{ Route::currentRouteNamed('home') ? 'active' : '' }}">
               <i class="nav-icon fas fa-home"></i>
               <p>
                 Beranda
               </p>
             </a>
-          </li>
+          </li> -->
 
           <!-- <li class="nav-item">
             <a href="{{ route('verifikasi.index') }}" class="nav-link {{ Route::currentRouteNamed('verifikasi.index') ? 'active' : '' }}">
@@ -365,14 +372,14 @@
             </a>
           </li> -->
 
-          <!-- <li class="nav-item">
+          <li class="nav-item">
             <a href="{{ route('master-tahun-ajaran.index') }}" class="nav-link {{ Route::currentRouteNamed('master-tahun-ajaran.index') || Route::currentRouteNamed('master-tahun-ajaran.edit') ? 'active' : '' }}">
-              <i class="nav-icon fas fa-sort-numeric-up-alt"></i>
+              <i class="nav-icon fas fa-sitemap"></i>
               <p>
                 Master Tahun Ajaran
               </p>
             </a>
-          </li> -->
+          </li>
 
           <li class="nav-item">
             <a href="{{ route('master-mapel.index') }}" class="nav-link {{ Route::currentRouteNamed('master-mapel.index') || Route::currentRouteNamed('master-mapel.edit') ? 'active' : '' }}">
@@ -383,14 +390,14 @@
             </a>
           </li>
 
-          <!-- <li class="nav-item">
+          <li class="nav-item">
             <a href="{{ route('master-kelas.index') }}" class="nav-link {{ Route::currentRouteNamed('master-kelas.index') || Route::currentRouteNamed('master-kelas.edit') ? 'active' : '' }}">
               <i class="nav-icon fas fa-graduation-cap"></i>
               <p>
                 Master Kelas
               </p>
             </a>
-          </li> -->
+          </li>
           
           <li class="nav-item">
             <a href="{{ route('profile.index') }}" class="nav-link {{ Route::currentRouteNamed('profile.index') ? 'active' : '' }}">

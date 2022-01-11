@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class MasterTahunAjaran extends Model
+class NilaiUjian extends Model
 {
     use HasFactory;
     
-    protected $table = "master_tahun_ajarans";
+    protected $table = "nilai_ujians";
 
     /**
      * The attributes that are mass assignable.
@@ -17,13 +17,18 @@ class MasterTahunAjaran extends Model
      * @var array
      */
     protected $fillable = [
-        'tahun_awal',
-        'tahun_akhir',
-        'semester',
+        'master_ruang_ujian_id',
+        'user_siswa_id',
+        'total_nilai',
     ];
-    
+
     public function master_ruang_ujians()
     {
-    	return $this->hasMany('App\MasterRuangUjian');
+    	return $this->belongsTo('App\MasterRuangUjian');
+    }
+
+    public function user_siswas()
+    {
+    	return $this->belongsTo('App\UserSiswa');
     }
 }

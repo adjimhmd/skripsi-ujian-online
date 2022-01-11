@@ -19,6 +19,7 @@ class MasterRuangUjian extends Model
     protected $fillable = [
         'deskripsi',
         'master_paket_soal_id',
+        'master_tahun_ajaran_id',
         'kelas_program_id',
         'instansi_pendidikan_id',
         'durasi',
@@ -31,9 +32,29 @@ class MasterRuangUjian extends Model
     	return $this->belongsTo('App\MasterPaketSoal');
     }
 
+    public function master_tahun_ajarans()
+    {
+    	return $this->belongsTo('App\MasterTahunAjaran');
+    }
+
     public function kelas_programs()
     {
     	return $this->belongsTo('App\KelasProgram');
+    }
+
+    public function instansi_pendidikans()
+    {
+    	return $this->belongsTo('App\InstansiPendidikan');
+    }
+
+    public function detail_ujians()
+    {
+    	return $this->hasMany('App\DetailUjian');
+    }
+
+    public function nilai_ujians()
+    {
+    	return $this->hasMany('App\NilaiUjian');
     }
 
 }

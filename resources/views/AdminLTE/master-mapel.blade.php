@@ -68,115 +68,7 @@
     <!-- Row Form Input Program Mapel -->
     <div class="row mt-3 mb-2">
 
-      <div class="col-12 col-md-4">
-        <div class="card">
-          
-          <div class="card-header">
-            <h3 class="card-title"><b>{{'Tambah Mata Pelajaran'}}</b></h3>
-
-            <div class="card-tools">
-              <button type="button" class="btn btn-tool" data-card-widget="maximize">
-                <i class="fas fa-expand"></i>
-              </button>
-              <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                <i class="fas fa-minus"></i>
-              </button>
-            </div>
-            <!-- /.card-tools -->
-          
-          </div>
-          <!-- /.card-header -->
-          
-          <div class="card-body">
-            <form method="POST" action="{{ route('master-mapel.store') }}" enctype="multipart/form-data">
-              @csrf
-              <!-- form input -->
-              <div class="row">
-
-                <!-- Nama -->
-                <div class="form-group col-12">
-                  <label for="name">{{ __('Nama Mata Pelajaran') }}</label>
-                  <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus placeholder="Apa nama mapelnya?">
-
-                  @error('name')
-                      <span class="invalid-feedback" role="alert">
-                          <strong>{{ $message }}</strong>
-                      </span>
-                  @enderror
-
-                </div>
-
-                <!-- Materi -->
-                <div class="form-group col-12">
-                  <label for="name">{{ __('Materi Mata Pelajaran') }}</label>
-                  <textarea id="materi" class="form-control @error('materi') is-invalid @enderror" name="materi" rows="2" autocomplete="materi" autofocus placeholder="Materinya apa ya (opsional)">{{ old('materi') }}</textarea>
-
-                  @error('materi')
-                      <span class="invalid-feedback" role="alert">
-                          <strong>{{ $message }}</strong>
-                      </span>
-                  @enderror
-                </div>
-
-                <!-- button  -->
-                <div class="form-group col-12">
-                  <button id="submit" type="submit" class="btn bg-purple btn-block">Simpan Data</button>
-                </div>
-
-              </div>
-
-            </form>
-          </div>
-          <!-- /.card-body -->
-
-        </div>
-        <!-- /.card -->
-        
-        <!-- <div class="card">
-          
-          <div class="card-header">
-            <h3 class="card-title"><b>{{'Impor Mata Pelajaran'}}</b></h3>
-
-            <div class="card-tools">
-              <button type="button" class="btn btn-tool" data-card-widget="maximize">
-                <i class="fas fa-expand"></i>
-              </button>
-              <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                <i class="fas fa-minus"></i>
-              </button>
-            </div>
-          
-          </div>
-          
-          <div class="card-body">
-            <form method="POST" action="{{ route('master-mapel.store') }}" enctype="multipart/form-data">
-              @csrf
-              <div class="row">
-
-                <div class="form-group col-12">
-                  <input id="file_impor" type="file" class="form-control @error('file_impor') is-invalid @enderror" name="file_impor" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" onchange="loadFile(event)" value="{{ old('file_impor') }}" required autocomplete="file_impor" autofocus>
-
-                  @error('file_impor')
-                      <span class="invalid-feedback" role="alert">
-                          <strong>{{ $message }}</strong>
-                      </span>
-                  @enderror
-
-                </div>
-
-                <div class="form-group col-12">
-                  <button id="submit" type="submit" class="btn bg-purple btn-block">Impor Data</button>
-                </div>
-
-              </div>
-
-            </form>
-          </div>
-
-        </div> -->
-      </div>
-
-      <div class="col-12 col-md-8">
+      <div class="col-12 col-md-12">
         <div class="card">
           
           <div class="card-header">
@@ -196,12 +88,17 @@
           <!-- /.card-header -->
           
           <div class="card-body">
+            
+            <div class="row mb-4">
+              <button type="button" class="btn bg-purple shadow-sm" data-toggle="modal" data-target="#modal-default">Tambah Mata Pelajaran</button>
+            </div>
+
             <table id="example2" class="table table-bordered table-hover" style="table-layout: fixed">
               <thead>
                 <tr>
-                  <th style="width: 8%; text-align: center;">NO</th>
+                  <th style="width: 5%; text-align: center;">NO</th>
                   <th style="width: 70%; text-align: center;">MATA PELAJARAN</th>
-                  <th style="width: 17%; text-align: center;">AKSI</th>
+                  <th style="width: 15%; text-align: center;">AKSI</th>
                 </tr>
               </thead>
               <tbody>
@@ -218,11 +115,68 @@
                 @endforeach
               </tbody>
             </table>
+
+            <!-- Modal Add Data -->
+            <div class="modal fade" id="modal-default">
+              
+              <div class="modal-dialog">
+
+                <form method="POST" action="{{ route('master-mapel.store') }}" enctype="multipart/form-data" autocomplete="off">
+                  @csrf
+                  <div class="modal-content">
+
+                    <div class="modal-header">
+                      <h4 class="modal-title">{{'Buat Mata Pelajaran'}}</h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+
+                    <div class="modal-body">
+                      
+                      <!-- form Add -->
+                      <div class="row">
+
+                        <!-- Tahun Awal -->
+                        <div class="form-group col-12">
+                          <label for="name">{{ __('Nama Mata Pelajaran') }}</label>
+                          
+                          <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required placeholder="Apa nama mapelnya?">
+
+                          @error('name')
+                            <script type="text/javascript">
+                              $( document ).ready(function() {
+                                  $('#modal-default').modal('show');
+                              });
+                            </script>
+
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                          @enderror
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                    <div class="modal-footer justify-content-between">
+                      <button id="submit" type="submit" class="btn bg-purple btn-block">Simpan Data</button>
+                    </div>
+
+                  </div>
+                  <!-- /.modal-content -->
+                </form>
+
+              </div>
+              <!-- /.modal-dialog -->
+
+            </div>
             
             <!-- Modal Edit Data -->
             <div class="modal fade" id="modal_edit">
               <div class="modal-dialog">
-                <form id="programMapelData">
+                <form id="programMapelData" autocomplete="off">
                   <div class="modal-content">
 
                     <div class="modal-header">
@@ -243,18 +197,14 @@
 
                           <label for="name">{{ __('Nama Mata Pelajaran') }}</label>
                           
-                          <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus placeholder="Apa nama mapelnya?">
+                          <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required placeholder="Apa nama mapelnya?">
 
-                          @error('name')
-                              <span class="invalid-feedback" role="alert">
-                                  <strong>{{ $message }}</strong>
-                              </span>
-                          @enderror
+                          <span id="err_name" class="text-danger" role="alert"></span>
 
                         </div>
 
                         <!-- Materi -->
-                        <div class="form-group col-12">
+                        <!-- <div class="form-group col-12">
                           <label for="name">{{ __('Materi Mata Pelajaran') }}</label>
                           <textarea id="materi" class="form-control @error('materi') is-invalid @enderror" name="materi" rows="2" autocomplete="materi" autofocus placeholder="Materinya apa ya">{{ old('materi') }}</textarea>
 
@@ -263,7 +213,7 @@
                                   <strong>{{ $message }}</strong>
                               </span>
                           @enderror
-                        </div>
+                        </div> -->
 
                       </div>
 
@@ -384,10 +334,14 @@
           },
           dataType: 'json',
           success: function (data) {
-              
+            if($.isEmptyObject(data.error)){
               $('#programMapelData').trigger("reset");
               $('#modal_edit').modal('hide');
               window.location.href = '/master-mapel'
+            }
+            else{
+              $("#err_name").html("<small><strong>" + data.error.nama[0] + "</strong></small>");
+            }
           }
       });
     });

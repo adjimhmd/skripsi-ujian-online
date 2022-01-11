@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\UserAdminInstansi;
 use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class MasterMapelController extends Controller
 {
@@ -75,7 +76,7 @@ class MasterMapelController extends Controller
     {
         // return $request;
         $request->validate([
-            'name' => ['string','max:50'],
+            'name' => ['string','max:50','unique:App\Models\MasterMapel,nama'],
             'materi' => ['max:100'],
             'file_impor' => ['mimes:xls,xlsx,csv|max:1024'],
         ]);
@@ -129,16 +130,33 @@ class MasterMapelController extends Controller
     {
         //
         // dd($request);
-        $mapel = MasterMapel::find($id);
 
-        $mapel->update([
-            'nama' => strtolower($request->input('nama')),
-            'materi' => strtolower($request->input('materi')),
-        ]); 
+        // Setup the validator
+        $validator = Validator::make($request->all(), [
+            'nama' => ['string','max:50','unique:App\Models\MasterMapel,nama']
+        ]);
 
-        $request->session()->flash('success', 'Mata pelajaran '.ucwords($mapel->nama).' - Materi '.ucwords($mapel->materi).' berhasil diperbarui!');
         
-        return response()->json([ 'success' => true ]);
+        // Validate the input and return correct response
+        if ($validator->fails())
+        {
+            return response()->json(['error'=>$validator->errors()]);
+        }
+        else{
+            $mapel = MasterMapel::find($id);
+
+            $mapel->update([
+                'nama' => strtolower($request->input('nama')),
+                'materi' => strtolower($request->input('materi')),
+            ]); 
+
+            $request->session()->flash('success', 'Mata pelajaran '.ucwords($mapel->nama).' berhasil diperbarui!');
+            
+            return response()->json(['success'=>'Added new records.']);
+        }
+
+        
+        // return response()->json([ 'success' => true ]);
     }
 
     /**

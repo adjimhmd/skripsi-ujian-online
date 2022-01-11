@@ -49,7 +49,7 @@
       @if(Session::has($key))
       <div class="row mt-2 mb-2">
         <div class="col-12 col-md-12">
-          <div class="alert alert-{{ $key }} alert-dismissible">
+          <div class="alert alert-default-{{ $key }} alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             <div style="justify-content:flex-start; display: flex;">
 
@@ -70,11 +70,11 @@
     <!-- Row Form Input Program Mapel -->
     <div class="row mt-3 mb-2">
 
-      <div class="col-12 col-md-4">
+      <div class="col-12 col-md-12">
         <div class="card">
           
           <div class="card-header">
-            <h3 class="card-title"><b>{{'Tambah Tahun Ajaran'}}</b></h3>
+            <h3 class="card-title"><b>{{'Data Tahun Ajaran'}}</b></h3>
 
             <div class="card-tools">
               <button type="button" class="btn btn-tool" data-card-widget="maximize">
@@ -90,143 +90,18 @@
           <!-- /.card-header -->
           
           <div class="card-body">
-            <form method="POST" action="{{ route('master-tahun-ajaran.store') }}" enctype="multipart/form-data">
-              @csrf
-              <!-- form input -->
-              <div class="row">
-                
-                <!-- Tahun Awal -->
-                <div class="form-group col-6">
-                  <label>Tahun Awal</label>
-                  <div class="input-group date" id="tanggalawal" data-target-input="nearest">
-                      <input id="tanggal_awal" name="tanggal_awal" value="{{ old('tanggal_awal') }}" required autocomplete="tanggal_awal" autofocus placeholder="Tahun awal" type="number" class="form-control @error('tanggal_awal') is-invalid @enderror datetimepicker-input" data-target="#tanggalawal" data-toggle="datetimepicker"/>
-                  </div>
-                  @error('tanggal_awal')
-                    <span class="text-danger" role="alert">
-                      <small><strong>{{ $message }}</strong></small>
-                    </span>
-                  @enderror
-                </div>
-                
-                <!-- Tahun Akhir -->
-                <div class="form-group col-6">
-                  <label>Tahun Akhir</label>
-                  <div class="input-group date" id="tanggalakhir" data-target-input="nearest">
-                      <input id="tanggal_akhir" name="tanggal_akhir" value="{{ old('tanggal_akhir') }}" required autocomplete="tanggal_akhir" autofocus placeholder="Tahun awal" type="number" class="form-control @error('tanggal_akhir') is-invalid @enderror datetimepicker-input" data-target="#tanggalakhir" data-toggle="datetimepicker"/>
-                  </div>
-                  @error('tanggal_akhir')
-                    <span class="text-danger" role="alert">
-                      <small><strong>{{ $message }}</strong></small>
-                    </span>
-                  @enderror
-                  <!-- /.input group -->
-                </div>
-
-                
-                <!-- Jurusan -->
-                <div class="form-group col-12">
-                  <label for="semester">{{ __('Semester') }}</label>
-
-                  <select id="semester" class="form-control select2 @error('semester') is-invalid @enderror" name="semester" required autofocus>
-                    @php ($list_semester = ['Ganjil','Genap'])
-                    <option value="" selected disabled>Pilih semesternya ya</option>
-                    @foreach($list_semester as $select_semester)
-                        <option {{old('semester') =="$select_semester" ? "selected" : ""}} value="{{$select_semester}}">{{$select_semester}}</option>
-                    @endforeach
-                  </select>
-                </div>
-
-                <!-- button  -->
-                <div class="form-group col-12">
-                  <button id="submit" type="submit" class="btn bg-purple btn-block">Simpan Data</button>
-                </div>
-
-              </div>
-
-            </form>
-          </div>
-          <!-- /.card-body -->
-
-        </div>
-        <!-- /.card -->
-        
-        <div class="card">
-          
-          <div class="card-header">
-            <h3 class="card-title"><b>{{'Impor Kelas'}}</b></h3>
-
-            <div class="card-tools">
-              <button type="button" class="btn btn-tool" data-card-widget="maximize">
-                <i class="fas fa-expand"></i>
-              </button>
-              <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                <i class="fas fa-minus"></i>
-              </button>
+            
+            <div class="row mb-4">
+              <button type="button" class="btn bg-purple shadow-sm" data-toggle="modal" data-target="#modal-default">Tambah Tahun Ajaran</button>
             </div>
-            <!-- /.card-tools -->
-          
-          </div>
-          <!-- /.card-header -->
-          
-          <div class="card-body">
-            <form method="POST" action="{{ route('master-tahun-ajaran.store') }}" enctype="multipart/form-data">
-              @csrf
-              <!-- form input -->
-              <div class="row">
-
-                <!-- Impor -->
-                <div class="form-group col-12">
-                  <input id="file_impor" type="file" class="form-control @error('file_impor') is-invalid @enderror" name="file_impor" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" onchange="loadFile(event)" value="{{ old('file_impor') }}" required autocomplete="file_impor" autofocus>
-
-                  @error('file_impor')
-                      <span class="invalid-feedback" role="alert">
-                          <strong>{{ $message }}</strong>
-                      </span>
-                  @enderror
-
-                </div>
-
-                <!-- button  -->
-                <div class="form-group col-12">
-                  <button id="submit" type="submit" class="btn bg-purple btn-block">Impor Data</button>
-                </div>
-
-              </div>
-
-            </form>
-          </div>
-          <!-- /.card-body -->
-
-        </div>
-        <!-- /.card -->
-      </div>
-
-      <div class="col-12 col-md-8">
-        <div class="card">
-          
-          <div class="card-header">
-            <h3 class="card-title"><b>{{'Data Kelas'}}</b></h3>
-
-            <div class="card-tools">
-              <button type="button" class="btn btn-tool" data-card-widget="maximize">
-                <i class="fas fa-expand"></i>
-              </button>
-              <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                <i class="fas fa-minus"></i>
-              </button>
-            </div>
-            <!-- /.card-tools -->
-          
-          </div>
-          <!-- /.card-header -->
-          
-          <div class="card-body">
+            
             <table id="example3" class="table table-bordered table-hover" style="table-layout: fixed">
               <thead>
                 <tr>
-                  <th style="width: 8%; text-align: center;">NO</th>
-                  <th style="width: 70%; text-align: center;">TAHUN AJARAN - SEMESTER</th>
-                  <th style="width: 22%; text-align: center;">AKSI</th>
+                  <th style="width: 5%; text-align: center;">NO</th>
+                  <th style="width: 45%; text-align: center;">TAHUN AJARAN</th>
+                  <th style="width: 35%; text-align: center;">SEMESTER</th>
+                  <th style="width: 15%; text-align: center;">AKSI</th>
                 </tr>
               </thead>
               <tbody>
@@ -234,7 +109,8 @@
                 @foreach($tahun_ajarans as $tahun_ajaran)
                 <tr>
                   <td style="text-align: center;">{{$no++}}</td>
-                  <td><strong>{{'TA. '.$tahun_ajaran->tahun_awal.'/'.$tahun_ajaran->tahun_akhir.' - Semester '.ucwords($tahun_ajaran->semester)}}</strong></td>
+                  <td style="text-align: center;">{{'Tahun Ajaran '.$tahun_ajaran->tahun_awal.'/'.$tahun_ajaran->tahun_akhir}}</td>
+                  <td style="text-align: center;">{{'Semester '.ucwords($tahun_ajaran->semester)}}</td>
                   <td style="text-align: center;">
                     <a href="" class="btn btn-warning btn-sm" id="editProgramMapel" data-toggle="modal" data-id="{{ $tahun_ajaran->id }}">Edit</a>
                     <button onclick="return false" id="delete_kelas" class="btn btn-sm bg-maroon"data-id="{{ $tahun_ajaran->id }}">Delete</button>
@@ -244,9 +120,109 @@
               </tbody>
             </table>
             
+
+            <!-- Modal Add Data -->
+            <div class="modal fade" id="modal-default">
+              
+              <div class="modal-dialog">
+
+                <form method="POST" action="{{ route('master-tahun-ajaran.store') }}" enctype="multipart/form-data" autocomplete="off">
+                  @csrf
+                  <div class="modal-content">
+
+                    <div class="modal-header">
+                      <h4 class="modal-title">{{'Buat Tahun Ajaran'}}</h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+
+                    <div class="modal-body">
+                      
+                      <!-- form Add -->
+                      <div class="row">
+
+                        <!-- Tahun Awal -->
+                        <div class="form-group col-6">
+                          <label>Tahun Awal</label>
+                          <div class="input-group date" id="tanggalawal2" data-target-input="nearest">
+                              <input id="tanggal_awal" name="tanggal_awal" value="{{ old('tanggal_awal') }}" required placeholder="Tahun awal" type="number" class="form-control @error('tanggal_awal') is-invalid @enderror datetimepicker-input" data-target="#tanggalawal2" data-toggle="datetimepicker"/>
+                          </div>
+                          @error('tanggal_awal')
+                            <span class="text-danger" role="alert">
+                              <small><strong>{{ $message }}</strong></small>
+                            </span>
+                          @enderror
+                        </div>
+                        
+                        <!-- Tahun Akhir -->
+                        <div class="form-group col-6">
+                          <label>Tahun Akhir</label>
+                          <div class="input-group date" id="tanggalakhir2" data-target-input="nearest">
+                              <input id="tanggal_akhir" name="tanggal_akhir" value="{{ old('tanggal_akhir') }}" required placeholder="Tahun akhir" type="number" class="form-control @error('tanggal_akhir') is-invalid @enderror datetimepicker-input" data-target="#tanggalakhir2" data-toggle="datetimepicker"/>
+                          </div>
+
+                          @error('tanggal_akhir')
+                            <script type="text/javascript">
+                              $( document ).ready(function() {
+                                  $('#modal-default').modal('show');
+                              });
+                            </script>
+
+                            <span class="text-danger" role="alert">
+                              <small><strong>{{ $message }}</strong></small>
+                            </span>
+                          @enderror
+                          <!-- <span id="err_tahun_akhir" class="text-danger" role="alert"></span> -->
+                          <!-- /.input group -->
+                        </div>
+
+                        <!-- Semester -->
+                        <div class="form-group col-12">
+                          <label for="semester3">{{ __('Semester') }}</label>
+
+                          <select id="semester3" class="form-control select2 @error('semester') is-invalid @enderror" name="semester" required autofocus>
+                            @php ($list_semester = ['ganjil','genap'])
+                            <option value="" selected disabled>Pilih semesternya ya</option>
+                            @foreach($list_semester as $select_semester)
+                                <option {{old('semester') =="$select_semester" ? "selected" : ""}} value="{{$select_semester}}">{{ucwords($select_semester)}}</option>
+                            @endforeach
+                          </select>
+
+                          @error('semester')
+                            <script type="text/javascript">
+                              $( document ).ready(function() {
+                                  $('#modal-default').modal('show');
+                              });
+                            </script>
+
+                            <span class="text-danger" role="alert">
+                              <small><strong>Tahun ajaran & semester sudah ada!</strong></small>
+                            </span>
+                          @enderror
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                    <div class="modal-footer justify-content-between">
+                      <button id="submit" type="submit" class="btn bg-purple btn-block">Simpan Data</button>
+                    </div>
+
+                  </div>
+                  <!-- /.modal-content -->
+                </form>
+
+              </div>
+              <!-- /.modal-dialog -->
+
+            </div>
+
             <!-- Modal Edit Data -->
             <div class="modal fade" id="modal_edit">
               <div class="modal-dialog">
+
                 <form id="kelasData">
                   <div class="modal-content">
 
@@ -267,8 +243,8 @@
                         <!-- Tahun Awal -->
                         <div class="form-group col-6">
                           <label>Tahun Awal</label>
-                          <div class="input-group date" id="tanggalawal2" data-target-input="nearest">
-                              <input id="tanggal_awal" name="tanggal_awal" value="{{ old('tanggal_awal') }}" required autocomplete="tanggal_awal" autofocus placeholder="Tahun awal" type="number" class="form-control @error('tanggal_awal') is-invalid @enderror datetimepicker-input" data-target="#tanggalawal2" data-toggle="datetimepicker"/>
+                          <div class="input-group date" id="tanggalawal3" data-target-input="nearest">
+                              <input id="tanggal_awal" name="tanggal_awal" value="{{ old('tanggal_awal') }}" required autocomplete="tanggal_awal" autofocus placeholder="Tahun awal" type="number" class="form-control @error('tanggal_awal') is-invalid @enderror datetimepicker-input" data-target="#tanggalawal3" data-toggle="datetimepicker"/>
                           </div>
                           @error('tanggal_awal')
                             <span class="text-danger" role="alert">
@@ -280,9 +256,10 @@
                         <!-- Tahun Akhir -->
                         <div class="form-group col-6">
                           <label>Tahun Akhir</label>
-                          <div class="input-group date" id="tanggalakhir2" data-target-input="nearest">
-                              <input id="tanggal_akhir" name="tanggal_akhir" value="{{ old('tanggal_akhir') }}" required autocomplete="tanggal_akhir" autofocus placeholder="Tahun awal" type="number" class="form-control @error('tanggal_akhir') is-invalid @enderror datetimepicker-input" data-target="#tanggalakhir2" data-toggle="datetimepicker"/>
+                          <div class="input-group date" id="tanggalakhir3" data-target-input="nearest">
+                              <input id="tanggal_akhir" name="tanggal_akhir" value="{{ old('tanggal_akhir') }}" required autocomplete="tanggal_akhir" autofocus placeholder="Tahun akhir" type="number" class="form-control @error('tanggal_akhir') is-invalid @enderror datetimepicker-input" data-target="#tanggalakhir3" data-toggle="datetimepicker"/>
                           </div>
+
                           <span id="err_tahun_akhir" class="text-danger" role="alert"></span>
                           <!-- /.input group -->
                         </div>
@@ -299,6 +276,9 @@
                                 <option {{old('semester2') =="$select_semester" ? "selected" : ""}} value="{{$select_semester}}">{{ucwords($select_semester)}}</option>
                             @endforeach
                           </select>
+
+                          <span id="err_semester" class="text-danger" role="alert"></span>
+
                         </div>
 
                       </div>
@@ -312,6 +292,7 @@
                   </div>
                   <!-- /.modal-content -->
                 </form>
+
               </div>
               <!-- /.modal-dialog -->
             </div>
@@ -329,8 +310,7 @@
     <!-- /.row -->
 
   </div>
-
-
+              
 </section>
 <!-- /.content -->
 @endsection
@@ -350,8 +330,14 @@
       viewMode: "years", 
       minViewMode: "years"
   });
+  
+  $('#modal-default #tanggalawal2').datetimepicker({
+      format: "YYYY",
+      viewMode: "years", 
+      minViewMode: "years"
+  });
 
-  $('#modal_edit #tanggalawal2').datetimepicker({
+  $('#modal_edit #tanggalawal3').datetimepicker({
       format: "YYYY",
       viewMode: "years", 
       minViewMode: "years"
@@ -363,7 +349,13 @@
       minViewMode: "years"
   });
   
-  $('#modal_edit #tanggalakhir2').datetimepicker({
+  $('#modal-default #tanggalakhir2').datetimepicker({
+      format: "YYYY",
+      viewMode: "years", 
+      minViewMode: "years"
+  });
+  
+  $('#modal_edit #tanggalakhir3').datetimepicker({
       format: "YYYY",
       viewMode: "years", 
       minViewMode: "years"
@@ -462,7 +454,13 @@
               $('#kelasData').trigger("reset");
               $('#modal_edit').modal('hide');
               window.location.href = '/master-tahun-ajaran'  
-            }else{
+            }
+            else if($.isEmptyObject(data.error.tahun_akhir)){
+              $("#err_tahun_akhir").empty();
+              $("#err_semester").html("<small><strong>Tahun ajaran & semester sudah ada!</strong></small>");
+            }
+            else if($.isEmptyObject(data.error.semester)){
+              $("#err_semester").empty();
               $("#err_tahun_akhir").html("<small><strong>" + data.error.tahun_akhir[0] + "</strong></small>");
             }
           }

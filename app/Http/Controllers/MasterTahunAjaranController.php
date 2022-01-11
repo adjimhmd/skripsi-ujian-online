@@ -75,10 +75,22 @@ class MasterTahunAjaranController extends Controller
      */
     public function store(Request $request)
     {
-        // return $request;
+        // return $request->semester;
+        
+        $tahun_ajarans = MasterTahunAjaran::select('*')->get();
+
+        $hasil="beda";
+        foreach($tahun_ajarans as $ta){
+            if($ta->tahun_awal==$request->tanggal_awal && $ta->tahun_akhir==$request->tanggal_akhir && $ta->semester==$request->semester){
+                $hasil=$ta->semester;
+            }
+        }
+
+        // return$request->semester.'=='.$hasil;
         $tgl_awal=$request->tanggal_awal+1;
         $request->validate([
             'tanggal_akhir' => ['in:'.$tgl_awal],
+            'semester' => ['notIn:'.$hasil],
             'file_impor' => ['mimes:xls,xlsx,csv|max:1024'],
         ]);
         
@@ -132,10 +144,23 @@ class MasterTahunAjaranController extends Controller
     {
         //
         $tgl_awal=$request->input('tahun_awal')+1;
+        
+        $tahun_ajarans = MasterTahunAjaran::select('*')->get();
+
+        $hasil="beda";
+
+        foreach($tahun_ajarans as $ta){
+            if($ta->tahun_awal==$request->tahun_awal && $ta->tahun_akhir==$request->tahun_akhir && $ta->semester==$request->semester){
+                $hasil=$ta->semester;
+            }
+        // dump($request->tahun_awal.'=='.$ta->tahun_awal);
+        }
+
 
         // Setup the validator
         $validator = Validator::make($request->all(), [
             'tahun_akhir' => 'in:'.$tgl_awal,
+            'semester' => 'notIn:'.$hasil,
             'file_impor' => 'mimes:xls,xlsx,csv|max:1024'
         ]);
 

@@ -54,6 +54,9 @@ class HomeController extends Controller
             return redirect()->route('list-instansi.index');
             // return redirect()->route('list.kelas.program.guru');
         }
+        else if (Auth::user()->hasRole('adm_sistem')){
+            return redirect()->route('master-tahun-ajaran.index');
+        }
         else{
             return view('AdminLTE/app', compact('foto_profil','id','user_admin_instansis'));
         }

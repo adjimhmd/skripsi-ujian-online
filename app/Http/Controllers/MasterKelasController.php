@@ -8,6 +8,7 @@ use App\Models\MasterKelas;
 use App\Models\User;
 use App\Models\UserAdminInstansi;
 use Auth;
+use Illuminate\Support\Facades\Validator;
 
 class MasterKelasController extends Controller
 {
@@ -72,10 +73,11 @@ class MasterKelasController extends Controller
      */
     public function store(Request $request)
     {
-        //
         // return $request;
+        
         $request->validate([
             'file_impor' => ['mimes:xls,xlsx,csv|max:1024'],
+            'kelas' => 'unique:App\Models\MasterKelas,kelas',
         ]);
 
         if(empty($request->input('file_impor'))){
@@ -127,15 +129,33 @@ class MasterKelasController extends Controller
     {
         //
         // dd($request);
-        $kelas = MasterKelas::find($id);
 
-        $kelas->update([
-            'tingkat' => $request->input('tingkat'),
-            'kelas' => $request->input('kelas'),
-        ]); 
-        $request->session()->flash('success', 'Kelas '.$request->input('kelas').' '.$request->input('tingkat').' berhasil diperbarui!');
+        // Setup the validator
+        $validator = Validator::make($request->all(), [
+            'kelas' => 'required|unique:App\Models\MasterKelas,kelas',
+        ]);
+        
+        // Validate the input and return correct response
+        if ($validator->fails())
+        {
+            return response()->json(['error'=>$validator->errors()]);
+        }
+        else{
+            $kelas = MasterKelas::find($id);
 
-        return response()->json([ 'success' => true ]);
+            $kelas->update([
+                'tingkat' => $request->input('tingkat'),
+                'kelas' => $request->input('kelas'),
+            ]); 
+
+            $request->session()->flash('success', 'Kelas '.$request->input('kelas').' '.$request->input('tingkat').' berhasil diperbarui!');
+
+            return response()->json(['success'=>'Added new records.']);
+        }
+
+        
+
+        // return response()->json([ 'success' => true ]);
     }
 
     /**

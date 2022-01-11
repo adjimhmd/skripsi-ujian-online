@@ -59,6 +59,11 @@ Route::resource('master-kelas', App\Http\Controllers\MasterKelasController::clas
 Route::resource('master-tahun-ajaran', App\Http\Controllers\MasterTahunAjaranController::class)->middleware('role:adm_sistem');
 
 Route::resource('ruang-ujian', App\Http\Controllers\RuangUjianController::class)->middleware('role:adm_instansi|siswa|guru');
+
+Route::resource('nilai-ujian', App\Http\Controllers\NilaiUjianController::class)->middleware('role:adm_instansi');
+Route::post('email-nilai', [App\Http\Controllers\NilaiUjianController::class, 'email'])->name('email.nilai')->middleware('role:adm_instansi');
+Route::get('detail-nilai-ujian/{nilai}', [App\Http\Controllers\NilaiUjianController::class, 'detail_nilai_ujian'])->name('detail.nilai.ujian')->middleware('role:adm_instansi');
+
 Route::post('show_paket', [App\Http\Controllers\RuangUjianController::class, 'show_paket'])->name('show.paket')->middleware('role:adm_instansi');
 Route::post('ujian-siswa', [App\Http\Controllers\RuangUjianController::class, 'ujian_siswa'])->name('ujian.siswa')->middleware('role:siswa');
 Route::get('hasil-ujian/{hasil_ujian}', [App\Http\Controllers\RuangUjianController::class, 'hasil_ujian'])->name('hasil.ujian')->middleware('role:adm_instansi|guru');
@@ -87,3 +92,5 @@ Route::post('update_harga', [App\Http\Controllers\KelasProgramController::class,
 Route::resource('list-guru', App\Http\Controllers\ListGuruController::class)->middleware('role:adm_instansi');
 Route::get('daftar_guru', [App\Http\Controllers\ListGuruController::class, 'daftar_guru'])->name('daftar.guru')->middleware('role:adm_instansi');
 Route::post('simpan_guru', [App\Http\Controllers\ListGuruController::class, 'simpan_guru'])->name('simpan.guru')->middleware('role:adm_instansi');
+
+Route::get('/sendmail', 'App\Http\Controllers\EmailController@index');

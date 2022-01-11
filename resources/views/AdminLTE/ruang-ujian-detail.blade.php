@@ -39,7 +39,7 @@
         <div class="col-md-12">
 
           <div class="card">
-            <div class="card-header border-0">
+            <div class="card-header">
               <h3 class="card-title"><b>Hasil Ujian <small><i>({{$nama_siswa->name.' - NISN: '.$nama_siswa->nisn}})</i></small></b></h3>
 
               <div class="card-tools">
@@ -362,7 +362,7 @@
           <div class="card card-outline card-purple">
           
           <div class="card-header">
-            <h1 class="card-title"><strong>{{$master_ruang_ujian->deskripsi}}</strong><i>{{' ('.$master_ruang_ujian->instansi_pendidikan.')'}}</i></h1>
+            <h1 class="card-title"><strong>{{$master_ruang_ujian->deskripsi}}</strong><i>{{' (TA '.$master_ruang_ujian->tahun_awal.'/'.$master_ruang_ujian->tahun_akhir.' - Semester '.ucwords($master_ruang_ujian->semester).')'}}</i></h1>
           </div>
           <!-- /.card-header -->
           
@@ -374,8 +374,18 @@
               <div class="row">
                 
                 <div class="col-4">
-                  <h6><b>{{$text}}</b><br style="display: block; content: ''; margin-top: 0.2rem;">{{$master_ruang_ujian->kelas_program}}</h6>
-                  <h6><b>Paket Soal</b><br style="display: block; content: ''; margin-top: 0.2rem;">{{$master_ruang_ujian->master_paket_soal}}</h6>
+                  <h6>
+                    <b>{{$text}}</b><br style="display: block; content: ''; margin-top: 0.2rem;">{{$master_ruang_ujian->kelas_program}}
+                    @if (Auth::user()->hasRole('adm_instansi') or Auth::user()->hasRole('guru'))
+                      <a href="{{route('kelas-program.show',$master_ruang_ujian->kelas_program_id)}}" class="ml-1 btn btn-xs bg-secondary shadow-sm" >Lihat {{$text ?? "siswa"}}</a>
+                    @endif
+                  </h6>
+                  <h6>
+                    <b>Paket Soal</b><br style="display: block; content: ''; margin-top: 0.2rem;">{{$master_ruang_ujian->master_paket_soal}}
+                    @if (Auth::user()->hasRole('adm_instansi') || Auth::user()->hasRole('guru'))
+                      <a href="{{route('paket_soal.show',$master_ruang_ujian->master_paket_soal_id)}}" class="ml-1 btn btn-xs bg-secondary shadow-sm" >Lihat soal</a>
+                    @endif
+                  </h6>
                 </div>
 
                 <div class="col-4">

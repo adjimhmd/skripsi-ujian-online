@@ -207,9 +207,9 @@
                     <tr>
                       <td style="text-align: center;">{{$no++}}</td>
                       @if($siswa_kelas->foto==null)
-                        <td><img src="{{asset('AdminLTE/dist/img/default-150x150.png')}}" class='img-circle mr-3' alt='User Image' style='max-width:50px'>{{$siswa_kelas->name}}</td>
+                        <td><img src="{{asset('AdminLTE/dist/img/default-150x150.png')}}" class='img-circle mr-3' alt='User Image' style='max-width:35px'>{{$siswa_kelas->name}}</td>
                       @else
-                        <td><img src="{{'/'.$siswa_kelas->foto}}" class='img-circle mr-3' alt='User Image' style='max-width:50px'>{{$siswa_kelas->name}}</td>
+                        <td><img src="{{'/'.$siswa_kelas->foto}}" class='img-circle mr-3' alt='User Image' style='max-width:35px'>{{$siswa_kelas->name}}</td>
                       @endif
                       <td style="text-align: center;">{{$siswa_kelas->nisn}}</td>
                       <td style="text-align: center;">
@@ -288,9 +288,9 @@
                     <tr>
                       <td style="text-align: center;">{{$no++}}</td>
                       @if($siswa_permintaan->foto==null)
-                        <td><img src="{{asset('AdminLTE/dist/img/default-150x150.png')}}" class='img-circle mr-3' alt='User Image' style='max-width:50px'>{{$siswa_permintaan->name}}</td>
+                        <td><img src="{{asset('AdminLTE/dist/img/default-150x150.png')}}" class='img-circle mr-3' alt='User Image' style='max-width:35px'>{{$siswa_permintaan->name}}</td>
                       @else
-                        <td><img src="{{'/'.$siswa_permintaan->foto}}" class='img-circle mr-3' alt='User Image' style='max-width:50px'>{{$siswa_permintaan->name}}</td>
+                        <td><img src="{{'/'.$siswa_permintaan->foto}}" class='img-circle mr-3' alt='User Image' style='max-width:35px'>{{$siswa_permintaan->name}}</td>
                       @endif
                       <td style="text-align: center;">{{$siswa_permintaan->nisn}}</td>
                       <td style="text-align: center;">

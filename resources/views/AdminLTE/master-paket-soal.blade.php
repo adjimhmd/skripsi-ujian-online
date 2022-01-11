@@ -97,9 +97,8 @@
                 <tr>
                   <th style="width: 5%; text-align: center;">No</th>
                   <th style="width: 1%;">Kelas</th>
-                  <th style="width: 30%;">Nama Paket</th>
-                  <th style="width: 30%;">Mata Pelajaran</th>
-                  <th style="width: 30%;">Data Guru</th>
+                  <th style="width: 55%;">Nama Paket</th>
+                  <th style="width: 35%;">Data Guru</th>
                   <th style="width: 9%; text-align: center;">Aksi</th>
                 </tr>
               </thead>
@@ -109,15 +108,22 @@
                 <tr>
                   <td style="text-align: center;">{{$no++}}</td>
                   <td>{{'Kelas '.$paket_soal->kelas.' '.$paket_soal->tingkat.'/sederajat'}}</td>
-                  <td>{{$paket_soal->deskripsi}}</td>
                   <td>
-                    @if($paket_soal->materi){{ucwords($paket_soal->nama)}}<br>{{ucwords($paket_soal->materi)}}
-                    @else($paket_soal->materi){{ucwords($paket_soal->nama)}}
-                    @endif
+                    {{$paket_soal->deskripsi}}
+                    @foreach($jml_soals as $jml_soal)
+                      @if($jml_soal->master_paket_soal_id==$paket_soal->id_paket_soal)
+                        {{' (Jumlah: '.$jml_soal->total.' soal)'}}
+                      @endif
+                    @endforeach
+                    <br>
+                    <!-- @if($paket_soal->materi)<small><b>{{ucwords($paket_soal->nama).'-'.ucwords($paket_soal->materi)}}</b></small> -->
+                    <!-- @else -->
+                    <small><b>{{'Mata Pelajaran: '.ucwords($paket_soal->nama)}}</b></small>
+                    <!-- @endif -->
                   </td>
                   <td>
                     @if($paket_soal->user_guru_id==0) 
-                      <i>{{'Guru belum ditentukan!'}}</i><br>
+                      <b style="color: red;">{{'Guru belum ditentukan!'}}</b><br>
                       <button type="button" class="btn btn-xs bg-secondary btn_guru shadow-sm" data-toggle="modal" data-target="#pilih_guru"
                       data-jenjang="{{$paket_soal->kelas.' '.$paket_soal->tingkat.'/sederajat'}}" 
                       data-nama-mapel="{{ucwords($paket_soal->nama)}}" 

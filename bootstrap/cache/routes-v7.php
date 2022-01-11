@@ -24,7 +24,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::oiuqW7yqcDHdDYwY',
+            '_route' => 'generated::FweZ8zmRPR4uyqyD',
           ),
           1 => NULL,
           2 => 
@@ -141,7 +141,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::35WlNd1emY8tFIoD',
+            '_route' => 'generated::e6hkipONMIqujYuT',
           ),
           1 => NULL,
           2 => 
@@ -196,7 +196,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::jEczoobQEjPeesee',
+            '_route' => 'generated::lfmC0iF8IEEpYhfo',
           ),
           1 => NULL,
           2 => 
@@ -287,7 +287,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::FxMKCS5q1JHFuDO3',
+            '_route' => 'generated::Zuaq1VcHG8nBmzAR',
           ),
           1 => NULL,
           2 => 
@@ -994,6 +994,81 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
+      '/nilai-ujian' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'nilai-ujian.index',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+        1 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'nilai-ujian.store',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/nilai-ujian/create' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'nilai-ujian.create',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/email-nilai' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'email.nilai',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
       '/show_paket' => 
       array (
         0 => 
@@ -1579,10 +1654,30 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
+      '/sendmail' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'generated::G95F8GbYTPvJoHYQ',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
     ),
     2 => 
     array (
-      0 => '{^(?|/p(?|a(?|ssword/reset/([^/]++)(*:37)|ket_soal/([^/]++)(?|(*:64)|/edit(*:76)|(*:83)))|rofile/([^/]++)(?|(*:110)|/edit(*:123)|(*:131)))|/email/verify/([^/]++)/([^/]++)(*:172)|/upload\\-verifikasi/([^/]++)(*:208)|/instansi\\-pendidikan/([^/]++)(?|(*:249)|/edit(*:262)|(*:270))|/list\\-(?|instansi/([^/]++)(?|(*:309)|/edit(*:322)|(*:330))|guru/([^/]++)(?|(*:355)|/edit(*:368)|(*:376)))|/verifikasi/([^/]++)(?|(*:409)|/edit(*:422)|(*:430))|/master\\-(?|mapel/([^/]++)(?|(*:468)|/edit(*:481)|(*:489))|kelas/([^/]++)(?|(*:515)|/edit(*:528)|(*:536))|tahun\\-ajaran/([^/]++)(?|(*:570)|/edit(*:583)|(*:591)))|/ruang\\-ujian/([^/]++)(?|(*:626)|/edit(*:639)|(*:647))|/hasil\\-ujian/([^/]++)(*:678)|/bank_soals/([^/]++)(?|(*:709)|/edit(*:722)|(*:730))|/kelas\\-program/([^/]++)(?|(*:766)|/edit(*:779)|(*:787)))/?$}sDu',
+      0 => '{^(?|/p(?|a(?|ssword/reset/([^/]++)(*:37)|ket_soal/([^/]++)(?|(*:64)|/edit(*:76)|(*:83)))|rofile/([^/]++)(?|(*:110)|/edit(*:123)|(*:131)))|/email/verify/([^/]++)/([^/]++)(*:172)|/upload\\-verifikasi/([^/]++)(*:208)|/instansi\\-pendidikan/([^/]++)(?|(*:249)|/edit(*:262)|(*:270))|/list\\-(?|instansi/([^/]++)(?|(*:309)|/edit(*:322)|(*:330))|guru/([^/]++)(?|(*:355)|/edit(*:368)|(*:376)))|/verifikasi/([^/]++)(?|(*:409)|/edit(*:422)|(*:430))|/master\\-(?|mapel/([^/]++)(?|(*:468)|/edit(*:481)|(*:489))|kelas/([^/]++)(?|(*:515)|/edit(*:528)|(*:536))|tahun\\-ajaran/([^/]++)(?|(*:570)|/edit(*:583)|(*:591)))|/ruang\\-ujian/([^/]++)(?|(*:626)|/edit(*:639)|(*:647))|/nilai\\-ujian/([^/]++)(?|(*:681)|/edit(*:694)|(*:702))|/detail\\-nilai\\-ujian/([^/]++)(*:741)|/hasil\\-ujian/([^/]++)(*:771)|/bank_soals/([^/]++)(?|(*:802)|/edit(*:815)|(*:823))|/kelas\\-program/([^/]++)(?|(*:859)|/edit(*:872)|(*:880)))/?$}sDu',
     ),
     3 => 
     array (
@@ -2535,7 +2630,118 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      678 => 
+      681 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'nilai-ujian.show',
+          ),
+          1 => 
+          array (
+            0 => 'nilai_ujian',
+          ),
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      694 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'nilai-ujian.edit',
+          ),
+          1 => 
+          array (
+            0 => 'nilai_ujian',
+          ),
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      702 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'nilai-ujian.update',
+          ),
+          1 => 
+          array (
+            0 => 'nilai_ujian',
+          ),
+          2 => 
+          array (
+            'PUT' => 0,
+            'PATCH' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+        1 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'nilai-ujian.destroy',
+          ),
+          1 => 
+          array (
+            0 => 'nilai_ujian',
+          ),
+          2 => 
+          array (
+            'DELETE' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      741 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'detail.nilai.ujian',
+          ),
+          1 => 
+          array (
+            0 => 'nilai',
+          ),
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      771 => 
       array (
         0 => 
         array (
@@ -2558,7 +2764,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      709 => 
+      802 => 
       array (
         0 => 
         array (
@@ -2581,7 +2787,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      722 => 
+      815 => 
       array (
         0 => 
         array (
@@ -2604,7 +2810,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      730 => 
+      823 => 
       array (
         0 => 
         array (
@@ -2646,7 +2852,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      766 => 
+      859 => 
       array (
         0 => 
         array (
@@ -2669,7 +2875,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      779 => 
+      872 => 
       array (
         0 => 
         array (
@@ -2692,7 +2898,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      787 => 
+      880 => 
       array (
         0 => 
         array (
@@ -2749,7 +2955,7 @@ app('router')->setCompiledRoutes(
   ),
   'attributes' => 
   array (
-    'generated::oiuqW7yqcDHdDYwY' => 
+    'generated::FweZ8zmRPR4uyqyD' => 
     array (
       'methods' => 
       array (
@@ -2764,15 +2970,15 @@ app('router')->setCompiledRoutes(
           0 => 'api',
           1 => 'auth:api',
         ),
-        'uses' => 'C:32:"Opis\\Closure\\SerializableClosure":289:{@z+oRvfYByIvU8V3suKJ5o2A+rUwe7vtkXTaz6D2apoo=.a:5:{s:3:"use";a:0:{}s:8:"function";s:77:"function (\\Illuminate\\Http\\Request $request) {
+        'uses' => 'C:32:"Opis\\Closure\\SerializableClosure":289:{@oUzS23IZyv3MiOsHa4q8ONir8K3TVZDLcoaJqw/9zRY=.a:5:{s:3:"use";a:0:{}s:8:"function";s:77:"function (\\Illuminate\\Http\\Request $request) {
     return $request->user();
-}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"000000001e8bf1f700000000545c219f";}}',
+}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"0000000014afe381000000006ecfdcf3";}}',
         'namespace' => NULL,
         'prefix' => 'api',
         'where' => 
         array (
         ),
-        'as' => 'generated::oiuqW7yqcDHdDYwY',
+        'as' => 'generated::FweZ8zmRPR4uyqyD',
       ),
       'fallback' => false,
       'defaults' => 
@@ -2968,7 +3174,7 @@ app('router')->setCompiledRoutes(
       'lockSeconds' => NULL,
       'waitSeconds' => NULL,
     ),
-    'generated::35WlNd1emY8tFIoD' => 
+    'generated::e6hkipONMIqujYuT' => 
     array (
       'methods' => 
       array (
@@ -2989,7 +3195,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::35WlNd1emY8tFIoD',
+        'as' => 'generated::e6hkipONMIqujYuT',
       ),
       'fallback' => false,
       'defaults' => 
@@ -3077,7 +3283,7 @@ app('router')->setCompiledRoutes(
       'lockSeconds' => NULL,
       'waitSeconds' => NULL,
     ),
-    'generated::jEczoobQEjPeesee' => 
+    'generated::lfmC0iF8IEEpYhfo' => 
     array (
       'methods' => 
       array (
@@ -3098,7 +3304,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::jEczoobQEjPeesee',
+        'as' => 'generated::lfmC0iF8IEEpYhfo',
       ),
       'fallback' => false,
       'defaults' => 
@@ -3296,7 +3502,7 @@ app('router')->setCompiledRoutes(
       'lockSeconds' => NULL,
       'waitSeconds' => NULL,
     ),
-    'generated::FxMKCS5q1JHFuDO3' => 
+    'generated::Zuaq1VcHG8nBmzAR' => 
     array (
       'methods' => 
       array (
@@ -3317,7 +3523,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::FxMKCS5q1JHFuDO3',
+        'as' => 'generated::Zuaq1VcHG8nBmzAR',
       ),
       'fallback' => false,
       'defaults' => 
@@ -5781,6 +5987,336 @@ app('router')->setCompiledRoutes(
       'lockSeconds' => NULL,
       'waitSeconds' => NULL,
     ),
+    'nilai-ujian.index' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'nilai-ujian',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'role:adm_instansi',
+        ),
+        'as' => 'nilai-ujian.index',
+        'uses' => 'App\\Http\\Controllers\\NilaiUjianController@index',
+        'controller' => 'App\\Http\\Controllers\\NilaiUjianController@index',
+        'namespace' => NULL,
+        'prefix' => NULL,
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+    ),
+    'nilai-ujian.create' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'nilai-ujian/create',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'role:adm_instansi',
+        ),
+        'as' => 'nilai-ujian.create',
+        'uses' => 'App\\Http\\Controllers\\NilaiUjianController@create',
+        'controller' => 'App\\Http\\Controllers\\NilaiUjianController@create',
+        'namespace' => NULL,
+        'prefix' => NULL,
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+    ),
+    'nilai-ujian.store' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'nilai-ujian',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'role:adm_instansi',
+        ),
+        'as' => 'nilai-ujian.store',
+        'uses' => 'App\\Http\\Controllers\\NilaiUjianController@store',
+        'controller' => 'App\\Http\\Controllers\\NilaiUjianController@store',
+        'namespace' => NULL,
+        'prefix' => NULL,
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+    ),
+    'nilai-ujian.show' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'nilai-ujian/{nilai_ujian}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'role:adm_instansi',
+        ),
+        'as' => 'nilai-ujian.show',
+        'uses' => 'App\\Http\\Controllers\\NilaiUjianController@show',
+        'controller' => 'App\\Http\\Controllers\\NilaiUjianController@show',
+        'namespace' => NULL,
+        'prefix' => NULL,
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+    ),
+    'nilai-ujian.edit' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'nilai-ujian/{nilai_ujian}/edit',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'role:adm_instansi',
+        ),
+        'as' => 'nilai-ujian.edit',
+        'uses' => 'App\\Http\\Controllers\\NilaiUjianController@edit',
+        'controller' => 'App\\Http\\Controllers\\NilaiUjianController@edit',
+        'namespace' => NULL,
+        'prefix' => NULL,
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+    ),
+    'nilai-ujian.update' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'PUT',
+        1 => 'PATCH',
+      ),
+      'uri' => 'nilai-ujian/{nilai_ujian}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'role:adm_instansi',
+        ),
+        'as' => 'nilai-ujian.update',
+        'uses' => 'App\\Http\\Controllers\\NilaiUjianController@update',
+        'controller' => 'App\\Http\\Controllers\\NilaiUjianController@update',
+        'namespace' => NULL,
+        'prefix' => NULL,
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+    ),
+    'nilai-ujian.destroy' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'DELETE',
+      ),
+      'uri' => 'nilai-ujian/{nilai_ujian}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'role:adm_instansi',
+        ),
+        'as' => 'nilai-ujian.destroy',
+        'uses' => 'App\\Http\\Controllers\\NilaiUjianController@destroy',
+        'controller' => 'App\\Http\\Controllers\\NilaiUjianController@destroy',
+        'namespace' => NULL,
+        'prefix' => NULL,
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+    ),
+    'email.nilai' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'email-nilai',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'role:adm_instansi',
+        ),
+        'uses' => 'App\\Http\\Controllers\\NilaiUjianController@email',
+        'controller' => 'App\\Http\\Controllers\\NilaiUjianController@email',
+        'namespace' => NULL,
+        'prefix' => NULL,
+        'where' => 
+        array (
+        ),
+        'as' => 'email.nilai',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+    ),
+    'detail.nilai.ujian' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'detail-nilai-ujian/{nilai}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'role:adm_instansi',
+        ),
+        'uses' => 'App\\Http\\Controllers\\NilaiUjianController@detail_nilai_ujian',
+        'controller' => 'App\\Http\\Controllers\\NilaiUjianController@detail_nilai_ujian',
+        'namespace' => NULL,
+        'prefix' => NULL,
+        'where' => 
+        array (
+        ),
+        'as' => 'detail.nilai.ujian',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+    ),
     'show.paket' => 
     array (
       'methods' => 
@@ -7666,6 +8202,42 @@ app('router')->setCompiledRoutes(
         array (
         ),
         'as' => 'simpan.guru',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+    ),
+    'generated::G95F8GbYTPvJoHYQ' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'sendmail',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+        ),
+        'uses' => 'App\\Http\\Controllers\\EmailController@index',
+        'controller' => 'App\\Http\\Controllers\\EmailController@index',
+        'namespace' => NULL,
+        'prefix' => NULL,
+        'where' => 
+        array (
+        ),
+        'as' => 'generated::G95F8GbYTPvJoHYQ',
       ),
       'fallback' => false,
       'defaults' => 

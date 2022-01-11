@@ -17,6 +17,7 @@ class CreateMasterRuangUjiansTable extends Migration
             $table->id();
             $table->string('deskripsi');
             $table->Integer('master_paket_soal_id')->unsigned();
+            $table->Integer('master_tahun_ajaran_id')->unsigned();
             $table->Integer('kelas_program_id')->unsigned();
             $table->string('durasi',3);
             $table->dateTime('waktu_mulai', $precision = 0);

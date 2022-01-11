@@ -132,7 +132,7 @@
                     @if($nama_instansi->nama!=NULL) <small><i> ({{$nama_instansi->nama}})</i></small> @endif
                   @endforeach</h1>
                 @elseif (Route::currentRouteNamed('ruang-ujian.index') || Route::currentRouteNamed('ruang-ujian.show') || Route::currentRouteNamed('hasil.ujian'))
-                  <h1 class="m-0">Jadwal Ujian
+                  <h1 class="m-0">Ruang Ujian
                   @foreach($nama_instansis as $nama_instansi)
                     @if($nama_instansi->nama!=NULL) <small><i> ({{$nama_instansi->nama}})</i></small> @endif
                   @endforeach</h1>
@@ -143,6 +143,11 @@
                   @endforeach</h1>
                 @elseif (Route::currentRouteNamed('list.guru'))
                   <h1 class="m-0">Daftar Guru
+                  @foreach($nama_instansis as $nama_instansi)
+                    @if($nama_instansi->nama!=NULL) <small><i> ({{$nama_instansi->nama}})</i></small> @endif
+                  @endforeach</h1>
+                @elseif (Route::currentRouteNamed('nilai-ujian.index') || Route::currentRouteNamed('nilai-ujian.show') || Route::currentRouteNamed('nilai-ujian.store'))
+                  <h1 class="m-0">Nilai Ujian
                   @foreach($nama_instansis as $nama_instansi)
                     @if($nama_instansi->nama!=NULL) <small><i> ({{$nama_instansi->nama}})</i></small> @endif
                   @endforeach</h1>
@@ -175,13 +180,16 @@
                     <li class="breadcrumb-item active">Data {{$text}}</li>
                   @elseif (Route::currentRouteNamed('ruang-ujian.index') || Route::currentRouteNamed('ruang-ujian.show') || Route::currentRouteNamed('hasil.ujian'))
                     <li class="breadcrumb-item"><a href="/">Beranda</a></li>
-                    <li class="breadcrumb-item active">Jadwal Ujian</li>
+                    <li class="breadcrumb-item active">Ruang Ujian</li>
                   @elseif (Route::currentRouteNamed('list.siswa'))
                     <li class="breadcrumb-item"><a href="/">Beranda</a></li>
                     <li class="breadcrumb-item active">Daftar Siswa</li>
                   @elseif (Route::currentRouteNamed('list.guru'))
                     <li class="breadcrumb-item"><a href="/">Beranda</a></li>
                     <li class="breadcrumb-item active">Daftar Guru</li>
+                  @elseif (Route::currentRouteNamed('nilai-ujian.index') || Route::currentRouteNamed('nilai-ujian.show') || Route::currentRouteNamed('nilai-ujian.store'))
+                    <li class="breadcrumb-item"><a href="/">Beranda</a></li>
+                    <li class="breadcrumb-item active">Nilai Ujian</li>
                   @endif
                 </ol>
               </div><!-- /.col -->

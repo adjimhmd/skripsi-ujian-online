@@ -40,6 +40,11 @@ class InstansiPendidikan extends Model
     	return $this->hasMany('App\KelasProgram');
     }
 
+    public function master_ruang_ujians()
+    {
+    	return $this->hasMany('App\MasterRuangUjian');
+    }
+
     public function indonesia_villages()
     {
     	return $this->belongsTo('App\IndonesiaVillages');

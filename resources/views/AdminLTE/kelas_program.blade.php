@@ -295,7 +295,7 @@
               </div>
 
               <!-- Jurusan -->
-              <div class="form-group col-12">
+              <!-- <div class="form-group col-12">
                 <label for="jurusan">{{ __('Jurusan') }}</label>
                 <input id="jurusan" type="text" class="form-control @error('jurusan') is-invalid @enderror" name="jurusan" value="{{ old('jurusan') }}" autocomplete="jurusan" autofocus placeholder="Jurusan apa? (opsional)">
 
@@ -304,7 +304,7 @@
                         <strong>{{ $message }}</strong>
                     </span>
                 @enderror
-              </div>
+              </div> -->
 
               <!-- Harga -->
               <div class="form-group col-12">
