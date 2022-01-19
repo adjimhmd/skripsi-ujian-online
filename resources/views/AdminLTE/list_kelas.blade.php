@@ -224,11 +224,15 @@
                       </td>
                       <!-- <td><img src="{{$profil}}" class="img-circle mr-4" alt="User Image" style="max-width:40px">{{$list_kelas->name ?? 'Guru belum ditentukan!'}}</td> -->
                       <td> 
+                          @php($i=0)
                           <h6 style="margin-bottom:0;">{{'Kelas '.$list_kelas->kls_program}}
                           <small><b>(Mata Pelajaran: 
                           @foreach($mapel_rombels as $mapel_rombel)
                             @if($mapel_rombel->id_rombongan_belajar==$list_kelas->id_rombongan_belajar)
-                            {{ucwords($mapel_rombel->nama)}}
+                            @php($i++)
+                              @if($i!=1){{', '.ucwords($mapel_rombel->nama)}}
+                              @else{{ucwords($mapel_rombel->nama)}}
+                              @endif
                             @endif
                           @endforeach
                           )</b></small>

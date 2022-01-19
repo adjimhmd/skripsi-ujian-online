@@ -513,21 +513,27 @@ class InstansiSiswaController extends Controller
     public function bayar_dulu(Request $request)
     {
         //
+        $id_harga=RombonganBelajar::select('harga_kelas_program_id as harga')->where('id',$request->id_rombongan_belajar)->first();
+        // return$id_harga;
         $id_rombongan_belajar=$request->id_rombongan_belajar;
         $data = RombonganBelajar::select(
             'instansi_pendidikans.nama as nama_instansi','instansi_pendidikans.*',
             'master_kelas.*',
             'master_mapels.*',
             'kelas_programs.*',
+            'harga_kelas_programs.*',
             // 'user_gurus.user_id as id_guru',
             'user_siswas.user_id as id_siswa')
             ->join('kelas_programs', 'rombongan_belajars.kelas_program_id', '=', 'kelas_programs.id')
             ->join('instansi_pendidikans', 'kelas_programs.instansi_pendidikan_id', '=', 'instansi_pendidikans.id')
             ->join('master_kelas', 'kelas_programs.master_kelas_id', '=', 'master_kelas.id')
-            ->join('master_mapels', 'kelas_programs.master_mapel_id', '=', 'master_mapels.id')
+            ->join('harga_kelas_programs', 'kelas_programs.id', '=', 'harga_kelas_programs.kelas_program_id')
+            ->join('mapel_kelas_programs', 'kelas_programs.id', '=', 'mapel_kelas_programs.kelas_program_id')
+            ->join('master_mapels', 'mapel_kelas_programs.master_mapel_id', '=', 'master_mapels.id')
             // ->leftJoin('user_gurus', 'kelas_programs.user_guru_id', '=', 'user_gurus.id')
             ->join('user_siswas', 'rombongan_belajars.user_siswa_id', '=', 'user_siswas.id')
             ->where('rombongan_belajars.id',$id_rombongan_belajar)
+            ->where('harga_kelas_programs.id',$id_harga->harga)
             ->first();
 
 
