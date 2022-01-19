@@ -72,7 +72,7 @@
         <div class="card">
           
           <div class="card-header">
-            <h3 class="card-title"><b>{{'List Guru'}}</b></h3>
+            <h3 class="card-title"><b>{{'Data Guru Terdaftar'}}</b></h3>
 
             <div class="card-tools">
               <button type="button" class="btn btn-tool" data-card-widget="maximize">

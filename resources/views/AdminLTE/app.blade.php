@@ -116,17 +116,17 @@
                 @elseif (Route::currentRouteNamed('profile.index'))
                   <h1 class="m-0">Profile</h1>
                 @elseif (Route::currentRouteNamed('list-instansi.index'))
-                  <h1 class="m-0">Instansi Pendidikan</h1>
+                  <h1 class="m-0">Lembaga Pendidikan</h1>
                 @elseif (Route::currentRouteNamed('instansi-pendidikan.index'))
                   <h1 class="m-0">Data {{$tipe}}</h1>
                 @elseif (Route::currentRouteNamed('list.kelas.program'))
-                  <h1 class="m-0">Kelas & Program</h1>
+                  <h1 class="m-0">Kelas & Program Kursus</h1>
                 @elseif (Route::currentRouteNamed('paket_soal.index') || Route::currentRouteNamed('paket_soal.show'))
                   <h1 class="m-0">Paket Soal
                   @foreach($nama_instansis as $nama_instansi)
                     @if($nama_instansi->nama!=NULL) <small><i> ({{$nama_instansi->nama}})</i></small> @endif
                   @endforeach</h1>
-                @elseif (Route::currentRouteNamed('kelas-program.index') || Route::currentRouteNamed('kelas-program.show'))
+                @elseif (Route::currentRouteNamed('kelas-program.index') || Route::currentRouteNamed('kelas-program.show') || Route::currentRouteNamed('show.kelas_program'))
                   <h1 class="m-0">Data {{$text}}
                   @foreach($nama_instansis as $nama_instansi)
                     @if($nama_instansi->nama!=NULL) <small><i> ({{$nama_instansi->nama}})</i></small> @endif
@@ -151,6 +151,17 @@
                   @foreach($nama_instansis as $nama_instansi)
                     @if($nama_instansi->nama!=NULL) <small><i> ({{$nama_instansi->nama}})</i></small> @endif
                   @endforeach</h1>
+                @elseif (Route::currentRouteNamed('list-guru.index'))
+                  <h1 class="m-0">Data Guru
+                  @foreach($nama_instansis as $nama_instansi)
+                    @if($nama_instansi->nama!=NULL) <small><i> ({{$nama_instansi->nama}})</i></small> @endif
+                  @endforeach</h1>
+                @elseif (Route::currentRouteNamed('master-kelas.index') || Route::currentRouteNamed('master-kelas.edit'))
+                  <h1 class="m-0">Data Master Kelas</h1>
+                @elseif (Route::currentRouteNamed('master-mapel.index') || Route::currentRouteNamed('master-mapel.edit'))
+                  <h1 class="m-0">Data Master Mata Pelajaran</h1>
+                @elseif (Route::currentRouteNamed('master-tahun-ajaran.index') || Route::currentRouteNamed('master-tahun-ajaran.edit'))
+                  <h1 class="m-0">Data Tahun Ajaran</h1>
                 @endif
               </div><!-- /.col -->
               <div class="col-sm-6">
@@ -165,17 +176,17 @@
                     <li class="breadcrumb-item active">Profile</li>
                   @elseif (Route::currentRouteNamed('list-instansi.index'))
                     <li class="breadcrumb-item"><a href="/">Beranda</a></li>
-                    <li class="breadcrumb-item active">Instansi Pendidikan</li>
+                    <li class="breadcrumb-item active">Lembaga Pendidikan</li>
                   @elseif (Route::currentRouteNamed('instansi-pendidikan.index'))
                     <li class="breadcrumb-item"><a href="/">Beranda</a></li>
                     <li class="breadcrumb-item active">Data {{$tipe}}</li>
                   @elseif (Route::currentRouteNamed('list.kelas.program'))
                     <li class="breadcrumb-item"><a href="/">Beranda</a></li>
-                    <li class="breadcrumb-item active">Kelas & Program</li>
+                    <li class="breadcrumb-item active">Kelas & Program Kursus</li>
                   @elseif (Route::currentRouteNamed('paket_soal.index') || Route::currentRouteNamed('paket_soal.show'))
                     <li class="breadcrumb-item"><a href="/">Beranda</a></li>
                     <li class="breadcrumb-item active">Paket Soal</li>
-                  @elseif (Route::currentRouteNamed('kelas-program.index') || Route::currentRouteNamed('kelas-program.show'))
+                  @elseif (Route::currentRouteNamed('kelas-program.index') || Route::currentRouteNamed('kelas-program.show') || Route::currentRouteNamed('show.kelas_program'))
                     <li class="breadcrumb-item"><a href="/">Beranda</a></li>
                     <li class="breadcrumb-item active">Data {{$text}}</li>
                   @elseif (Route::currentRouteNamed('ruang-ujian.index') || Route::currentRouteNamed('ruang-ujian.show') || Route::currentRouteNamed('hasil.ujian'))
@@ -190,6 +201,18 @@
                   @elseif (Route::currentRouteNamed('nilai-ujian.index') || Route::currentRouteNamed('nilai-ujian.show') || Route::currentRouteNamed('nilai-ujian.store'))
                     <li class="breadcrumb-item"><a href="/">Beranda</a></li>
                     <li class="breadcrumb-item active">Nilai Ujian</li>
+                  @elseif (Route::currentRouteNamed('list-guru.index'))
+                    <li class="breadcrumb-item"><a href="/">Beranda</a></li>
+                    <li class="breadcrumb-item active">Data Guru</li>
+                  @elseif (Route::currentRouteNamed('master-kelas.index') || Route::currentRouteNamed('master-kelas.editMaster Kelas'))
+                    <li class="breadcrumb-item"><a href="/">Beranda</a></li>
+                    <li class="breadcrumb-item active">Data Master Kelas</li>
+                  @elseif (Route::currentRouteNamed('master-mapel.index') || Route::currentRouteNamed('master-mapel.edit'))
+                    <li class="breadcrumb-item"><a href="/">Beranda</a></li>
+                    <li class="breadcrumb-item active">Data Master Mata Pelajaran</li>
+                  @elseif (Route::currentRouteNamed('master-tahun-ajaran.index') || Route::currentRouteNamed('master-tahun-ajaran.edit'))
+                    <li class="breadcrumb-item"><a href="/">Beranda</a></li>
+                    <li class="breadcrumb-item active">Data Master Tahun Ajaran</li>
                   @endif
                 </ol>
               </div><!-- /.col -->

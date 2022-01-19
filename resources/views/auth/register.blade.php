@@ -97,7 +97,7 @@
           <!-- link login -->
           <div class="row">
             <div class="col-12">
-              <a href="{{ route('login') }}"><p class="text-center">Sudah punya akun? Login ya!</p></a>
+              <a href="{{ route('login') }}"><p class="text-center">Sudah punya akun? Login disini ya!</p></a>
             </div>
           </div>
       </div>
@@ -174,7 +174,7 @@
           <!-- link login -->
           <div class="row">
             <div class="col-12">
-              <a href="{{ route('login') }}"><p class="text-center">Sudah punya akun? Login ya!</p></a>
+              <a href="{{ route('login') }}"><p class="text-center">Sudah punya akun? Login disini ya!</p></a>
             </div>
           </div>
           
@@ -186,7 +186,7 @@
       @csrf
 
       <div class="card-header text-center mt-3">
-        <a href="/home" class="h1"><b>Register </b>Instansi</a>
+        <a href="/home" class="h2"><b>Register </b>Lembaga Pendidikan</a>
       </div>
       <div class="card-body">
 
@@ -226,7 +226,7 @@
           </div>
 
           <!-- Tipe Instansi Pendidikan -->
-          <h6>{{ __('Tipe Instansi Pendidikan') }}</h6>
+          <h6>{{ __('Tipe Lembaga Pendidikan') }}</h6>
           <div class="input-group mb-3">
             @php ($list_instansi = ['Sekolah','Lembaga_Kursus'])
             @php ($i = 1)
@@ -255,7 +255,7 @@
           <!-- link login -->
           <div class="row">
             <div class="col-12">
-              <a href="{{ route('login') }}"><p class="text-center">Sudah punya akun? Login ya!</p></a>
+              <a href="{{ route('login') }}"><p class="text-center">Sudah punya akun? Login disini ya!</p></a>
             </div>
           </div>
           

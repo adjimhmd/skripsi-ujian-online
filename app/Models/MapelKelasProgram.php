@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class RombonganBelajar extends Model
+class MapelKelasProgram extends Model
 {
     use HasFactory;
     
-    protected $table = "rombongan_belajars";
+    protected $table = "mapel_kelas_programs";
 
     /**
      * The attributes that are mass assignable.
@@ -18,10 +18,7 @@ class RombonganBelajar extends Model
      */
     protected $fillable = [
         'kelas_program_id',
-        'user_siswa_id',
-        'harga_kelas_program_id',
-        'status',
-        'bukti_bayar',
+        'master_mapel_id',
     ];
     
     public function kelas_programs()
@@ -29,13 +26,8 @@ class RombonganBelajar extends Model
     	return $this->belongsTo('App\KelasProgram');
     }
     
-    public function user_siswas()
+    public function master_mapels()
     {
-    	return $this->belongsTo('App\UserSiswa');
-    }
-    
-    public function harga_kelas_programs()
-    {
-    	return $this->belongsTo('App\HargaKelasProgram');
+    	return $this->belongsTo('App\MasterMapel');
     }
 }

@@ -241,8 +241,12 @@
                     <select id="kelas_program" class="form-control select2 @error('kelas_program') is-invalid @enderror" name="kelas_program" required>
                       <option value="" selected disabled>{{'Pilih '.strtolower($text).'nya ya'}}</option>
                       @foreach($kelas_programs as $kelas_program)
+                  
+                      @if($kelas_program->jurusan!=null) @php($tanda=' - Jurusan ')
+                      @else @php($tanda='')
+                      @endif
 
-                        <option {{old('kelas_program') =="$kelas_program->id" ? "selected" : ""}} value="{{$kelas_program->id_kelas_program}}">{{$kelas_program->deskripsi}}</option>
+                        <option {{old('kelas_program') =="$kelas_program->id" ? "selected" : ""}} value="{{$kelas_program->id_kelas_program}}">{{$kelas_program->deskripsi.' | Kelas '.$kelas_program->kelas.' '.$kelas_program->tingkat.'/sederajat'.$tanda.ucwords($kelas_program->jurusan)}}</option>
                           <!-- {{$kelas_program->kelas.' '.$kelas_program->tingkat.'/Sederajat '.$tanda.ucwords($kelas_program->jurusan).' | Mapel '.ucwords($kelas_program->nama).' - '}} -->
                       @endforeach
                     </select>
@@ -251,13 +255,8 @@
                   <!-- Keterangan kelas/program -->
                   @foreach($kelas_programs as $kelas_program)
                   
-                  @if($kelas_program->jurusan!=null) @php($tanda=' - Jurusan ')
-                  @else @php($tanda='')
-                  @endif
-                  
                   <div id="{{'ket_'.$kelas_program->id_kelas_program}}" class="ket_kelas_program form-group col-12 ml-1" style="margin-top:-10px;" hidden>
-                    <small><b>{{'Keterangan:'}}</b></small>
-                    <small>{{'Kelas '.$kelas_program->kelas.' '.$kelas_program->tingkat.'/sederajat'.$tanda.ucwords($kelas_program->jurusan).' | Mapel '.ucwords($kelas_program->nama)}}</small>
+                    <small><b>{{'Mata Pelajaran: '}}</b>{{ucwords($kelas_program->nama)}}</small>
                   </div>
                   @endforeach
 
@@ -282,18 +281,6 @@
                     </select>
                   </div>
 
-                  <!-- Durasi -->
-                  <div class="form-group col-6">
-                    <label for="durasi">{{ __('Durasi Ujian') }}</label>
-                    <input id="durasi" type="number" class="form-control @error('durasi') is-invalid @enderror" name="durasi" value="{{ old('durasi') }}" placeholder="Tentukan durasinya (satuan menit)" required min="1" max="10080">
-
-                    @error('durasi')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                  </div>
-
                   <!-- Tanggal Mulai -->
                   <div class="form-group col-6">
                     <label for="tanggal_mulai">{{ __('Tanggal Mulai') }}</label>
@@ -301,6 +288,18 @@
                     <input id="tanggal_mulai" type="text" onfocus="(this.type='datetime-local')" onblur="(this.type='text')" class="form-control @error('tanggal_mulai') is-invalid @enderror" name="waktu_mulai" value="{{ old('tanggal_mulai') }}" placeholder="Pilih waktu mulai ujiannya ya" required>
 
                     @error('tanggal_mulai')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                  </div>
+
+                  <!-- Durasi -->
+                  <div class="form-group col-6">
+                    <label for="durasi">{{ __('Durasi Ujian') }}</label>
+                    <input id="durasi" type="number" class="form-control @error('durasi') is-invalid @enderror" name="durasi" value="{{ old('durasi') }}" placeholder="Tentukan durasinya (satuan menit)" required min="1" max="10080">
+
+                    @error('durasi')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>

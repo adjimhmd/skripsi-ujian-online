@@ -24,7 +24,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::FweZ8zmRPR4uyqyD',
+            '_route' => 'generated::6K3pMn9i4UBvPPcP',
           ),
           1 => NULL,
           2 => 
@@ -141,7 +141,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::e6hkipONMIqujYuT',
+            '_route' => 'generated::nFnHwT7P3wuyanhX',
           ),
           1 => NULL,
           2 => 
@@ -196,7 +196,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::lfmC0iF8IEEpYhfo',
+            '_route' => 'generated::PIwxF0KxlDk36haT',
           ),
           1 => NULL,
           2 => 
@@ -287,7 +287,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::Zuaq1VcHG8nBmzAR',
+            '_route' => 'generated::5XZqGu6aeNO9OV1G',
           ),
           1 => NULL,
           2 => 
@@ -1660,7 +1660,63 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::G95F8GbYTPvJoHYQ',
+            '_route' => 'generated::GFigT0Tu1nXnBYn2',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/orders' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'orders.index',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+        1 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'orders.store',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/orders/create' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'orders.create',
           ),
           1 => NULL,
           2 => 
@@ -1677,7 +1733,7 @@ app('router')->setCompiledRoutes(
     ),
     2 => 
     array (
-      0 => '{^(?|/p(?|a(?|ssword/reset/([^/]++)(*:37)|ket_soal/([^/]++)(?|(*:64)|/edit(*:76)|(*:83)))|rofile/([^/]++)(?|(*:110)|/edit(*:123)|(*:131)))|/email/verify/([^/]++)/([^/]++)(*:172)|/upload\\-verifikasi/([^/]++)(*:208)|/instansi\\-pendidikan/([^/]++)(?|(*:249)|/edit(*:262)|(*:270))|/list\\-(?|instansi/([^/]++)(?|(*:309)|/edit(*:322)|(*:330))|guru/([^/]++)(?|(*:355)|/edit(*:368)|(*:376)))|/verifikasi/([^/]++)(?|(*:409)|/edit(*:422)|(*:430))|/master\\-(?|mapel/([^/]++)(?|(*:468)|/edit(*:481)|(*:489))|kelas/([^/]++)(?|(*:515)|/edit(*:528)|(*:536))|tahun\\-ajaran/([^/]++)(?|(*:570)|/edit(*:583)|(*:591)))|/ruang\\-ujian/([^/]++)(?|(*:626)|/edit(*:639)|(*:647))|/nilai\\-ujian/([^/]++)(?|(*:681)|/edit(*:694)|(*:702))|/detail\\-nilai\\-ujian/([^/]++)(*:741)|/hasil\\-ujian/([^/]++)(*:771)|/bank_soals/([^/]++)(?|(*:802)|/edit(*:815)|(*:823))|/kelas\\-program/([^/]++)(?|(*:859)|/edit(*:872)|(*:880)))/?$}sDu',
+      0 => '{^(?|/p(?|a(?|ssword/reset/([^/]++)(*:37)|ket_soal/([^/]++)(?|(*:64)|/edit(*:76)|(*:83)))|rofile/([^/]++)(?|(*:110)|/edit(*:123)|(*:131)))|/email/verify/([^/]++)/([^/]++)(*:172)|/upload\\-verifikasi/([^/]++)(*:208)|/instansi\\-pendidikan/([^/]++)(?|(*:249)|/edit(*:262)|(*:270))|/list\\-(?|instansi/([^/]++)(?|(*:309)|/edit(*:322)|(*:330))|guru/([^/]++)(?|(*:355)|/edit(*:368)|(*:376)))|/verifikasi/([^/]++)(?|(*:409)|/edit(*:422)|(*:430))|/master\\-(?|mapel/([^/]++)(?|(*:468)|/edit(*:481)|(*:489))|kelas/([^/]++)(?|(*:515)|/edit(*:528)|(*:536))|tahun\\-ajaran/([^/]++)(?|(*:570)|/edit(*:583)|(*:591)))|/ruang\\-ujian/([^/]++)(?|(*:626)|/edit(*:639)|(*:647))|/nilai\\-ujian/([^/]++)(?|(*:681)|/edit(*:694)|(*:702))|/detail\\-nilai\\-ujian/([^/]++)(*:741)|/hasil\\-ujian/([^/]++)(*:771)|/bank_soals/([^/]++)(?|(*:802)|/edit(*:815)|(*:823))|/kelas\\-program/([^/]++)(?|(*:859)|/edit(*:872)|(*:880))|/orders/([^/]++)(?|(*:908)|/edit(*:921)|(*:929)))/?$}sDu',
     ),
     3 => 
     array (
@@ -2939,6 +2995,94 @@ app('router')->setCompiledRoutes(
           5 => true,
           6 => NULL,
         ),
+      ),
+      908 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'orders.show',
+          ),
+          1 => 
+          array (
+            0 => 'order',
+          ),
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      921 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'orders.edit',
+          ),
+          1 => 
+          array (
+            0 => 'order',
+          ),
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      929 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'orders.update',
+          ),
+          1 => 
+          array (
+            0 => 'order',
+          ),
+          2 => 
+          array (
+            'PUT' => 0,
+            'PATCH' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+        1 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'orders.destroy',
+          ),
+          1 => 
+          array (
+            0 => 'order',
+          ),
+          2 => 
+          array (
+            'DELETE' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
         2 => 
         array (
           0 => NULL,
@@ -2955,7 +3099,7 @@ app('router')->setCompiledRoutes(
   ),
   'attributes' => 
   array (
-    'generated::FweZ8zmRPR4uyqyD' => 
+    'generated::6K3pMn9i4UBvPPcP' => 
     array (
       'methods' => 
       array (
@@ -2970,15 +3114,15 @@ app('router')->setCompiledRoutes(
           0 => 'api',
           1 => 'auth:api',
         ),
-        'uses' => 'C:32:"Opis\\Closure\\SerializableClosure":289:{@oUzS23IZyv3MiOsHa4q8ONir8K3TVZDLcoaJqw/9zRY=.a:5:{s:3:"use";a:0:{}s:8:"function";s:77:"function (\\Illuminate\\Http\\Request $request) {
+        'uses' => 'C:32:"Opis\\Closure\\SerializableClosure":289:{@LHCCddehcNS7e6/Sc3RfipoRh7LKpbUFu1JpzylsHWc=.a:5:{s:3:"use";a:0:{}s:8:"function";s:77:"function (\\Illuminate\\Http\\Request $request) {
     return $request->user();
-}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"0000000014afe381000000006ecfdcf3";}}',
+}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"000000004442cb5300000000264b8e71";}}',
         'namespace' => NULL,
         'prefix' => 'api',
         'where' => 
         array (
         ),
-        'as' => 'generated::FweZ8zmRPR4uyqyD',
+        'as' => 'generated::6K3pMn9i4UBvPPcP',
       ),
       'fallback' => false,
       'defaults' => 
@@ -3174,7 +3318,7 @@ app('router')->setCompiledRoutes(
       'lockSeconds' => NULL,
       'waitSeconds' => NULL,
     ),
-    'generated::e6hkipONMIqujYuT' => 
+    'generated::nFnHwT7P3wuyanhX' => 
     array (
       'methods' => 
       array (
@@ -3195,7 +3339,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::e6hkipONMIqujYuT',
+        'as' => 'generated::nFnHwT7P3wuyanhX',
       ),
       'fallback' => false,
       'defaults' => 
@@ -3283,7 +3427,7 @@ app('router')->setCompiledRoutes(
       'lockSeconds' => NULL,
       'waitSeconds' => NULL,
     ),
-    'generated::lfmC0iF8IEEpYhfo' => 
+    'generated::PIwxF0KxlDk36haT' => 
     array (
       'methods' => 
       array (
@@ -3304,7 +3448,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::lfmC0iF8IEEpYhfo',
+        'as' => 'generated::PIwxF0KxlDk36haT',
       ),
       'fallback' => false,
       'defaults' => 
@@ -3502,7 +3646,7 @@ app('router')->setCompiledRoutes(
       'lockSeconds' => NULL,
       'waitSeconds' => NULL,
     ),
-    'generated::Zuaq1VcHG8nBmzAR' => 
+    'generated::5XZqGu6aeNO9OV1G' => 
     array (
       'methods' => 
       array (
@@ -3523,7 +3667,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::Zuaq1VcHG8nBmzAR',
+        'as' => 'generated::5XZqGu6aeNO9OV1G',
       ),
       'fallback' => false,
       'defaults' => 
@@ -8216,7 +8360,7 @@ app('router')->setCompiledRoutes(
       'lockSeconds' => NULL,
       'waitSeconds' => NULL,
     ),
-    'generated::G95F8GbYTPvJoHYQ' => 
+    'generated::GFigT0Tu1nXnBYn2' => 
     array (
       'methods' => 
       array (
@@ -8237,7 +8381,257 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::G95F8GbYTPvJoHYQ',
+        'as' => 'generated::GFigT0Tu1nXnBYn2',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+    ),
+    'orders.index' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'orders',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+        ),
+        'as' => 'orders.index',
+        'uses' => 'App\\Http\\Controllers\\OrderController@index',
+        'controller' => 'App\\Http\\Controllers\\OrderController@index',
+        'namespace' => NULL,
+        'prefix' => NULL,
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+    ),
+    'orders.create' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'orders/create',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+        ),
+        'as' => 'orders.create',
+        'uses' => 'App\\Http\\Controllers\\OrderController@create',
+        'controller' => 'App\\Http\\Controllers\\OrderController@create',
+        'namespace' => NULL,
+        'prefix' => NULL,
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+    ),
+    'orders.store' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'orders',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+        ),
+        'as' => 'orders.store',
+        'uses' => 'App\\Http\\Controllers\\OrderController@store',
+        'controller' => 'App\\Http\\Controllers\\OrderController@store',
+        'namespace' => NULL,
+        'prefix' => NULL,
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+    ),
+    'orders.show' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'orders/{order}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+        ),
+        'as' => 'orders.show',
+        'uses' => 'App\\Http\\Controllers\\OrderController@show',
+        'controller' => 'App\\Http\\Controllers\\OrderController@show',
+        'namespace' => NULL,
+        'prefix' => NULL,
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+    ),
+    'orders.edit' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'orders/{order}/edit',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+        ),
+        'as' => 'orders.edit',
+        'uses' => 'App\\Http\\Controllers\\OrderController@edit',
+        'controller' => 'App\\Http\\Controllers\\OrderController@edit',
+        'namespace' => NULL,
+        'prefix' => NULL,
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+    ),
+    'orders.update' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'PUT',
+        1 => 'PATCH',
+      ),
+      'uri' => 'orders/{order}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+        ),
+        'as' => 'orders.update',
+        'uses' => 'App\\Http\\Controllers\\OrderController@update',
+        'controller' => 'App\\Http\\Controllers\\OrderController@update',
+        'namespace' => NULL,
+        'prefix' => NULL,
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+    ),
+    'orders.destroy' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'DELETE',
+      ),
+      'uri' => 'orders/{order}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+        ),
+        'as' => 'orders.destroy',
+        'uses' => 'App\\Http\\Controllers\\OrderController@destroy',
+        'controller' => 'App\\Http\\Controllers\\OrderController@destroy',
+        'namespace' => NULL,
+        'prefix' => NULL,
+        'where' => 
+        array (
+        ),
       ),
       'fallback' => false,
       'defaults' => 

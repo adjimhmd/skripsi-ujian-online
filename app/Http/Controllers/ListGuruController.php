@@ -53,6 +53,10 @@ class ListGuruController extends Controller
             ->join('instansi_pendidikans', 'user_admin_instansis.instansi_pendidikan_id', '=', 'instansi_pendidikans.id')
             ->where('users.id', '=', $id)
             ->get();
+
+        foreach($user_admin_instansis as $user_admin_instansi){
+            $id_instansi=$user_admin_instansi->id_instansi;
+        }
         
         $list_gurus=GuruInstansi::select('guru_instansis.id as id_guru_instansi','guru_instansis.*',
             'user_gurus.id as id_user_guru','user_gurus.*',
@@ -63,6 +67,7 @@ class ListGuruController extends Controller
             ->join('spesialisasis', 'user_gurus.id', '=', 'spesialisasis.user_guru_id')
             ->join('master_mapels', 'spesialisasis.master_mapel_id', '=', 'master_mapels.id')
             ->groupBy('guru_instansis.user_guru_id')
+            ->where('guru_instansis.instansi_pendidikan_id',$id_instansi)
             ->get();
 
         return view('AdminLTE/master-guru', compact('id','nama_instansis','foto_profil','user_admin_instansis','last_update_guru', 'jumlah_guru','list_gurus'));

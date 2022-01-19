@@ -106,7 +106,7 @@
                 @foreach($mapels as $mapel)
                 <tr>
                   <td style="text-align: center;">{{$no++}}</td>
-                  <td><strong>{{ucwords($mapel->nama)}}</strong><br>{{ucfirst($mapel->materi)}}</td>
+                  <td>{{ucwords($mapel->nama)}}</td>
                   <td style="text-align: center;">
                     <a href="" class="btn btn-warning btn-sm" id="editProgramMapel" data-toggle="modal" data-id="{{ $mapel->id }}">Edit</a>
                     <button onclick="return false" id="delete_kelas" class="btn btn-sm bg-maroon"data-id="{{ $mapel->id }}">Delete</button>

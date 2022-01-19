@@ -103,7 +103,7 @@
           </li>
           
           <li class="nav-item">
-            <a href="{{ route('list-instansi.index') }}" class="nav-link {{ Route::currentRouteNamed('list-instansi.index') ? 'active' : '' }}">
+            <a href="{{ route('list-instansi.index') }}" class="nav-link {{ Route::currentRouteNamed('list-instansi.index') || Route::currentRouteNamed('show.kelas_program') ? 'active' : '' }}">
               <i class="nav-icon fas fa-university"></i>
               <p>
                 Instansi Pendidikan
@@ -198,7 +198,7 @@
             <a href="{{ route('list-instansi.index') }}" class="nav-link {{ Route::currentRouteNamed('list-instansi.index') ? 'active' : '' }}">
               <i class="nav-icon fas fa-university"></i>
               <p>
-                Instansi Pendidikan
+                Lembaga Pendidikan
               </p>
             </a>
           </li>

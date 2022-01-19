@@ -94,3 +94,5 @@ Route::get('daftar_guru', [App\Http\Controllers\ListGuruController::class, 'daft
 Route::post('simpan_guru', [App\Http\Controllers\ListGuruController::class, 'simpan_guru'])->name('simpan.guru')->middleware('role:adm_instansi');
 
 Route::get('/sendmail', 'App\Http\Controllers\EmailController@index');
+
+Route::resource('orders', App\Http\Controllers\OrderController::class);

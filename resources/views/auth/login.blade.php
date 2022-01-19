@@ -78,7 +78,7 @@
                 <div class="dropdown-menu" role="menu">
                   <a class="dropdown-item" href="{{ route('guru.register') }}">Guru</a>
                   <a class="dropdown-item" href="{{ route('siswa.register') }}">Siswa</a>
-                  <a class="dropdown-item" href="{{ route('instansi.register') }}">Instansi Pendidikan</a>
+                  <a class="dropdown-item" href="{{ route('instansi.register') }}">Lembaga Pendidikan</a>
                 </div>
               </div>
         </div>

@@ -100,9 +100,11 @@
           <!-- /.card-header -->
           
           <div class="card-body">
+            @if (Auth::user()->hasRole('adm_instansi'))
             <div class="row mb-4">
               <button type="button" class="btn bg-purple shadow-sm" data-toggle="modal" data-target="#modal-default">Buat {{$text}}</button>
             </div>
+            @endif
 
             <table id="example" class="table table-hover table-valign-middle" style="table-layout: fixed">
               <thead>
@@ -112,9 +114,9 @@
                       <th style="width: 25%;">Nama {{$text}}</th>
                       <th style="width: 25%;">Mata Pelajaran</th>
                       <!-- <th style="width: 33%;">Data Guru</th> -->
-                      <th style="width: 20%; text-align: center;">Jumlah Siswa</th>
-                      <th style="width: 10%; text-align: center;">Harga</th>
-                      <th style="width: 10%; text-align: center;">Aksi</th>
+                      <th style="width: 15%;">Jumlah Siswa</th>
+                      <th style="width: 25%;">Harga</th>
+                      <th style="width: 5%; text-align: center;">Aksi</th>
                   </tr>
               </thead>
               <tbody>
@@ -133,7 +135,13 @@
 
                     <td style="text-align: center;">{{$no++}}</td>
                     <td>{{$kelas_program->deskripsi}}</td>
-                    <td>{{ucwords($kelas_program->nama)}}{{$materi}}</td>
+                    <td>
+                      @foreach($mapel_kelas_programs as $mapel_kelas_program)
+                        @if($mapel_kelas_program->kelas_program_id==$kelas_program->id_kelas_program)
+                          {{'- '.ucwords($mapel_kelas_program->nama)}}<br>
+                        @endif
+                      @endforeach
+                    </td>
                     <!-- <td>
                       @if($kelas_program->user_guru_id==0) 
                         {{'Guru belum ditentukan!'}} <br>
@@ -153,7 +161,7 @@
                         @endforeach
                       @endif
                     </td> -->
-                    <td id="jml_siswa" style="text-align: center;">
+                    <td id="jml_siswa">
                       @php($siswa_pending=0)
                       @php($siswa_terdaftar=0)
                       @foreach($siswa_totals as $siswa_total)
@@ -165,12 +173,56 @@
                           @endif
                         @endif
                       @endforeach
-                      Terdaftar <small class="badge badge-primary">{{$siswa_terdaftar}}<br></small>
-                       - Pending <small class="badge badge-warning">{{$siswa_pending}}<br></small>
+                      <small class="badge badge-primary">{{'Terdaftar: '.$siswa_terdaftar}}</small><br>
+                      <small class="badge badge-warning">{{'Pending: '.$siswa_pending}}</small>
                     </td>
-                    <td style="text-align: center;">{{'Rp '.$kelas_program->harga}}</td>
+
+                    <td>
+                      @foreach($harga_kelas_programs as $harga_kelas_program)
+                        @if($harga_kelas_program->kelas_program_id==$kelas_program->id_kelas_program)
+                          @if($harga_kelas_program->harga===NULL)
+                            <b>Harga belum diatur</b>
+                            @if (Auth::user()->hasRole('adm_instansi'))
+                            <a href="" id="edit" data-toggle="modal" data-id="{{ $harga_kelas_program->id }}" class="btn btn-warning btn-xs shadow-sm mb-2"><i class="fas fa-edit"></i> Edit</a>
+                            @elseif (Auth::user()->hasRole('siswa'))
+                            <form method='POST' action='{{ route("daftar.siswa") }}' enctype='multipart/form-data' style="display:inline">
+                            <!-- <form method='POST' action='{{ route("orders.store") }}' enctype='multipart/form-data'> -->
+                              @csrf
+                              <input type='hidden' name='id_kelas_program' value='{{$harga_kelas_program->kelas_program_id}}'>
+                              <button type='submit' class='btn bg-purple btn-xs mb-2' disabled><i class='fas fa-check-circle'></i> Pilih</button>
+                            </form>
+                            @endif<br>
+                          @elseif($harga_kelas_program->harga==='0')
+                            <b>{{$harga_kelas_program->jumlah_bulan.' bulan: '}}</b>{{'Gratis'}}
+                            @if (Auth::user()->hasRole('adm_instansi'))
+                            <a href="" id="edit" data-toggle="modal" data-id="{{ $harga_kelas_program->id }}" class="btn btn-warning btn-xs shadow-sm mb-2"><i class="fas fa-edit"></i> Edit</a>
+                            @elseif (Auth::user()->hasRole('siswa'))
+                            <form method='POST' action='{{ route("daftar.siswa") }}' enctype='multipart/form-data' style="display:inline">
+                            <!-- <form method='POST' action='{{ route("orders.store") }}' enctype='multipart/form-data'> -->
+                              @csrf
+                              <input type='hidden' name='id_kelas_program' value='{{$harga_kelas_program->kelas_program_id}}'>
+                              <button type='submit' class='btn bg-purple btn-xs mb-2'><i class='fas fa-check-circle'></i> Pilih</button>
+                            </form>
+                            @endif<br>
+                          @else
+                            <b>{{$harga_kelas_program->jumlah_bulan.' bulan: '}}</b>{{'Rp ' .number_format($harga_kelas_program->harga,0,',',',')}}
+                            @if (Auth::user()->hasRole('adm_instansi'))
+                            <a href="" id="edit" data-toggle="modal" data-id="{{ $harga_kelas_program->id }}" class="btn btn-warning btn-xs shadow-sm mb-2"><i class="fas fa-edit"></i> Edit</a>
+                            @elseif (Auth::user()->hasRole('siswa'))
+                            <form method='POST' action='{{ route("daftar.siswa") }}' enctype='multipart/form-data' style="display:inline">
+                            <!-- <form method='POST' action='{{ route("orders.store") }}' enctype='multipart/form-data'> -->
+                              @csrf
+                              <input type='hidden' name='id_kelas_program' value='{{$harga_kelas_program->kelas_program_id}}'>
+                              <input type='hidden' name='id_harga' value='{{$harga_kelas_program->id}}'>
+                              <button type='submit' class='btn bg-purple btn-xs mb-2'><i class='fas fa-check-circle'></i> Pilih</button>
+                            </form>
+                            @endif<br>
+                          @endif
+                        @endif
+                      @endforeach
+                    </td>
+                    
                     <td style="text-align: center;"><center>
-                      <a href="" id="edit" data-toggle="modal" data-id="{{ $kelas_program->id_kelas_program }}" class="btn btn-warning btn-sm shadow-sm">Edit</a>
                       <a href="{{route('kelas-program.show',$kelas_program->id_kelas_program)}}" class="btn bg-purple btn-sm shadow-sm" >Detail</a>
                     </center></td>
                   </tr>
@@ -245,7 +297,7 @@
           </button>
         </div>
         
-        <form method="POST" action="{{ route('kelas-program.store') }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('kelas-program.store') }}" enctype="multipart/form-data" autocomplete="off">
           @csrf
           <div class="modal-body">
               
@@ -253,12 +305,12 @@
               <input type="hidden" name="id_instansi" value="{{$user_admin_instansi->id_instansi}}">
             @endforeach
             <!-- form input -->
-            <div class="row">
+            <div class="row" id="input_kelas_program">
 
               <!-- Nama -->
               <div class="form-group col-12">
                 <label for="deskripsi">{{ __('Nama '.$text) }}</label>
-                <input id="deskripsi" type="text" class="form-control @error('deskripsi') is-invalid @enderror" name="deskripsi" value="{{ old('deskripsi') }}" autocomplete="deskripsi" autofocus placeholder="Namanya apa?"required>
+                <input id="deskripsi" type="text" class="form-control @error('deskripsi') is-invalid @enderror" name="deskripsi" value="{{ old('deskripsi') }}" placeholder="Namanya apa?"required>
 
                 @error('deskripsi')
                     <span class="invalid-feedback" role="alert">
@@ -294,29 +346,34 @@
                 </select>
               </div>
 
-              <!-- Jurusan -->
-              <!-- <div class="form-group col-12">
-                <label for="jurusan">{{ __('Jurusan') }}</label>
-                <input id="jurusan" type="text" class="form-control @error('jurusan') is-invalid @enderror" name="jurusan" value="{{ old('jurusan') }}" autocomplete="jurusan" autofocus placeholder="Jurusan apa? (opsional)">
+              <!-- Jumlah Harga -->
+              <div class="form-group col-12">
+                <label for="variasi_harga">{{ __('Jumlah  Variasi Harga') }}</label>
+                <input id="variasi_harga" type="number" class="form-control @error('variasi_harga') is-invalid @enderror" name="variasi_harga" value="{{ old('variasi_harga') }}" placeholder="Masukkan jumlah variasi harga" required>
 
-                @error('jurusan')
+                @error('variasi_harga')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
                 @enderror
-              </div> -->
+              </div>
 
               <!-- Harga -->
-              <div class="form-group col-12">
+              <!-- <div class="form-group col-9">
                 <label for="jurusan">{{ __('Harga') }}</label>
-                <input id="harga" type="number" class="form-control @error('harga') is-invalid @enderror" name="harga" value="{{ old('jurusan') }}" autocomplete="harga" autofocus placeholder="Masukkan harga kelasnya ya" required>
+                <input id="harga" type="number" class="form-control @error('harga') is-invalid @enderror" name="harga" value="{{ old('jurusan') }}" placeholder="Masukkan harga kelasnya ya" required>
 
                 @error('harga')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
                 @enderror
-              </div>
+              </div> -->
+
+              <!-- <div class="form-group col-3">
+                <label for="addRow" style="color: white;">Button</label>
+                <button id="addRow" type="button" class="btn btn-info form-control">Tambah</button>
+              </div> -->
 
             </div>
           </div>
@@ -335,50 +392,62 @@
   <!-- Modal Edit Data -->
   <div class="modal fade" id="modal-edit">
     <div class="modal-dialog">
-      <div class="modal-content">
+      <form id="kelas_program_modal" autocomplete="off">
+        <div class="modal-content">
 
-        <div class="modal-header">
-          <h4 class="modal-title">Edit {{$text}}</h4>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-          <div class="modal-body">
-            <div class="row">
+          <div class="modal-header">
+            <h4 class="modal-title">Edit {{$text}}</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+            <div class="modal-body">
+              <div class="row">
 
-              <input type="hidden" id="id_kelas_program" name="id_kelas_program" value="">
+                <input type="hidden" id="id_harga" name="id_harga" value="">
 
-              <!-- Nama -->
-              <div class="form-group col-12">
-                <label for="deskripsi">{{ __('Nama '.$text) }}</label>
-                <input id="deskripsi" type="text" class="form-control @error('deskripsi') is-invalid @enderror" name="deskripsi" value="{{ old('deskripsi') }}" autocomplete="deskripsi" autofocus placeholder="Namanya apa?"required>
+                <!-- Nama -->
+                <div class="form-group col-12">
+                  <label for="deskripsi">{{ __('Nama '.$text) }}</label>
+                  <input id="deskripsi" type="text" class="form-control @error('deskripsi') is-invalid @enderror" name="deskripsi" value="{{ old('deskripsi') }}" placeholder="Namanya apa?"required>
+                </div>
 
-                @error('deskripsi')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
+                <!-- Harga -->
+                <div class="form-group col-6">
+                  <label for="jurusan">{{ __('Harga') }}</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Rp.</span>
+                    </div>
+                    <input id="harga" type="number" class="form-control @error('harga') is-invalid @enderror" name="harga" value="{{ old('jurusan') }}" placeholder="Harga langganan" required>
+                  </div>
+                </div>
+
+                <!-- Jumlah Bulan -->
+                <div class="form-group col-6">
+                  <label for="jumlah_bulan">{{ __('Jumlah Bulan') }}</label>
+                  <div class="input-group">
+                    <input id="jumlah_bulan" type="number" class="form-control @error('jumlah_bulan') is-invalid @enderror" name="jumlah_bulan" value="{{ old('jumlah_bulan') }}" placeholder="Berapa lama?" required>
+                    <div class="input-group-append">
+                      <div class="input-group-text"> bulan</div>
+                    </div>
+                  </div>
+                  
+                  
+                </div>
+
+                <div class="form-group col-12">
+                  <span id="err" class="text-danger" role="alert"></span>
+                </div>
+
               </div>
-
-              <!-- Harga -->
-              <div class="form-group col-12">
-                <label for="jurusan">{{ __('Harga') }}</label>
-                <input id="harga" type="number" class="form-control @error('harga') is-invalid @enderror" name="harga" value="{{ old('jurusan') }}" autocomplete="harga" autofocus placeholder="Masukkan harga kelasnya ya" required>
-
-                @error('harga')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-              </div>
-
             </div>
-          </div>
-          <div class="modal-footer justify-content-between mb-2">
-            <button id="submit" type="submit" class="btn bg-purple btn-block shadow-sm">Perbarui Data</button>
-          </div>
-      </div>
-      <!-- /.modal-content -->
+            <div class="modal-footer justify-content-between mb-2">
+              <button id="submit" type="submit" class="btn bg-purple btn-block shadow-sm">Perbarui Data</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+      </form>
     </div>
     <!-- /.modal-dialog -->
   </div>
@@ -390,6 +459,22 @@
 @section('js-end')
 
 <script type="text/javascript">
+
+  // add row
+  $("#addRow").click(function () {
+      var html = '';
+      html += '<div class="form-group col-9">';
+      html += '<label for="jurusan">Harga</label>';
+      html += '<input id="harga" type="number" class="form-control @error("harga") is-invalid @enderror" name="harga" value="{{ old("jurusan") }}" autocomplete="harga" autofocus placeholder="Masukkan harga kelasnya ya" required>';
+      html += '</div>';
+      html += '<div class="form-group col-3">';
+      html += '<label for="addRow" style="color: white;">Button</label>';
+      html += '<button id="removeRow" type="button" class="btn btn-danger form-control">Hapus</button>';
+      html += '</div>';
+
+      $('#modal-default #input_kelas_program').append(html);
+  });
+
   $(document).ready(function() {
     //Initialize Select2 Elements
     $('.select2').select2({
@@ -553,9 +638,10 @@
 
       $.get('kelas-program/' + id + '/edit', function (data) {
         console.log(data);
-        $('#modal-edit #id_kelas_program').val(data.data.id);
+        $('#modal-edit #id_harga').val(data.data.id_harga);
         $('#modal-edit #deskripsi').val(data.data.deskripsi);
         $('#modal-edit #harga').val(data.data.harga);
+        $('#modal-edit #jumlah_bulan').val(data.data.jumlah_bulan);
         $('#modal-edit').modal('show');
       })
     });
@@ -564,24 +650,35 @@
     $('body').on('click', '#modal-edit #submit', function (event) {
         event.preventDefault()
         
-        var id = $("#modal-edit #id_kelas_program").val();
+        $("#err").empty()
+        var id = $("#modal-edit #id_harga").val();
         var deskripsi = $("#modal-edit #deskripsi").val();
         var harga = $("#modal-edit #harga").val();
+        var jumlah_bulan = $("#modal-edit #jumlah_bulan").val();
+        // alert(id);
         
         $.ajax({
-          url: 'kelas-program/' + id,
+          url: 'kelas-program/'+id,
           type: 'POST',
           data: {
             _token: "{{ csrf_token() }}",
-            _method: "PUT",
+            _method: "PATCH",
             deskripsi: deskripsi,
             harga: harga,
+            jumlah_bulan: jumlah_bulan,
             keterangan: 'update_master',
           },
           dataType: 'json',
           success: function (data) {
+            // if($.isEmptyObject(data.error)){
+              $('#kelas_program_modal').trigger("reset");
               $('#modal-edit').modal('hide');
               window.location.href = '/kelas-program'
+            // }
+            // else{
+              // console.log(data.error)
+              // $("#err").html("<small><strong>" + data.error.jumlah_bulan[0] + data.error.jumlah_bulan[1] + "</strong></small>");
+            // }
           }
       });
     });

@@ -74,7 +74,7 @@
                   @if($data_kelas->tipe=='sekolah')Harga Kelas
                   @else Harga Program Kursus
                   @endif
-                </b><br style="display: block; content: ''; margin-top: 0.2rem;">{{'Rp '.$data_kelas->harga}}</h6>
+                </b><br style="display: block; content: ''; margin-top: 0.2rem;">{{'Rp '.number_format($data_kelas->harga,0,',',',')}}</h6>
               </div>
               
               <div class="col-4">
@@ -223,7 +223,7 @@
                           data-telp="{{ $siswa_kelas->no_telp }}"
                           data-nisn="{{ $siswa_kelas->nisn }}" 
                           data-nama_wali="{{ $siswa_kelas->nama_wali }}" 
-                          data-telp_wali="{{ $siswa_kelas->telp_wali }}" 
+                          data-telp_wali="{{ $siswa_kelas->email_wali }}" 
                           data-bukti="{{ $siswa_kelas->bukti_bayar }}"
                           data-status="{{ '1' }}"><i class="fas fa-eye"></i>  Lihat
                         </a>
@@ -305,7 +305,7 @@
                           data-telp="{{ $siswa_permintaan->no_telp }}"
                           data-nisn="{{ $siswa_permintaan->nisn }}" 
                           data-nama_wali="{{ $siswa_permintaan->nama_wali }}" 
-                          data-telp_wali="{{ $siswa_permintaan->telp_wali }}" 
+                          data-telp_wali="{{ $siswa_permintaan->email_wali }}" 
                           data-bukti="{{ $siswa_permintaan->bukti_bayar }}"
                           data-status="{{ '0' }}"><i class="fas fa-eye"></i>  Lihat
                         </a>
@@ -435,7 +435,7 @@
                           @if($data_kelas->harga!='0')
                           <a id="link_bukti" href="#" class="btn btn-sm btn-secondary" target="_blank"><i class="fas fa-file-invoice-dollar"></i> Lihat Bukti Pembayaran</a>
                           @endif
-                          <button id="submit" type="submit" class="btn bg-purple btn-sm btn_terima" hidden><i class="fas fa-user-check"></i> Terima</button>
+                          <button id="submit" type="submit" class="btn bg-purple btn-sm btn_terima" hidden><i class="fas fa-user-check"></i> Valid</button>
                         </div>
                       </form>
 
@@ -571,7 +571,7 @@
     $(".text_gender").html( '<span class="fa-li"><i class="fas fa-venus-mars"></i></span>'+jenis_kelamin );
     $(".text_no_telp").html( '<span class="fa-li"><i class="fas fa-mobile-alt"></i></span>'+no_telp );
     $(".text_nama_wali").html( '<span class="fa-li"><i class="fas fa-user-tie"></i></span>'+nama_wali );
-    $(".text_no_wali").html( '<span class="fa-li"><i class="fas fa-mobile-alt"></i></span>'+telp_wali );
+    $(".text_no_wali").html( '<span class="fa-li"><i class="fas fa-envelope-open-text"></i></span>'+telp_wali );
 
     if(status==0){
       $(".btn_terima").prop('hidden', '');

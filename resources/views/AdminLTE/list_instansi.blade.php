@@ -44,7 +44,7 @@
       <div class="col-md-12">
         <div class="card">
           
-          <div class="card-header border-0">
+          <div class="card-header">
             @if (Auth::user()->hasRole('siswa'))              
               @if($siswa->kelas>=1 and $siswa->kelas<=6)
                 @php($tingkat='('.$siswa->kelas.' SD/sederajat)')
@@ -54,7 +54,7 @@
                 @php($tingkat='('.$siswa->kelas.' SMA/sederajat)')
               @endif
             @endif
-            <h3 class="card-title"><b>Data Instansi Pendidikan <small><i>{{$tingkat ?? ''}}</i></small></b></h3>
+            <h3 class="card-title"><b>Data Lembaga Pendidikan <small><i>{{$tingkat ?? ''}}</i></small></b></h3>
 
             <div class="card-tools">
               <button type="button" class="btn btn-tool" data-card-widget="maximize">
@@ -112,16 +112,14 @@
                           </td>
                           <td><center>
                             @if (Auth::user()->hasRole('siswa'))
-                              <button type="button" class="btn btn-sm bg-purple btn_pilih" data-toggle="modal" data-target="#pilih_guru" 
-                                data-id-instansi="{{$select_sekolah->id}} " 
-                                data-nama-instansi="{{$select_sekolah->instansi}}" 
-                                data-tipe-instansi="{{$select_sekolah->tipe}}" 
-                                data-id-siswa="{{$siswa->id}}"
-                                data-master-kelas-id="{{$siswa->master_kelas_id}}" >
-                                <i class="fas fa-info-circle"></i> Detail
-                              </button>
+                              <form method='POST' action="{{ route('show.kelas_program') }}" enctype='multipart/form-data'>
+                                @csrf
+                                <input type="hidden" name="id_instansi" value="{{$select_sekolah->id}}">
+                                <input type="hidden" name="id_master_kelas" value="{{$siswa->master_kelas_id}}">
+                                <button type="submit" class="btn btn-sm bg-purple"><i class="fas fa-info-circle"></i> Detail</button>
+                              </form>
 
-                              <!-- <button type="button" class="btn btn-sm bg-purple btn_pilih"
+                              <!-- <button type="button" class="btn btn-sm bg-purple btn_pilih" data-toggle="modal" data-target="#pilih_guru" 
                                 data-id-instansi="{{$select_sekolah->id}} " 
                                 data-nama-instansi="{{$select_sekolah->instansi}}" 
                                 data-tipe-instansi="{{$select_sekolah->tipe}}" 
@@ -129,6 +127,7 @@
                                 data-master-kelas-id="{{$siswa->master_kelas_id}}" >
                                 <i class="fas fa-info-circle"></i> Detail
                               </button> -->
+
                             @elseif (Auth::user()->hasRole('guru'))
                               @if($select_sekolah->jenjang=='SD')
                                 <span class="badge badge-danger">{{$select_sekolah->jenjang.'/sederajat'}}</span>
@@ -186,16 +185,13 @@
                           </td>
                           <td><center>
                             @if (Auth::user()->hasRole('siswa'))
-                              <button type="button" class="btn btn-sm bg-purple btn_pilih" data-toggle="modal" data-target="#pilih_guru" 
-                                data-id-instansi="{{$select_kursus->id}} " 
-                                data-nama-instansi="{{$select_kursus->instansi}}" 
-                                data-tipe-instansi="{{$select_kursus->tipe}}" 
-                                data-id-siswa="{{$siswa->id}}"
-                                data-master-kelas-id="{{$siswa->master_kelas_id}}" >
-                                <i class="fas fa-info-circle"></i> Detail
-                              </button>
-
-                              <!-- <button type="button" class="btn btn-sm bg-purple btn_pilih" 
+                              <form method='POST' action="{{ route('show.kelas_program') }}" enctype='multipart/form-data'>
+                                @csrf
+                                <input type="hidden" name="id_instansi" value="{{$select_kursus->id}}">
+                                <input type="hidden" name="id_master_kelas" value="{{$siswa->master_kelas_id}}">
+                                <button type="submit" class="btn btn-sm bg-purple"><i class="fas fa-info-circle"></i> Detail</button>
+                              </form>
+                              <!-- <button type="button" class="btn btn-sm bg-purple btn_pilih" data-toggle="modal" data-target="#pilih_guru" 
                                 data-id-instansi="{{$select_kursus->id}} " 
                                 data-nama-instansi="{{$select_kursus->instansi}}" 
                                 data-tipe-instansi="{{$select_kursus->tipe}}" 
@@ -203,6 +199,7 @@
                                 data-master-kelas-id="{{$siswa->master_kelas_id}}" >
                                 <i class="fas fa-info-circle"></i> Detail
                               </button> -->
+
                             @elseif (Auth::user()->hasRole('guru'))
                               @if($select_kursus->jenjang=='SD')
                                 <span class="badge badge-danger">{{$select_kursus->jenjang.'/sederajat'}}</span>
@@ -241,7 +238,7 @@
                               <thead>
                                 <tr>
                                   <th style="width: 1%; text-align: center;">Kelas</th>
-                                  <th style="width: 5%; text-align: center;">No</th>
+                                  <!-- <th style="width: 5%; text-align: center;">No</th> -->
                                   <th style="width: 30%;">Nama</th>
                                   <th style="width: 35%;">Mata Pelajaran</th>
                                   <!-- <th style="width: 40%;">Data Guru</th> -->
@@ -420,15 +417,23 @@
           else{
             jurusan=row.tingkat+"/sederajat"+" - "+row.jurusan;
           }
+
+          if(row.harga==='0'){
+            row.harga="Gratis";
+          }
+          else{
+            row.harga="Rp "+parseInt(row.harga).toLocaleString();
+          }
           
           bodyData+="<tr>"
-          bodyData+="<td>(Kelas "+row.kelas+" "+row.tingkat+"/sederajat"+jurusan+")</td>"+
-          "<td><center>"+i+"</center></td>"+
+          bodyData+="<td>(Kelas "+row.kelas+" "+jurusan+")</td>"+
+          // "<td><center>"+i+"</center></td>"+
           "<td>"+row.deskripsi+"</td>"+
           "<td>"+materi+"</td>"+
           // "<td><img src="+profil+" class='img-circle mr-4' alt='User Image' style='max-width:40px'>"+row.name+"</td>"+
-          "<td><center>Rp "+row.harga+"</center></td>"+
+          "<td><center>"+row.harga+"</center></td>"+
           "<td><center><form method='POST' action='{{ route('daftar.siswa') }}' enctype='multipart/form-data'>"+
+          // "<td><center><form method='POST' action='{{ route('orders.store') }}' enctype='multipart/form-data'>"+
             "<input type='hidden' name='_token' id='csrf-token' value='{{ csrf_token() }}' />"+
             "<input type='hidden' name='id_kelas_program' value='"+row.id_kelas_program+"'>"+
             "<button type='submit' class='btn bg-purple btn-sm'><i class='fas fa-check-circle'></i> Pilih</button>"+

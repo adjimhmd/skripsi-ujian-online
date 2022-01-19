@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\GuruInstansi;
+use App\Models\HargaKelasProgram;
 use App\Models\InstansiPendidikan;
 use App\Models\KelasProgram;
+use App\Models\MapelKelasProgram;
 use App\Models\MasterKelas;
 use App\Models\MasterMapel;
 use App\Models\MasterTahunAjaran;
@@ -77,14 +79,29 @@ class KelasProgramController extends Controller
         $tahun_ajarans = MasterTahunAjaran::select('*')->orderBy('tahun_awal')->orderBy('semester')->get();
         
         foreach($user_admin_instansis as $user_admin_instansi){
-            $kelas_programs = KelasProgram::select('kelas_programs.id as id_kelas_program','kelas_programs.*','master_kelas.tingkat','master_kelas.kelas','master_mapels.nama','master_mapels.materi','master_mapels.id as id_master_mapel')
+            $kelas_programs = KelasProgram::select('kelas_programs.id as id_kelas_program','kelas_programs.*','master_kelas.tingkat','master_kelas.kelas')
                 ->join('master_kelas', 'kelas_programs.master_kelas_id', '=', 'master_kelas.id')
-                ->join('master_mapels', 'kelas_programs.master_mapel_id', '=', 'master_mapels.id')
                 ->where('instansi_pendidikan_id', '=', $user_admin_instansi->id_instansi)
                 ->orderBy('master_kelas.kelas')
                 ->orderBy('kelas_programs.deskripsi')
                 ->get();
         }
+        // return$kelas_programs;
+
+        $id_kelas_program[]='';
+
+        if(!$kelas_programs->isEmpty()){
+            foreach($kelas_programs as $kelas_program){
+                $id_kelas_program[]=$kelas_program->id_kelas_program;
+            }
+        }
+
+        $mapel_kelas_programs = MapelKelasProgram::select('mapel_kelas_programs.*','master_mapels.nama')
+                ->join('master_mapels', 'mapel_kelas_programs.master_mapel_id', '=', 'master_mapels.id')
+                ->whereIn('kelas_program_id',$id_kelas_program)
+                ->get();
+
+        $harga_kelas_programs = HargaKelasProgram::whereIn('kelas_program_id',$id_kelas_program)->get();
 
         $nama_gurus = GuruInstansi::select('guru_instansis.id as id_guru_instansi','guru_instansis.*','users.*')
             ->join('user_gurus', 'guru_instansis.user_guru_id', '=', 'user_gurus.id')
@@ -98,8 +115,7 @@ class KelasProgramController extends Controller
 
         $siswa_totals = RombonganBelajar::select('*')->get();
 
-        // return$nama_gurus;
-        return view('AdminLTE/kelas_program',compact('nama_instansis','foto_profil','id','user_admin_instansis','last_updates','jumlahs','kelass','mapels','tahun_ajarans','kelas_programs','siswa_totals'));
+        return view('AdminLTE/kelas_program',compact('nama_instansis','foto_profil','id','user_admin_instansis','last_updates','jumlahs','kelass','mapels','tahun_ajarans','kelas_programs','siswa_totals','mapel_kelas_programs','harga_kelas_programs'));
     }
 
     /**
@@ -121,13 +137,13 @@ class KelasProgramController extends Controller
     public function store(Request $request)
     {
         //
-        // return$request->input('deskripsi');
-
+        // return $request;
         $rules = array(
             'deskripsi' => 'string|max:100',
-            'jurusan' => 'string|max:50|nullable',
-            'harga' => 'numeric|gte:0',
-            'file_impor' => 'mimes:xls,xlsx,csv|max:1024',
+            'variasi_harga' => 'numeric|gt:0',
+            // 'harga' => 'numeric|gte:0',
+            // 'jurusan' => 'string|max:50|nullable',
+            // 'file_impor' => 'mimes:xls,xlsx,csv|max:1024',
         );
 
         $validator = Validator::make($request->all(), $rules);
@@ -137,19 +153,37 @@ class KelasProgramController extends Controller
             return redirect()->back()->withInput()->withErrors($validator->errors());
         }
 
-        if(empty($request->input('file_impor'))){
-            for($count = 0; $count < count($request->input('mapel')); $count++){
+        $save_kelas_program=KelasProgram::create([
+            'deskripsi' => $request->input('deskripsi'),
+            'master_kelas_id' => $request->input('kelas'),
+            'instansi_pendidikan_id' =>  $request->input('id_instansi'),
+        ]); 
 
-                KelasProgram::create([
-                    'deskripsi' => $request->input('deskripsi'),
-                    'master_kelas_id' => $request->input('kelas'),
-                    'master_mapel_id' =>  $request->input('mapel')[$count],
-                    'instansi_pendidikan_id' =>  $request->input('id_instansi'),
-                    'jurusan' => $request->input('jurusan'),
-                    'harga' => $request->input('harga'),
-                ]); 
-            };
-        };
+        for($count = 0; $count < $request->input('variasi_harga'); $count++){
+            HargaKelasProgram::create([
+                'kelas_program_id' => $save_kelas_program->id,
+            ]); 
+        }
+
+        for($count = 0; $count < count($request->input('mapel')); $count++){
+            MapelKelasProgram::create([
+                'kelas_program_id' => $save_kelas_program->id,
+                'master_mapel_id' =>  $request->input('mapel')[$count],
+            ]); 
+        }
+
+        // if(empty($request->input('file_impor'))){
+        //     for($count = 0; $count < count($request->input('mapel')); $count++){
+
+        //         KelasProgram::create([
+        //             'deskripsi' => $request->input('deskripsi'),
+        //             'master_kelas_id' => $request->input('kelas'),
+        //             'instansi_pendidikan_id' =>  $request->input('id_instansi'),
+        //             'jurusan' => $request->input('jurusan'),
+        //             'harga' => $request->input('harga'),
+        //         ]); 
+        //     };
+        // };
 
         $request->session()->flash('success', 'Data berhasil disimpan!');
 
@@ -165,6 +199,7 @@ class KelasProgramController extends Controller
      */
     public function show($id)
     {
+        // return $id;
         $id_user = Auth::user()->id;
 
         $roles=Auth::user()->roles;
@@ -216,11 +251,14 @@ class KelasProgramController extends Controller
         
         $data_kelas = KelasProgram::select(
             'kelas_programs.id as id_kelas_program','kelas_programs.*',
+            'harga_kelas_programs.harga',
             'master_kelas.id as id_master_kelas','master_kelas.*',
             'master_mapels.id as id_master_mapel','master_mapels.nama as nama_mapel','master_mapels.*',
             'instansi_pendidikans.id as id_instansi_pendidikan','instansi_pendidikans.nama as nama_sekolah','instansi_pendidikans.*')
             ->join('master_kelas', 'kelas_programs.master_kelas_id', '=', 'master_kelas.id')
-            ->join('master_mapels', 'kelas_programs.master_mapel_id', '=', 'master_mapels.id')
+            ->join('harga_kelas_programs', 'kelas_programs.id', '=', 'harga_kelas_programs.kelas_program_id')
+            ->join('mapel_kelas_programs', 'kelas_programs.id', '=', 'mapel_kelas_programs.kelas_program_id')
+            ->join('master_mapels', 'mapel_kelas_programs.master_mapel_id', '=', 'master_mapels.id')
             ->join('instansi_pendidikans', 'kelas_programs.instansi_pendidikan_id', '=', 'instansi_pendidikans.id')
             ->where('kelas_programs.id', '=', $id)
             ->first();
@@ -263,7 +301,10 @@ class KelasProgramController extends Controller
     public function edit($id)
     {
         //
-        $kelas_program = KelasProgram::find($id);
+        $kelas_program = HargaKelasProgram::select('harga_kelas_programs.*','harga_kelas_programs.id as id_harga','kelas_programs.*')
+            ->join('kelas_programs','harga_kelas_programs.kelas_program_id','=','kelas_programs.id')
+            ->where('harga_kelas_programs.id',$id)
+            ->first();
 
 	    return response()->json([
 	      'data' => $kelas_program
@@ -280,27 +321,35 @@ class KelasProgramController extends Controller
     public function update(Request $request, $id)
     {
         //
+        // dd ($id);
         if($request->keterangan=='update_master'){
             $rules = array(
                 'deskripsi' => 'string|max:100',
                 'harga' => 'numeric|gte:0',
+                'jumlah_bulan' => 'numeric|gt:0',
             );
 
             $validator = Validator::make($request->all(), $rules);
 
             if($validator->fails()) {
                 $request->session()->flash('danger', 'Aduh ada yang salah, coba cek lagi ya form editnya');
+                return response()->json(['error'=>$validator->errors()]);
             }
             else{
-                $kelas_program = KelasProgram::find($id);
+                $harga_kelas_program = HargaKelasProgram::find($id);
+                $harga_kelas_program->update([
+                    'harga' => $request->input('harga'),
+                    'jumlah_bulan' => $request->input('jumlah_bulan'),
+                ]); 
+
+                $kelas_program = KelasProgram::find($harga_kelas_program->kelas_program_id);
                 $kelas_program->update([
                     'deskripsi' => $request->input('deskripsi'),
-                    'harga' => $request->input('harga'),
                 ]); 
         
                 $request->session()->flash('success', 'Data '.$request->input('deskripsi').' berhasil diperbarui!');
+                return response()->json([ 'success' => true ]);
             }
-            return response()->json([ 'success' => true ]);
             
         }
         elseif($request->keterangan=='terima_user'){

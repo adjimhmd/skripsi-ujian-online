@@ -23,7 +23,7 @@
     <div class="card">
 
       <div class="card-header mt-2">
-        <a href="AdminLTE/index2.html" class="h3"><b>Bayar </b>Dulu Ya..</a>
+        <a href="AdminLTE/index2.html" class="h3"><b>Halaman </b>Pembayaran</a>
       </div>
       <div class="card-body pb-0 pb-5">
 
@@ -67,11 +67,11 @@
                     @else @php($materi=ucwords($data->nama))
                     @endif
                     <td><strong>{{$data->kelas.' '.$data->tingkat.'/sederajat'.$jurusan}}</strong><br> {{$materi}} </td>
-                    <td class="text-md-right">{{'Rp '.$data->harga}}</td>
+                    <td class="text-md-right">{{'Rp '.number_format($data->harga,0,',',',')}}</td>
                   </tr>
                   <tr>
                     <td class="text-md-right"><strong>Total</strong></td>
-                    <td class="text-md-right">{{'Rp '.$data->harga}}</td>
+                    <td class="text-md-right">{{'Rp '.number_format($data->harga,0,',',',')}}</td>
                   </tr>
                   </tbody>
                 </table>

@@ -17,6 +17,7 @@ class CreateRombonganBelajarsTable extends Migration
             $table->id();
             $table->integer('kelas_program_id')->unsigned();
             $table->bigInteger('user_siswa_id')->unsigned();
+            $table->bigInteger('harga_kelas_program_id')->unsigned();
             $table->enum('status', ['0', '1'])->nullable();
             $table->string('bukti_bayar')->nullable();
             $table->timestamps();

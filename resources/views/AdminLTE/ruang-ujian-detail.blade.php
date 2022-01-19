@@ -161,7 +161,7 @@
                             <h6><b>Jawaban Siswa: </b></h6>
                             <div class="media_tabel">{!!$detail_ujian->jawaban!!}</div><br>
                             
-                            <div class="form-group row">
+                            <div class="form-group row mb-0">
                               <b class="col-auto col-form-label">Nilai </b>
                               <div class="col-1 my-auto">
                                 <input type="number" step="0.1" class="form-control form-control-sm" value="{{$detail_ujian->nilai}}" id="nilai_subjektif_{{$detail_ujian->id}}" maxlength="1" min="0" max="1">
@@ -171,8 +171,9 @@
                               </div>
                               <div class="col-auto my-auto">
                                 <button type="button" class="btn bg-purple btn-sm lihat_pembahasan shadow-sm" data-toggle="modal" data-target="#lihat-pembahasan" data-pembahasan="{{ $bank_soal->pembahasan }}" data-kunci-jawaban="{{ $bank_soal->jawaban }}">Lihat Kunci Jawaban & Pembahasan</button>
-                              </div>
+                              </div><br>
                             </div>
+                            <small><b><i class="far fa-question-circle mr-2"></i>Note: </b>Rentang nilai adalah 0 s/d 1</small>
                             <hr><br>
 
                             <!-- <textarea id="{{'pilihan_siswa_'.$no_subjektif++}}" class="form-control pilihan_siswa pilihan" disabled>{!!$bank_soal->jawaban!!}</textarea> -->
@@ -733,7 +734,9 @@
                     <th style="width: 12%; text-align: center;;">Essay</th>
                     <th style="width: 12%; text-align: center;;">Penjodohan</th>
                     <th style="width: 12%; text-align: center;;">True-False</th>
+                    @if(Auth::user()->hasRole('guru'))
                     <th style="width: 8%; text-align: center;">Aksi</th>
+                    @endif
                   </tr>
                 </thead>
                 <tbody>
@@ -778,15 +781,13 @@
                       @endif
                     @endforeach
 
-                    <td style="text-align: center;">{{'Nilai: '.$nilaiObjektif.'/'.$jumlahObjektif}}</td>
-                    <td style="text-align: center;">{{'Nilai: '.$nilaiSubjektif.'/'.$jumlahSubjektif}}</td>
-                    <td style="text-align: center;">{{'Nilai: '.$nilaiPenjodohan.'/'.$jumlahPenjodohan}}</td>
-                    <td style="text-align: center;">{{'Nilai: '.$nilaiTruefalse.'/'.$jumlahTruefalse}}</td>
+                    <td style="text-align: center;">{{'Benar: '.$nilaiObjektif.'/'.$jumlahObjektif.' soal'}}</td>
+                    <td style="text-align: center;">{{'Benar: '.$nilaiSubjektif.'/'.$jumlahSubjektif.' soal'}}</td>
+                    <td style="text-align: center;">{{'Benar: '.$nilaiPenjodohan.'/'.$jumlahPenjodohan.' soal'}}</td>
+                    <td style="text-align: center;">{{'Benar: '.$nilaiTruefalse.'/'.$jumlahTruefalse.' soal'}}</td>
       
                     @if(Auth::user()->hasRole('guru'))
                     <td><a href="{{route('hasil.ujian',$master_ruang_ujian->id_master_ruang_ujian.'-'.$rombongan_belajar->id_user)}}" class="btn btn-sm bg-purple btn-block shadow-sm" >Lihat</a></td>
-                    @elseif(Auth::user()->hasRole('adm_instansi'))
-                    <td><a href="{{route('hasil.ujian',$master_ruang_ujian->id_master_ruang_ujian.'-'.$rombongan_belajar->id_user)}}" class="btn btn-sm bg-purple btn-block shadow-sm" ><i class="fas fa-share-square"></i> Nilai</a></td>
                     @endif
                   </tr>
                   @endforeach

@@ -19,16 +19,8 @@ class KelasProgram extends Model
     protected $fillable = [
         'deskripsi',
         'master_kelas_id',
-        'master_mapel_id',
         'instansi_pendidikan_id',
-        'jurusan',
-        'harga',
     ];
-    
-    public function master_mapels()
-    {
-    	return $this->belongsTo('App\MasterMapel');
-    }
     
     public function master_kelas()
     {
@@ -43,5 +35,15 @@ class KelasProgram extends Model
     public function master_ruang_ujians()
     {
     	return $this->hasMany('App\MasterRuangUjian');
+    }
+    
+    public function harga_kelas_programs()
+    {
+    	return $this->hasMany('App\HargaKelasProgram');
+    }
+    
+    public function mapel_kelas_programs()
+    {
+    	return $this->hasMany('App\MapelKelasProgram');
     }
 }

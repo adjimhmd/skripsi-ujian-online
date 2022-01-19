@@ -556,6 +556,15 @@
       ),
     ),
   ),
+  'midtrans' => 
+  array (
+    'mercant_id' => 'G178721750',
+    'client_key' => 'SB-Mid-client-3aOPN3Cq-KoYwTeU',
+    'server_key' => 'SB-Mid-server-ODAUNoE1AyNnFCAmlhp41qSq',
+    'is_production' => false,
+    'is_sanitized' => false,
+    'is_3ds' => false,
+  ),
   'permission' => 
   array (
     'models' => 
