@@ -150,7 +150,12 @@
                   <td>{{$ruang_ujian->nama}}</td>
                   @endif
                   <td>
-                    {{$ruang_ujian->ruang_ujian}}<small><b>{{'  (Mata Pelajaran: '.ucwords($ruang_ujian->mapel).')'}}</b></small><br>
+                    @foreach($mapel_kelas_programs as $mapel_kelas_program)
+                      @if($ruang_ujian->master_mapel_id==$mapel_kelas_program->master_mapel_id)
+                        @php($nama_mata_pelajaran=$mapel_kelas_program->nama)
+                      @endif
+                    @endforeach
+                    {{$ruang_ujian->ruang_ujian}}<small><b>{{' ('.$text.': '.ucwords($ruang_ujian->deskripsi).' | '.'Mata Pelajaran: '.ucwords($nama_mata_pelajaran).')'}}</b></small><br>
                     {{'Tahun Ajaran '.$ruang_ujian->tahun_awal.'/'.$ruang_ujian->tahun_akhir.' -  Semester '.ucwords($ruang_ujian->semester)}}
 
                     <!-- <b>{{$text.': '}}</b>{{$ruang_ujian->deskripsi}}
@@ -206,7 +211,7 @@
       @if (Auth::user()->hasRole('adm_instansi'))
       <!-- Modal AddEdit Data -->
       <div class="modal fade" id="modal-default">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
           <div class="modal-content">
 
             <div class="modal-header">
@@ -216,7 +221,7 @@
               </button>
             </div>
 
-            <form method="POST" action="{{ route('ruang-ujian.store') }}" enctype="multipart/form-data" id="form_paket_soal">
+            <form method="POST" action="{{ route('ruang-ujian.store') }}" enctype="multipart/form-data" id="form_paket_soal" autocomplete="off">
             @csrf
 
               <div class="modal-body">
@@ -242,9 +247,9 @@
                       <option value="" selected disabled>{{'Pilih '.strtolower($text).'nya ya'}}</option>
                       @foreach($kelas_programs as $kelas_program)
                   
-                      @if($kelas_program->jurusan!=null) @php($tanda=' - Jurusan ')
-                      @else @php($tanda='')
-                      @endif
+                        @if($kelas_program->jurusan!=null) @php($tanda=' - Jurusan ')
+                        @else @php($tanda='')
+                        @endif
 
                         <option {{old('kelas_program') =="$kelas_program->id" ? "selected" : ""}} value="{{$kelas_program->id_kelas_program}}">{{$kelas_program->deskripsi.' | Kelas '.$kelas_program->kelas.' '.$kelas_program->tingkat.'/sederajat'.$tanda.ucwords($kelas_program->jurusan)}}</option>
                           <!-- {{$kelas_program->kelas.' '.$kelas_program->tingkat.'/Sederajat '.$tanda.ucwords($kelas_program->jurusan).' | Mapel '.ucwords($kelas_program->nama).' - '}} -->
@@ -253,18 +258,17 @@
                   </div>
 
                   <!-- Keterangan kelas/program -->
-                  @foreach($kelas_programs as $kelas_program)
-                  
+                  <!-- @foreach($mapel_kelas_programs as $mapel_kelas_program)
                   <div id="{{'ket_'.$kelas_program->id_kelas_program}}" class="ket_kelas_program form-group col-12 ml-1" style="margin-top:-10px;" hidden>
-                    <small><b>{{'Mata Pelajaran: '}}</b>{{ucwords($kelas_program->nama)}}</small>
+                    <small><b>{{'Mata Pelajaran: '}}</b>{{ucwords($mapel_kelas_program->nama)}}</small>
                   </div>
-                  @endforeach
+                  @endforeach -->
 
                   <!-- paket soal -->
                   <div class="form-group col-12">
                     <label>Paket Soal</label>
                     <select id="paket_soal" class="form-control select2 @error('paket_soal') is-invalid @enderror" name="paket_soal" required>
-                      <option value="" selected disabled>Pilih paket soal ya</option>
+                      <option value="" selected disabled>Pilih paket soalnya ya</option>
                     </select>
                   </div>
 
@@ -282,7 +286,7 @@
                   </div>
 
                   <!-- Tanggal Mulai -->
-                  <div class="form-group col-6">
+                  <div class="form-group col-4">
                     <label for="tanggal_mulai">{{ __('Tanggal Mulai') }}</label>
 
                     <input id="tanggal_mulai" type="text" onfocus="(this.type='datetime-local')" onblur="(this.type='text')" class="form-control @error('tanggal_mulai') is-invalid @enderror" name="waktu_mulai" value="{{ old('tanggal_mulai') }}" placeholder="Pilih waktu mulai ujiannya ya" required>
@@ -295,11 +299,23 @@
                   </div>
 
                   <!-- Durasi -->
-                  <div class="form-group col-6">
+                  <div class="form-group col-4">
                     <label for="durasi">{{ __('Durasi Ujian') }}</label>
-                    <input id="durasi" type="number" class="form-control @error('durasi') is-invalid @enderror" name="durasi" value="{{ old('durasi') }}" placeholder="Tentukan durasinya (satuan menit)" required min="1" max="10080">
+                    <input id="durasi" type="number" class="form-control @error('durasi') is-invalid @enderror" name="durasi" value="{{ old('durasi') }}" placeholder="Satuan menit" required min="1" max="10080">
 
                     @error('durasi')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                  </div>
+
+                  <!-- Batas Mengulang -->
+                  <div class="form-group col-4">
+                    <label for="batas">{{ __('Batas Mengulang') }}</label>
+                    <input id="batas" type="number" class="form-control @error('batas') is-invalid @enderror" name="batas" value="{{ old('batas') }}" placeholder="Batas mengulang" required min="1" max="10">
+
+                    @error('batas')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
@@ -465,6 +481,7 @@
   $('#kelas_program').on('change', function () {
     $(".ket_kelas_program").attr('hidden',true);
     $("#ket_"+$(this).val()).attr('hidden',false);
+
     $.ajax({
       url: "{{ route('show.paket') }}",
       type:'POST',
@@ -478,7 +495,7 @@
         $("#paket_soal").append('<option value=""selected disabled>Pilih paket soalnya ya</option>');
         
         $.each(resultData,function(index,row){
-          // console.log('id_master_paket_soal'+id_master_paket_soal);
+          console.log(row);
 
           $("#paket_soal").append('<option value="'+row.id+'">'+row.deskripsi+'</option>');
           // $('#modal-default #paket_soal').val(id_master_paket_soal).change();

@@ -61,7 +61,11 @@ class InstansiSiswaController extends Controller
             ->select('role_id')
             ->where('model_id', '=', $id)
             ->first();
-        
+
+        $id_guru='';
+        $list_lembaga_kursus_semua='';
+        $list_sekolah_semua='';
+
         // if siswa
         if($role->role_id==1){
             $list_sekolah = InstansiPendidikan::select('instansi_pendidikans.id','instansi_pendidikans.nama as instansi','alamat','jenjang','tipe','nomor_induk','indonesia_provinces.name as provinsi','indonesia_cities.name as kota','indonesia_districts.name as kecamatan','indonesia_villages.name as desa')
@@ -85,28 +89,47 @@ class InstansiSiswaController extends Controller
         // if guru
         elseif($role->role_id==2){
             $id_guru=UserGuru::where('user_id',$id)->first();
-            $list_sekolah = GuruInstansi::select('instansi_pendidikans.id','instansi_pendidikans.nama as instansi','alamat','jenjang','tipe','nomor_induk','indonesia_provinces.name as provinsi','indonesia_cities.name as kota','indonesia_districts.name as kecamatan','indonesia_villages.name as desa')
-                ->join('instansi_pendidikans', 'guru_instansis.instansi_pendidikan_id', '=', 'instansi_pendidikans.id')
+
+            $id_guru_lembaga_pendidikan=GuruInstansi::where('user_guru_id',$id_guru->id)->pluck('instansi_pendidikan_id')->toArray();
+
+            $list_lembaga_kursus = InstansiPendidikan::select('instansi_pendidikans.id','instansi_pendidikans.nama as instansi','alamat','jenjang','tipe','nomor_induk','indonesia_provinces.name as provinsi','indonesia_cities.name as kota','indonesia_districts.name as kecamatan','indonesia_villages.name as desa')
                 ->join('indonesia_villages', 'instansi_pendidikans.desa_id', '=', 'indonesia_villages.id')
                 ->join('indonesia_districts', 'indonesia_villages.district_id', '=', 'indonesia_districts.id')
                 ->join('indonesia_cities', 'indonesia_districts.city_id', '=', 'indonesia_cities.id')
                 ->join('indonesia_provinces', 'indonesia_cities.province_id', '=', 'indonesia_provinces.id')
-                ->where('instansi_pendidikans.tipe', '=', 'sekolah')
-                ->where('guru_instansis.user_guru_id', '=', $id_guru->id)
+                ->where('instansi_pendidikans.tipe','lembaga_kursus')
+                ->whereIn('instansi_pendidikans.id',$id_guru_lembaga_pendidikan)
                 ->get();
 
-            $list_lembaga_kursus = GuruInstansi::select('instansi_pendidikans.id','instansi_pendidikans.nama as instansi','alamat','jenjang','tipe','nomor_induk','indonesia_provinces.name as provinsi','indonesia_cities.name as kota','indonesia_districts.name as kecamatan','indonesia_villages.name as desa')
-                ->join('instansi_pendidikans', 'guru_instansis.instansi_pendidikan_id', '=', 'instansi_pendidikans.id')
+            $list_lembaga_kursus_semua = InstansiPendidikan::select('instansi_pendidikans.id','instansi_pendidikans.nama as instansi','alamat','jenjang','tipe','nomor_induk','indonesia_provinces.name as provinsi','indonesia_cities.name as kota','indonesia_districts.name as kecamatan','indonesia_villages.name as desa')
                 ->join('indonesia_villages', 'instansi_pendidikans.desa_id', '=', 'indonesia_villages.id')
                 ->join('indonesia_districts', 'indonesia_villages.district_id', '=', 'indonesia_districts.id')
                 ->join('indonesia_cities', 'indonesia_districts.city_id', '=', 'indonesia_cities.id')
                 ->join('indonesia_provinces', 'indonesia_cities.province_id', '=', 'indonesia_provinces.id')
-                ->where('instansi_pendidikans.tipe', '=', 'lembaga_kursus')
-                ->where('guru_instansis.user_guru_id', '=', $id_guru->id)
+                ->where('instansi_pendidikans.tipe','lembaga_kursus')
+                ->whereNotIn('instansi_pendidikans.id',$id_guru_lembaga_pendidikan)
                 ->get();
 
-            }
+            $list_sekolah = InstansiPendidikan::select('instansi_pendidikans.id','instansi_pendidikans.nama as instansi','alamat','jenjang','tipe','nomor_induk','indonesia_provinces.name as provinsi','indonesia_cities.name as kota','indonesia_districts.name as kecamatan','indonesia_villages.name as desa')
+                ->join('indonesia_villages', 'instansi_pendidikans.desa_id', '=', 'indonesia_villages.id')
+                ->join('indonesia_districts', 'indonesia_villages.district_id', '=', 'indonesia_districts.id')
+                ->join('indonesia_cities', 'indonesia_districts.city_id', '=', 'indonesia_cities.id')
+                ->join('indonesia_provinces', 'indonesia_cities.province_id', '=', 'indonesia_provinces.id')
+                ->where('instansi_pendidikans.tipe','sekolah')
+                ->whereIn('instansi_pendidikans.id',$id_guru_lembaga_pendidikan)
+                ->get();
 
+            $list_sekolah_semua = InstansiPendidikan::select('instansi_pendidikans.id','instansi_pendidikans.nama as instansi','alamat','jenjang','tipe','nomor_induk','indonesia_provinces.name as provinsi','indonesia_cities.name as kota','indonesia_districts.name as kecamatan','indonesia_villages.name as desa')
+                ->join('indonesia_villages', 'instansi_pendidikans.desa_id', '=', 'indonesia_villages.id')
+                ->join('indonesia_districts', 'indonesia_villages.district_id', '=', 'indonesia_districts.id')
+                ->join('indonesia_cities', 'indonesia_districts.city_id', '=', 'indonesia_cities.id')
+                ->join('indonesia_provinces', 'indonesia_cities.province_id', '=', 'indonesia_provinces.id')
+                ->where('instansi_pendidikans.tipe','sekolah')
+                ->whereNotIn('instansi_pendidikans.id',$id_guru_lembaga_pendidikan)
+                ->get();
+        }
+
+        $jumlah_tawaran=GuruInstansi::where('status','0-lembaga')->count();
 
         $siswa = UserSiswa::select('user_siswas.*','master_kelas.tingkat','master_kelas.kelas')
             ->join('master_kelas', 'user_siswas.master_kelas_id', '=', 'master_kelas.id')
@@ -125,9 +148,8 @@ class InstansiSiswaController extends Controller
             ->where('instansi_pendidikans.tipe', '=', 'sekolah')
             ->count();
 
-        // return$jumlah_lembaga_kursus;
             
-        return view('AdminLTE/list_instansi', compact('foto_profil','id','list_sekolah','list_lembaga_kursus','last_update','jumlah_sekolah','jumlah_lembaga_kursus','user_admin_instansis','siswa'));
+        return view('AdminLTE/list_instansi', compact('foto_profil','id','list_sekolah','list_lembaga_kursus','last_update','jumlah_sekolah','jumlah_lembaga_kursus','user_admin_instansis','siswa','id_guru','jumlah_tawaran','list_lembaga_kursus_semua','list_sekolah_semua'));
     }
 
     public function index_kelas_program()
@@ -161,8 +183,10 @@ class InstansiSiswaController extends Controller
             ->join('master_kelas', 'kelas_programs.master_kelas_id', '=', 'master_kelas.id')
             ->join('user_siswas', 'rombongan_belajars.user_siswa_id', '=', 'user_siswas.id')
             ->join('users', 'user_siswas.user_id', '=', 'users.id')
-            ->where('user_siswa_id',$id_siswa->id)
+            ->where('rombongan_belajars.user_siswa_id',$id_siswa->id)
             ->get();
+
+        // return$list_kelass;
             
         $mapel_rombels = RombonganBelajar::select('rombongan_belajars.id as id_rombongan_belajar','master_mapels.*')
             ->join('kelas_programs', 'rombongan_belajars.kelas_program_id', '=', 'kelas_programs.id')
@@ -177,8 +201,6 @@ class InstansiSiswaController extends Controller
             ->where('waktu_selesai','>',Carbon::now())
             ->get();
         
-        // return$total_ujians;
-
         $last_update = InstansiPendidikan::select('updated_at')
             ->orderBy('updated_at', 'desc')
             ->get();
@@ -195,7 +217,6 @@ class InstansiSiswaController extends Controller
             ->where('user_siswa_id', $id_siswa->id)
             ->count();
 
-        // return$mapel_rombels;
         return view('AdminLTE/list_kelas', compact('foto_profil','id','list_kelass','last_update','jumlah_terdaftar','jumlah_menunggu','user_admin_instansis','total_ujians','mapel_rombels'));
     }
 
@@ -580,6 +601,36 @@ class InstansiSiswaController extends Controller
         }
 
         return redirect()->route('list.kelas.program');
+
+    }
+    
+    public function terima_lembaga()
+    {
+        //
+        $id_guru=UserGuru::where('user_id',Auth::user()->id)->first();
+        
+        // $list_lembaga_pendidikan=GuruInstansi::select('guru_instansis.id as id_guru_instansi','instansi_pendidikans.id','instansi_pendidikans.nama as instansi','alamat','jenjang','tipe','nomor_induk','indonesia_provinces.name as provinsi','indonesia_cities.name as kota','indonesia_districts.name as kecamatan','indonesia_villages.name as desa')
+        //     ->join('instansi_pendidikans', 'guru_instansis.instansi_pendidikan_id', '=', 'instansi_pendidikans.id')
+        //     ->join('indonesia_villages', 'instansi_pendidikans.desa_id', '=', 'indonesia_villages.id')
+        //     ->join('indonesia_districts', 'indonesia_villages.district_id', '=', 'indonesia_districts.id')
+        //     ->join('indonesia_cities', 'indonesia_districts.city_id', '=', 'indonesia_cities.id')
+        //     ->join('indonesia_provinces', 'indonesia_cities.province_id', '=', 'indonesia_provinces.id')
+        //     ->where('instansi_pendidikans.tipe','lembaga_kursus')
+        //     ->where('guru_instansis.user_guru_id',$id_guru->id)
+        //     ->where('guru_instansis.status','0-lembaga')
+        //     ->get();
+            
+        $list_lembaga_pendidikan=GuruInstansi::select('guru_instansis.id as id_guru_instansi','instansi_pendidikans.id','instansi_pendidikans.nama as instansi','alamat','jenjang','tipe','nomor_induk','indonesia_provinces.name as provinsi','indonesia_cities.name as kota','indonesia_districts.name as kecamatan','indonesia_villages.name as desa')
+            ->join('instansi_pendidikans', 'guru_instansis.instansi_pendidikan_id', '=', 'instansi_pendidikans.id')
+            ->join('indonesia_villages', 'instansi_pendidikans.desa_id', '=', 'indonesia_villages.id')
+            ->join('indonesia_districts', 'indonesia_villages.district_id', '=', 'indonesia_districts.id')
+            ->join('indonesia_cities', 'indonesia_districts.city_id', '=', 'indonesia_cities.id')
+            ->join('indonesia_provinces', 'indonesia_cities.province_id', '=', 'indonesia_provinces.id')
+            ->where('guru_instansis.user_guru_id',$id_guru->id)
+            ->where('guru_instansis.status','0-lembaga')
+            ->get();
+            
+        return json_encode(array('data'=>$list_lembaga_pendidikan));
 
     }
 

@@ -121,7 +121,7 @@ class BankSoalController extends Controller
             ->where('user_guru_id',$id_guru->id)
             ->get();
 
-        $list_kelas = MasterKelas::get();
+        $list_kelas = MasterKelas::orderBy('kelas','asc')->get();
 
             // return $list_soal_subjektif;
         // foreach($pembayaran as $bayar){
@@ -421,8 +421,7 @@ class BankSoalController extends Controller
             ->where('user_guru_id',$id_guru->id)
             ->get();
 
-        $list_kelas = MasterKelas::select('master_kelas.*')
-            ->get();
+        $list_kelas = MasterKelas::orderBy('kelas','asc')->get();
 
         $program_mapels = BankSoal::select('master_mapels.id')
             ->join('master_mapels', 'bank_soals.master_mapel_id', '=', 'master_mapels.id')

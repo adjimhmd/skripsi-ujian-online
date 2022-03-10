@@ -46,4 +46,9 @@ class KelasProgram extends Model
     {
     	return $this->hasMany('App\MapelKelasProgram');
     }
+    
+    public function materi_kelas_programs()
+    {
+    	return $this->hasMany('App\MateriKelasProgram');
+    }
 }

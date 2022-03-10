@@ -49,6 +49,7 @@ Route::get('siswa/list-kelas-program', [App\Http\Controllers\InstansiSiswaContro
 Route::get('guru/list-kelas-program', [App\Http\Controllers\InstansiSiswaController::class, 'index_kelas_program_guru'])->middleware('role:guru')->name('list.kelas.program.guru');
 Route::post('bayar-dulu', [App\Http\Controllers\InstansiSiswaController::class, 'bayar_dulu'])->name('bayar.dulu')->middleware('role:siswa');
 Route::post('upload_bayar', [App\Http\Controllers\InstansiSiswaController::class, 'upload_bayar'])->name('upload.bayar')->middleware('role:siswa');
+Route::get('terima_lembaga', [App\Http\Controllers\InstansiSiswaController::class, 'terima_lembaga'])->name('terima.lembaga')->middleware('role:guru');
 
 Route::resource('verifikasi', App\Http\Controllers\Admin_Sistem\VerifikasiUserController::class)->middleware('role:adm_sistem');
 
@@ -69,7 +70,8 @@ Route::post('ujian-siswa', [App\Http\Controllers\RuangUjianController::class, 'u
 Route::get('hasil-ujian/{hasil_ujian}', [App\Http\Controllers\RuangUjianController::class, 'hasil_ujian'])->name('hasil.ujian')->middleware('role:adm_instansi|guru');
 Route::post('update-nilai', [App\Http\Controllers\RuangUjianController::class, 'update_nilai'])->name('update.nilai')->middleware('role:adm_instansi|guru');
 
-Route::resource('bank_soals', App\Http\Controllers\BankSoalController::class)->middleware('role:guru|adm_instansi');
+Route::resource('bank_soals', App\Http\Controllers\BankSoalController::class)->middleware('role:guru');
+Route::resource('materi-pembelajaran', App\Http\Controllers\MateriPembelajaranController::class)->middleware('role:guru');
 
 Route::resource('paket_soal', App\Http\Controllers\PaketSoalController::class)->middleware('role:guru|adm_instansi');
 Route::post('show_guru_paket', [App\Http\Controllers\PaketSoalController::class, 'show_guru_paket'])->name('show.guru.paket')->middleware('role:guru|adm_instansi');
@@ -91,8 +93,16 @@ Route::post('update_harga', [App\Http\Controllers\KelasProgramController::class,
 
 Route::resource('list-guru', App\Http\Controllers\ListGuruController::class)->middleware('role:adm_instansi');
 Route::get('daftar_guru', [App\Http\Controllers\ListGuruController::class, 'daftar_guru'])->name('daftar.guru')->middleware('role:adm_instansi');
-Route::post('simpan_guru', [App\Http\Controllers\ListGuruController::class, 'simpan_guru'])->name('simpan.guru')->middleware('role:adm_instansi');
+Route::get('terima_guru', [App\Http\Controllers\ListGuruController::class, 'terima_guru'])->name('terima.guru')->middleware('role:adm_instansi');
+Route::post('simpan_guru', [App\Http\Controllers\ListGuruController::class, 'simpan_guru'])->name('simpan.guru')->middleware('role:adm_instansi|guru');
+Route::post('valid_guru', [App\Http\Controllers\ListGuruController::class, 'valid_guru'])->name('valid.guru')->middleware('role:adm_instansi|guru');
 
 Route::get('/sendmail', 'App\Http\Controllers\EmailController@index');
 
 Route::resource('orders', App\Http\Controllers\OrderController::class);
+
+Route::get('gdrive', function() {
+  Storage::disk('google')->put('test.txt', 'Hello World');
+  $url = Storage::disk('google')->url('test.txt');
+  return $url;
+});

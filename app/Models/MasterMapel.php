@@ -40,4 +40,9 @@ class MasterMapel extends Model
     {
     	return $this->hasMany('App\PaketSoal');
     }
+    
+    public function master_materis()
+    {
+    	return $this->hasMany('App\MasterMateri');
+    }
 }

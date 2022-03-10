@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BankSoal;
 use App\Models\GuruInstansi;
+use App\Models\GuruPaketSoal;
 use App\Models\InstansiPendidikan;
 use App\Models\KelasProgram;
 use App\Models\MasterKelas;
@@ -84,13 +85,15 @@ class PaketSoalController extends Controller
         $paket_soals=MasterPaketSoal::select('master_paket_soals.id as id_paket_soal','master_paket_soals.*',
             'master_kelas.id as id_master_kelas','master_kelas.*',
             'master_mapels.id as id_master_mapel','master_mapels.*',
+            'guru_paket_soals.id as id_guru_paket_soal','guru_paket_soals.*',
             'user_admin_instansis.instansi_pendidikan_id as id_instansi',
             'user_gurus.id as id_user_guru','user_gurus.*',
             'users.id as id_user','users.*')
             ->join('user_admin_instansis', 'master_paket_soals.user_admin_instansi_id', '=', 'user_admin_instansis.id')
             ->join('master_kelas', 'master_paket_soals.master_kelas_id', '=', 'master_kelas.id')
             ->join('master_mapels', 'master_paket_soals.master_mapel_id', '=', 'master_mapels.id')
-            ->leftJoin('user_gurus', 'master_paket_soals.user_guru_id', '=', 'user_gurus.id')
+            ->leftJoin('guru_paket_soals', 'master_paket_soals.id', '=', 'guru_paket_soals.master_paket_soal_id')
+            ->leftJoin('user_gurus', 'guru_paket_soals.user_guru_id', '=', 'user_gurus.id')
             ->leftJoin('users', 'user_gurus.user_id', '=', 'users.id')
             ->where('user_admin_instansis.instansi_pendidikan_id', '=', $instansis->id)
             ->orderBy('master_kelas.kelas')
@@ -131,7 +134,6 @@ class PaketSoalController extends Controller
         MasterPaketSoal::create([
             'master_kelas_id' => $request->input('kelas'),
             'master_mapel_id' => $request->input('mapel'),
-            'user_guru_id' => 0,
             'user_admin_instansi_id' => $request->input('id_adm_instansi'),
             'deskripsi' => $request->input('deskripsi'),
         ]); 
@@ -150,6 +152,7 @@ class PaketSoalController extends Controller
     public function show($id)
     {
         //
+        // return $id;
         $id_user = Auth::user()->id;
 
         $foto_profil = User::select('foto')
@@ -169,15 +172,20 @@ class PaketSoalController extends Controller
             ->get();
 
         $master_paket_soal=MasterPaketSoal::where('id',$id)->first();
-        $id_user_guru=UserGuru::where('id',$master_paket_soal->user_guru_id)->first();
-        if(!$id_user_guru){
+        
+        $id_guru_paket_soal=GuruPaketSoal::where('master_paket_soal_id',$id)->pluck('user_guru_id')->toArray();
+
+        $id_guru=UserGuru::whereIn('id',$id_guru_paket_soal)->pluck('user_id')->toArray();
+
+        // $id_user_guru=UserGuru::where('id',$master_paket_soal->user_guru_id)->first();
+
+        if(!$id_guru_paket_soal){
             return redirect()->route('paket_soal.index')->with('danger', 'Paket soal yang dipilih belum memiliki guru!');
         }
-        $id_guru=User::where('id',$id_user_guru->user_id)->first();
-        
         $kelas_program = MasterPaketSoal::join('master_kelas', 'master_paket_soals.master_kelas_id', '=', 'master_kelas.id')
             ->join('master_mapels', 'master_paket_soals.master_mapel_id', '=', 'master_mapels.id')
-            ->join('user_gurus', 'master_paket_soals.user_guru_id', '=', 'user_gurus.id')
+            ->join('guru_paket_soals', 'master_paket_soals.id', '=', 'guru_paket_soals.master_paket_soal_id')
+            ->join('user_gurus', 'guru_paket_soals.user_guru_id', '=', 'user_gurus.id')
             ->join('users', 'user_gurus.user_id', '=', 'users.id')
             ->where('master_paket_soals.id',$id)
             ->first();
@@ -188,7 +196,7 @@ class PaketSoalController extends Controller
             ->join('master_kelas', 'bank_soals.master_kelas_id', '=', 'master_kelas.id')
             ->orderBy('bank_soals.updated_at', 'desc')
             ->where('master_paket_soal_id',$id)
-            ->where('bank_soals.user_id', '=', $id_guru->id)
+            ->whereIn('bank_soals.user_id',$id_guru)
             ->where('bank_soals.master_kelas_id', '=', $master_paket_soal->master_kelas_id)
             ->where('bank_soals.master_mapel_id', '=', $master_paket_soal->master_mapel_id)
             ->where('bank_soals.tipe_soal', '=', 'objektif')
@@ -200,7 +208,7 @@ class PaketSoalController extends Controller
             ->join('master_kelas', 'bank_soals.master_kelas_id', '=', 'master_kelas.id')
             ->orderBy('bank_soals.updated_at', 'desc')
             ->where('master_paket_soal_id',$id)
-            ->where('bank_soals.user_id', '=', $id_guru->id)
+            ->whereIn('bank_soals.user_id',$id_guru)
             ->where('bank_soals.master_kelas_id', '=', $master_paket_soal->master_kelas_id)
             ->where('bank_soals.master_mapel_id', '=', $master_paket_soal->master_mapel_id)
             ->where('bank_soals.tipe_soal', '=', 'subjektif')
@@ -212,7 +220,7 @@ class PaketSoalController extends Controller
             ->join('master_kelas', 'bank_soals.master_kelas_id', '=', 'master_kelas.id')
             ->orderBy('bank_soals.updated_at', 'desc')
             ->where('master_paket_soal_id',$id)
-            ->where('bank_soals.user_id', '=', $id_guru->id)
+            ->whereIn('bank_soals.user_id',$id_guru)
             ->where('bank_soals.master_kelas_id', '=', $master_paket_soal->master_kelas_id)
             ->where('bank_soals.master_mapel_id', '=', $master_paket_soal->master_mapel_id)
             ->where('bank_soals.tipe_soal', '=', 'penjodohan')
@@ -224,7 +232,7 @@ class PaketSoalController extends Controller
             ->join('master_kelas', 'bank_soals.master_kelas_id', '=', 'master_kelas.id')
             ->orderBy('bank_soals.updated_at', 'desc')
             ->where('master_paket_soal_id',$id)
-            ->where('bank_soals.user_id', '=', $id_guru->id)
+            ->whereIn('bank_soals.user_id',$id_guru)
             ->where('bank_soals.master_kelas_id', '=', $master_paket_soal->master_kelas_id)
             ->where('bank_soals.master_mapel_id', '=', $master_paket_soal->master_mapel_id)
             ->where('bank_soals.tipe_soal', '=', 'true-false')
@@ -240,18 +248,18 @@ class PaketSoalController extends Controller
             ->join('master_mapels', 'bank_soals.master_mapel_id', '=', 'master_mapels.id')
             ->join('master_kelas', 'bank_soals.master_kelas_id', '=', 'master_kelas.id')
             ->orderBy('bank_soals.updated_at', 'desc')
-            ->where('bank_soals.user_id', '=', $id_guru->id)
+            ->whereIn('bank_soals.user_id',$id_guru)
             ->where('bank_soals.master_kelas_id', '=', $master_paket_soal->master_kelas_id)
             ->where('bank_soals.master_mapel_id', '=', $master_paket_soal->master_mapel_id)
             ->where('bank_soals.tipe_soal', '=', 'objektif')
             ->whereNotIn('bank_soals.id', $id_soal_objektif)
             ->get();
         
-        // return $master_paket_soal;
+        // return $id_guru;
 
         $list_jawaban_objektif = BankSoal::select('jawabans.*')
             ->join('jawabans', 'bank_soals.id', '=', 'jawabans.banksoal_id')
-            ->where('bank_soals.user_id', '=', $id_guru->id)
+            ->whereIn('bank_soals.user_id',$id_guru)
             ->where('bank_soals.master_kelas_id', '=', $master_paket_soal->master_kelas_id)
             ->where('bank_soals.master_mapel_id', '=', $master_paket_soal->master_mapel_id)
             ->where('bank_soals.tipe_soal', '=', 'objektif')
@@ -261,7 +269,7 @@ class PaketSoalController extends Controller
             ->join('master_mapels', 'bank_soals.master_mapel_id', '=', 'master_mapels.id')
             ->join('master_kelas', 'bank_soals.master_kelas_id', '=', 'master_kelas.id')
             ->orderBy('bank_soals.updated_at', 'desc')
-            ->where('bank_soals.user_id', '=', $id_guru->id)
+            ->whereIn('bank_soals.user_id',$id_guru)
             ->where('bank_soals.master_kelas_id', '=', $master_paket_soal->master_kelas_id)
             ->where('bank_soals.master_mapel_id', '=', $master_paket_soal->master_mapel_id)
             ->where('bank_soals.tipe_soal', '=', 'subjektif')
@@ -272,7 +280,7 @@ class PaketSoalController extends Controller
             ->join('master_mapels', 'bank_soals.master_mapel_id', '=', 'master_mapels.id')
             ->join('master_kelas', 'bank_soals.master_kelas_id', '=', 'master_kelas.id')
             ->orderBy('bank_soals.updated_at', 'desc')
-            ->where('bank_soals.user_id', '=', $id_guru->id)
+            ->whereIn('bank_soals.user_id',$id_guru)
             ->where('bank_soals.master_kelas_id', '=', $master_paket_soal->master_kelas_id)
             ->where('bank_soals.master_mapel_id', '=', $master_paket_soal->master_mapel_id)
             ->where('bank_soals.tipe_soal', '=', 'penjodohan')
@@ -283,7 +291,7 @@ class PaketSoalController extends Controller
             ->join('master_mapels', 'bank_soals.master_mapel_id', '=', 'master_mapels.id')
             ->join('master_kelas', 'bank_soals.master_kelas_id', '=', 'master_kelas.id')
             ->orderBy('bank_soals.updated_at', 'desc')
-            ->where('bank_soals.user_id', '=', $id_guru->id)
+            ->whereIn('bank_soals.user_id',$id_guru)
             ->where('bank_soals.master_kelas_id', '=', $master_paket_soal->master_kelas_id)
             ->where('bank_soals.master_mapel_id', '=', $master_paket_soal->master_mapel_id)
             ->where('bank_soals.tipe_soal', '=', 'true-false')
@@ -351,39 +359,47 @@ class PaketSoalController extends Controller
 
     public function show_guru_paket(Request $request)
     {
-        $guru_paket_soal=MasterPaketSoal::where('id',$request->id_paket_soal)->first();
-        // select guru yg mengajar mapel tertentu di instansi tertentu
-        // $id_gurus=KelasProgram::select('user_guru_id')
-        //     ->where('instansi_pendidikan_id', '=', $request->id_instansi)
-        //     ->where('master_mapel_id', '=', $request->id_master_mapel)
-        //     ->get();
         
-        // hasil select guru dijadikan parameter untuk menampilkannya
-        // foreach($id_gurus as $id_guru){
-            $userData = GuruInstansi::select('user_gurus.id as id_user_guru','user_gurus.*',
-            'users.id as id_user','users.*')
-                ->join('user_gurus', 'guru_instansis.user_guru_id', '=', 'user_gurus.id')
-                ->join('spesialisasis', 'user_gurus.id', '=', 'spesialisasis.user_guru_id')
-                ->join('users', 'user_gurus.user_id', '=', 'users.id')
-                ->where('spesialisasis.master_mapel_id', '=', $request->id_master_mapel)
-                // ->where('guru_instansis.user_guru_id', '!=', $guru_paket_soal->user_guru_id)
-                ->get();
-        // }
-        // dd($request);
+        if($request->keterangan=='pilih_guru'){
+            $userData = GuruInstansi::select('user_gurus.id as id_user_guru','user_gurus.*','users.id as id_user','users.*')
+            ->join('user_gurus', 'guru_instansis.user_guru_id', '=', 'user_gurus.id')
+            ->join('spesialisasis', 'user_gurus.id', '=', 'spesialisasis.user_guru_id')
+            ->join('users', 'user_gurus.user_id', '=', 'users.id')
+            ->where('guru_instansis.status', '=', '1')
+            ->where('guru_instansis.instansi_pendidikan_id', '=', $request->id_instansi)
+            ->where('spesialisasis.master_mapel_id', '=', $request->id_master_mapel)
+            ->get();
+        }
+        else if($request->keterangan=='tambah_guru'){
+            $id_guru_paket_soals=GuruPaketSoal::where('master_paket_soal_id',$request->id_paket_soal)->pluck('user_guru_id')->toArray();
+
+            $userData = GuruInstansi::select('user_gurus.id as id_user_guru','user_gurus.*','users.id as id_user','users.*')
+            ->join('user_gurus', 'guru_instansis.user_guru_id', '=', 'user_gurus.id')
+            ->join('spesialisasis', 'user_gurus.id', '=', 'spesialisasis.user_guru_id')
+            ->join('users', 'user_gurus.user_id', '=', 'users.id')
+            ->where('guru_instansis.status', '=', '1')
+            ->where('guru_instansis.instansi_pendidikan_id', '=', $request->id_instansi)
+            ->whereNotIn('guru_instansis.user_guru_id',$id_guru_paket_soals)
+            ->where('spesialisasis.master_mapel_id', '=', $request->id_master_mapel)
+            ->get();
+        }
+
+        // dd($userData);
         return json_encode(array('data'=>$userData));
     }
 
     public function update_guru_paket(Request $request)
     {
         // dd($request);
-        $id = Auth::user()->id;
+        // $id = Auth::user()->id;
 
-        $id_instansi=UserAdminInstansi::select('instansi_pendidikan_id')
-            ->where('user_id',$id)
-            ->first();
+        // $paket_soal = MasterPaketSoal::find($request->id_paket_soal);
+        // $paket_soal->update(['user_guru_id' => $request->input('id_user_guru')]); 
 
-        $paket_soal = MasterPaketSoal::find($request->id_paket_soal);
-        $paket_soal->update(['user_guru_id' => $request->input('id_user_guru')]); 
+        $paket_soal=GuruPaketSoal::create([
+            'master_paket_soal_id' => $request->id_paket_soal,
+            'user_guru_id' => $request->id_user_guru,
+        ]); 
 
         $request->session()->flash('success', 'Master paket soal berhasil diperbarui!');
         return json_encode(array('data'=>$paket_soal));

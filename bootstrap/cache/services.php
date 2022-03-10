@@ -38,7 +38,8 @@
     34 => 'App\\Providers\\AuthServiceProvider',
     35 => 'App\\Providers\\EventServiceProvider',
     36 => 'App\\Providers\\RouteServiceProvider',
-    37 => 'Intervention\\Image\\ImageServiceProvider',
+    37 => 'App\\Providers\\GoogleDriveServiceProvider',
+    38 => 'Intervention\\Image\\ImageServiceProvider',
   ),
   'eager' => 
   array (
@@ -65,7 +66,8 @@
     20 => 'App\\Providers\\AuthServiceProvider',
     21 => 'App\\Providers\\EventServiceProvider',
     22 => 'App\\Providers\\RouteServiceProvider',
-    23 => 'Intervention\\Image\\ImageServiceProvider',
+    23 => 'App\\Providers\\GoogleDriveServiceProvider',
+    24 => 'Intervention\\Image\\ImageServiceProvider',
   ),
   'deferred' => 
   array (

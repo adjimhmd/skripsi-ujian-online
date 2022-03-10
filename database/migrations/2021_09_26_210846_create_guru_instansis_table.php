@@ -17,7 +17,7 @@ class CreateGuruInstansisTable extends Migration
             $table->id();
             $table->smallInteger('instansi_pendidikan_id')->unsigned();
             $table->integer('user_guru_id')->unsigned();
-            $table->enum('status', ['0', '1'])->nullable();
+            $table->enum('status', ['0-lembaga','0-guru','1'])->nullable();
             $table->timestamps();
         });
     }

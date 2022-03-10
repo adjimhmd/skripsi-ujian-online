@@ -16,8 +16,8 @@
       <div class="col-12 col-md-12">
         <div class="card card-outline card-purple">
           
-          <div class="card-header">
-            <h3 class="card-title"><b>{{'Data Nilai Siswa'}}</b></h3>
+          <div class="card-header border-0">
+            <!-- <h3 class="card-title"><b>{{'Data Nilai Siswa'}}</b></h3>
 
             <div class="card-tools">
               <button type="button" class="btn btn-tool" data-card-widget="maximize">
@@ -26,7 +26,7 @@
               <button type="button" class="btn btn-tool" data-card-widget="collapse">
                 <i class="fas fa-minus"></i>
               </button>
-            </div>
+            </div> -->
             <!-- /.card-tools -->
           
           </div>
@@ -34,45 +34,64 @@
           
           <div class="card-body">
 
-@foreach($nama_instansis as $lembaga_pendidikan)
-  <h4>{{$lembaga_pendidikan->nama}}</h4>
-  <h5>{{$lembaga_pendidikan->nomor_induk}}</h5>
-  <h6>{{$lembaga_pendidikan->alamat}}</h6>
-@endforeach
-
             @foreach($nama_instansis as $nama_instansi)
               @if($nama_instansi->tipe=='sekolah')
                 @php($tipe='Kelas')
+                @php($no_induk='NPSN')
               @elseif($nama_instansi->tipe=='lembaga_kursus')
                 @php($tipe='Program Kursus')
+                @php($no_induk='NUPTK')
               @endif
             @endforeach
 
-            <table id="example4" class="table table-hover" style="table-layout: fixed">
+            @foreach($nama_instansis as $lembaga_pendidikan)
+            <center>
+              <h4><b>{{$lembaga_pendidikan->nama}}</b></h4>
+              <h5><b>{{$no_induk.': '.$lembaga_pendidikan->nomor_induk}}</b></h5>
+              <h6>{{'Alamat: '.ucwords($lembaga_pendidikan->alamat)}}</h6><br>
+            </center>
+            @endforeach
+
+            
+            <table id="example" class="table table-bordered table-hover mb-4" style="table-layout: fixed">
               <thead>
                 <tr>
+                  <th style="width: 5%; text-align: center;">No</th>
                   <th style="width: 40%;">{{$tipe}}</th>
                   <th style="width: 40%;">Detail Ujian</th>
-                  <th style="width: 20%;">Nilai</th>
+                  <th style="width: 15%; text-align: center;">Nilai</th>
                 </tr>
               </thead>
               <tbody>
+                @php ($no=1)
                 @php ($nama_kelas_program='.')
+                @php ($id_master_ruang_ujian='.')
+                @php ($total_nilai='.')
                 @foreach($data_siswas as $data_siswa)
+                  <!-- {{$id_master_ruang_ujian.'!='.$data_siswa->id_master_ruang_ujian.' and '.$total_nilai.'!='.$data_siswa->total_nilai}}<br> -->
+                  @if($id_master_ruang_ujian!=$data_siswa->id_master_ruang_ujian)
                   <tr>
+                    <td style="text-align: center;">
+                      @if($nama_kelas_program!=$data_siswa->nama_kelas_program)
+                        {{$no++}}
+                      @endif
+                    </td>
                     <td>
                       @if($nama_kelas_program!=$data_siswa->nama_kelas_program)
-                        <b>{{$data_siswa->nama_kelas_program}}</b>
-                      @else
-                        <b hidden>{{$data_siswa->nama_kelas_program}}</b>
+                        {{$data_siswa->nama_kelas_program}}</b>
                       @endif
                       @php($nama_kelas_program=$data_siswa->nama_kelas_program)
                     </td>
                     <td>
                       {{$data_siswa->deskripsi}}
                     </td>
-                    <td>{{$data_siswa->total_nilai}}</td>
+                    <td style="text-align: center;">
+                      {{$data_siswa->total_nilai}}
+                    </td>
                   </tr>
+                  @endif
+                  @php($id_master_ruang_ujian=$data_siswa->id_master_ruang_ujian)
+                  @php($total_nilai=$data_siswa->total_nilai)
                 @endforeach
               </tbody>
             </table>

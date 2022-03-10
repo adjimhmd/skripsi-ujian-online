@@ -6,6 +6,7 @@ use App\Models\BankSoal;
 use App\Models\DetailUjian;
 use App\Models\Jawaban;
 use App\Models\KelasProgram;
+use App\Models\MapelKelasProgram;
 use App\Models\MasterKelas;
 use App\Models\MasterPaketSoal;
 use App\Models\MasterRuangUjian;
@@ -87,51 +88,59 @@ class RuangUjianController extends Controller
         // check if role siswa
         if ($role->role_id=='1'){
             
-            $ruang_ujians=MasterRuangUjian::select('master_ruang_ujians.id as id_master_ruang_ujian','master_ruang_ujians.deskripsi as ruang_ujian','master_ruang_ujians.*','master_paket_soals.deskripsi as paket_soal','master_paket_soals.id as id_master_paket_soal','master_paket_soals.*','kelas_programs.id as id_kelas_program','kelas_programs.*','master_kelas.*','master_mapels.nama as mapel','master_mapels.*','instansi_pendidikans.id as id_instansi_pendidikan','instansi_pendidikans.*','master_tahun_ajarans.tahun_awal','master_tahun_ajarans.tahun_akhir','master_tahun_ajarans.semester')
+            $ruang_ujians=MasterRuangUjian::select('master_ruang_ujians.id as id_master_ruang_ujian','master_ruang_ujians.deskripsi as ruang_ujian','master_ruang_ujians.*','master_paket_soals.deskripsi as paket_soal','master_paket_soals.id as id_master_paket_soal','master_paket_soals.*','kelas_programs.id as id_kelas_program','kelas_programs.*','master_kelas.*','instansi_pendidikans.id as id_instansi_pendidikan','instansi_pendidikans.*','master_tahun_ajarans.tahun_awal','master_tahun_ajarans.tahun_akhir','master_tahun_ajarans.semester')
                 ->join('master_paket_soals', 'master_ruang_ujians.master_paket_soal_id', '=', 'master_paket_soals.id')
                 ->join('kelas_programs', 'master_ruang_ujians.kelas_program_id', '=', 'kelas_programs.id')
                 ->join('instansi_pendidikans', 'kelas_programs.instansi_pendidikan_id', '=', 'instansi_pendidikans.id')
                 ->join('master_kelas', 'kelas_programs.master_kelas_id', '=', 'master_kelas.id')
-                ->join('master_mapels', 'kelas_programs.master_mapel_id', '=', 'master_mapels.id')
                 ->join('rombongan_belajars', 'kelas_programs.id', '=', 'rombongan_belajars.kelas_program_id')
                 ->join('master_tahun_ajarans', 'master_ruang_ujians.master_tahun_ajaran_id', '=', 'master_tahun_ajarans.id')
                 ->where('rombongan_belajars.user_siswa_id',$id_siswa->id)
                 ->where('rombongan_belajars.status','1')
                 ->get();
 
-            return view('AdminLTE/master-ruang-ujian', compact('nama_instansis','foto_profil','user_admin_instansis','last_update_ruang','jumlah_ruang','ruang_ujians'));
+            $mapel_kelas_programs=MapelKelasProgram::select('mapel_kelas_programs.*','master_mapels.nama')
+            ->join('master_mapels', 'mapel_kelas_programs.master_mapel_id', '=', 'master_mapels.id')
+            ->get();
+
+            return view('AdminLTE/master-ruang-ujian', compact('nama_instansis','foto_profil','user_admin_instansis','last_update_ruang','jumlah_ruang','ruang_ujians','mapel_kelas_programs'));
         }
         // check if guru
         else if ($role->role_id=='2'){
             
-            $ruang_ujians=MasterRuangUjian::select('master_ruang_ujians.id as id_master_ruang_ujian','master_ruang_ujians.deskripsi as ruang_ujian','master_ruang_ujians.*','master_paket_soals.deskripsi as paket_soal','master_paket_soals.id as id_master_paket_soal','master_paket_soals.*','kelas_programs.id as id_kelas_program','kelas_programs.*','master_kelas.*','master_mapels.nama as mapel','master_mapels.*','instansi_pendidikans.id as id_instansi_pendidikan','instansi_pendidikans.*','master_tahun_ajarans.tahun_awal','master_tahun_ajarans.tahun_akhir','master_tahun_ajarans.semester')
+            $ruang_ujians=MasterRuangUjian::select('master_ruang_ujians.id as id_master_ruang_ujian','master_ruang_ujians.deskripsi as ruang_ujian','master_ruang_ujians.*','master_paket_soals.deskripsi as paket_soal','master_paket_soals.id as id_master_paket_soal','master_paket_soals.*','kelas_programs.id as id_kelas_program','kelas_programs.*','master_kelas.*','instansi_pendidikans.id as id_instansi_pendidikan','instansi_pendidikans.*','master_tahun_ajarans.tahun_awal','master_tahun_ajarans.tahun_akhir','master_tahun_ajarans.semester')
                 ->join('master_paket_soals', 'master_ruang_ujians.master_paket_soal_id', '=', 'master_paket_soals.id')
                 ->join('kelas_programs', 'master_ruang_ujians.kelas_program_id', '=', 'kelas_programs.id')
                 ->join('instansi_pendidikans', 'kelas_programs.instansi_pendidikan_id', '=', 'instansi_pendidikans.id')
                 ->join('master_kelas', 'kelas_programs.master_kelas_id', '=', 'master_kelas.id')
-                ->join('master_mapels', 'kelas_programs.master_mapel_id', '=', 'master_mapels.id')
                 ->join('master_tahun_ajarans', 'master_ruang_ujians.master_tahun_ajaran_id', '=', 'master_tahun_ajarans.id')
                 ->where('master_paket_soals.user_guru_id',$id_guru->id)
                 ->get();
 
-            return view('AdminLTE/master-ruang-ujian', compact('nama_instansis','foto_profil','user_admin_instansis','last_update_ruang','jumlah_ruang','ruang_ujians'));
+            $mapel_kelas_programs=MapelKelasProgram::select('mapel_kelas_programs.*','master_mapels.nama')
+            ->join('master_mapels', 'mapel_kelas_programs.master_mapel_id', '=', 'master_mapels.id')
+            ->get();
+
+            return view('AdminLTE/master-ruang-ujian', compact('nama_instansis','foto_profil','user_admin_instansis','last_update_ruang','jumlah_ruang','ruang_ujians','mapel_kelas_programs'));
         }
         
         foreach($user_admin_instansis as $user_admin_instansi){
-            $kelas_programs=KelasProgram::select('kelas_programs.id as id_kelas_program','kelas_programs.*','master_kelas.*','master_mapels.*')
+            $kelas_programs=KelasProgram::select('kelas_programs.id as id_kelas_program','kelas_programs.*','master_kelas.*')
             ->join('master_kelas', 'kelas_programs.master_kelas_id', '=', 'master_kelas.id')
-            ->join('master_mapels', 'kelas_programs.master_mapel_id', '=', 'master_mapels.id')
             ->where('instansi_pendidikan_id',$user_admin_instansi->instansi_pendidikan_id)
             ->orderBy('kelas_programs.deskripsi')
             ->orderBy('master_kelas.kelas')
             ->get();
 
-            $ruang_ujians=MasterRuangUjian::select('master_ruang_ujians.id as id_master_ruang_ujian','master_ruang_ujians.deskripsi as ruang_ujian','master_ruang_ujians.*','master_paket_soals.deskripsi as paket_soal','master_paket_soals.id as id_master_paket_soal','master_paket_soals.*','kelas_programs.id as id_kelas_program','kelas_programs.*','master_kelas.*','master_mapels.nama as mapel','master_mapels.*','instansi_pendidikans.nama as nama','master_tahun_ajarans.tahun_awal','master_tahun_ajarans.tahun_akhir','master_tahun_ajarans.semester')
+            $mapel_kelas_programs=MapelKelasProgram::select('mapel_kelas_programs.*','master_mapels.nama')
+            ->join('master_mapels', 'mapel_kelas_programs.master_mapel_id', '=', 'master_mapels.id')
+            ->get();
+
+            $ruang_ujians=MasterRuangUjian::select('master_ruang_ujians.id as id_master_ruang_ujian','master_ruang_ujians.deskripsi as ruang_ujian','master_ruang_ujians.*','master_paket_soals.deskripsi as paket_soal','master_paket_soals.id as id_master_paket_soal','master_paket_soals.*','kelas_programs.id as id_kelas_program','kelas_programs.*','master_kelas.*','instansi_pendidikans.nama as nama','master_tahun_ajarans.tahun_awal','master_tahun_ajarans.tahun_akhir','master_tahun_ajarans.semester')
             ->join('master_paket_soals', 'master_ruang_ujians.master_paket_soal_id', '=', 'master_paket_soals.id')
             ->join('kelas_programs', 'master_ruang_ujians.kelas_program_id', '=', 'kelas_programs.id')
             ->join('instansi_pendidikans', 'kelas_programs.instansi_pendidikan_id', '=', 'instansi_pendidikans.id')
             ->join('master_kelas', 'kelas_programs.master_kelas_id', '=', 'master_kelas.id')
-            ->join('master_mapels', 'kelas_programs.master_mapel_id', '=', 'master_mapels.id')
             ->join('master_tahun_ajarans', 'master_ruang_ujians.master_tahun_ajaran_id', '=', 'master_tahun_ajarans.id')
             ->where('kelas_programs.instansi_pendidikan_id',$user_admin_instansi->instansi_pendidikan_id)
             ->get();
@@ -139,8 +148,7 @@ class RuangUjianController extends Controller
 
         $tahun_ajarans = MasterTahunAjaran::where('tahun_akhir','>=',Carbon::now()->year)->get();
 
-        // return$ruang_ujians;
-        return view('AdminLTE/master-ruang-ujian', compact('nama_instansis','foto_profil','user_admin_instansis','last_update_ruang','jumlah_ruang','kelas_programs','ruang_ujians','tahun_ajarans'));
+        return view('AdminLTE/master-ruang-ujian', compact('nama_instansis','foto_profil','user_admin_instansis','last_update_ruang','jumlah_ruang','kelas_programs','ruang_ujians','tahun_ajarans','mapel_kelas_programs'));
 
     }
 
@@ -173,6 +181,7 @@ class RuangUjianController extends Controller
             'master_paket_soal_id' => $request->input('paket_soal'),
             'master_tahun_ajaran_id' => $request->input('tahun_ajaran'),
             'kelas_program_id' => $request->input('kelas_program'),
+            'batas' => $request->input('batas'),
             'durasi' => $request->input('durasi'),
             'waktu_mulai' => $request->input('waktu_mulai'),
             'waktu_selesai' => Carbon::parse($request->input('waktu_mulai'))->addMinutes($request->input('durasi')),
@@ -216,16 +225,21 @@ class RuangUjianController extends Controller
             ->where('users.id', '=', $id_user)
             ->get();
 
-        $master_ruang_ujian=MasterRuangUjian::select('master_ruang_ujians.id as id_master_ruang_ujian','master_ruang_ujians.*','master_paket_soals.id as id_master_paket_soal','master_paket_soals.deskripsi as master_paket_soal','master_kelas.*','master_mapels.*','kelas_programs.deskripsi as kelas_program','instansi_pendidikans.tipe','instansi_pendidikans.nama as instansi_pendidikan','master_tahun_ajarans.tahun_awal','master_tahun_ajarans.tahun_akhir','master_tahun_ajarans.semester')
+        $master_ruang_ujian=MasterRuangUjian::select('master_ruang_ujians.id as id_master_ruang_ujian','master_ruang_ujians.*','master_paket_soals.id as id_master_paket_soal','master_paket_soals.master_mapel_id as id_master_mapel','master_paket_soals.deskripsi as master_paket_soal','master_kelas.*','kelas_programs.deskripsi as kelas_program','kelas_programs.id as id_kelas_program','instansi_pendidikans.tipe','instansi_pendidikans.nama as instansi_pendidikan','master_tahun_ajarans.tahun_awal','master_tahun_ajarans.tahun_akhir','master_tahun_ajarans.semester')
             ->join('kelas_programs', 'master_ruang_ujians.kelas_program_id', '=', 'kelas_programs.id')
             ->join('instansi_pendidikans', 'kelas_programs.instansi_pendidikan_id', '=', 'instansi_pendidikans.id')
-            ->join('master_mapels', 'kelas_programs.master_mapel_id', '=', 'master_mapels.id')
             ->join('master_kelas', 'kelas_programs.master_kelas_id', '=', 'master_kelas.id')
             ->join('master_paket_soals', 'master_ruang_ujians.master_paket_soal_id', '=', 'master_paket_soals.id')
             ->join('master_tahun_ajarans', 'master_ruang_ujians.master_tahun_ajaran_id', '=', 'master_tahun_ajarans.id')
             ->where('master_ruang_ujians.id',$id)
             ->first();
-
+        
+        $mapel_kelas_programs=MapelKelasProgram::select('master_mapels.*')
+            ->join('master_mapels', 'mapel_kelas_programs.master_mapel_id', '=', 'master_mapels.id')
+            ->where('kelas_program_id',$master_ruang_ujian->id_kelas_program)
+            ->where('master_mapel_id',$master_ruang_ujian->id_master_mapel)
+            ->first();
+            
         $rombongans=RombonganBelajar::select('users.id', 'rombongan_belajars.user_siswa_id')
             ->join('user_siswas', 'rombongan_belajars.user_siswa_id', '=', 'user_siswas.id')
             ->join('users', 'user_siswas.user_id', '=', 'users.id')
@@ -249,7 +263,7 @@ class RuangUjianController extends Controller
             $id_siswa_rombongan[]=0;
         }
 
-        $rombongan_belajars=DetailUjian::select('user_siswas.id as id user_siswa','user_siswas.*','users.id as id_user','users.*')
+        $rombongan_belajars=DetailUjian::select('user_siswas.id as id_user_siswa','user_siswas.*','users.id as id_user','users.*')
             ->join('users', 'detail_ujians.user_siswa_id', '=', 'users.id')
             ->join('user_siswas', 'users.id', '=', 'user_siswas.user_id')
             ->where('detail_ujians.master_ruang_ujian_id',$master_ruang_ujian->id_master_ruang_ujian)
@@ -257,18 +271,22 @@ class RuangUjianController extends Controller
             ->groupBy('detail_ujians.user_siswa_id')
             ->get();
 
-        $nilai=DetailUjian::select('detail_ujians.nilai','detail_ujians.user_siswa_id','bank_soals.tipe_soal')
-            ->join('bank_soals', 'detail_ujians.bank_soal_id', '=', 'bank_soals.id')
-            ->where('detail_ujians.master_ruang_ujian_id',$master_ruang_ujian->id_master_ruang_ujian)
-            ->whereIn('detail_ujians.user_siswa_id',$id_siswa_rombongan)
-            // ->orderBy('detail_ujians.user_siswa_id')
-            ->get();
+        // $nilai=DetailUjian::select('detail_ujians.nilai','detail_ujians.user_siswa_id','bank_soals.tipe_soal')
+        //     ->join('bank_soals', 'detail_ujians.bank_soal_id', '=', 'bank_soals.id')
+        //     ->where('detail_ujians.master_ruang_ujian_id',$master_ruang_ujian->id_master_ruang_ujian)
+        //     ->whereIn('detail_ujians.user_siswa_id',$id_siswa_rombongan)
+        //     ->get();
 
+        $nilai=NilaiUjian::where('nilai_ujians.master_ruang_ujian_id',$master_ruang_ujian->id_master_ruang_ujian)
+            ->whereIn('nilai_ujians.user_siswa_id',$id_siswa_rombongan)
+            ->get();
         // return $nilai;
 
         $id_bank_soal=PaketSoal::where('master_paket_soal_id',$master_ruang_ujian->master_paket_soal_id)->pluck('bank_soal_id')->toArray();
 
         $detail_ujians=DetailUjian::where('master_ruang_ujian_id',$master_ruang_ujian->id_master_ruang_ujian)->where('user_siswa_id',$id_user)->get();
+
+        $ujian_ke = NilaiUjian::where('master_ruang_ujian_id',$master_ruang_ujian->id_master_ruang_ujian)->where('user_siswa_id',$id_user)->max('ujian_ke');
 
         $bank_soals=BankSoal::whereIn('id',$id_bank_soal)->get();
     
@@ -277,7 +295,7 @@ class RuangUjianController extends Controller
         $jawabans=Jawaban::whereIn('banksoal_id',$id_bank_soal)->get();
         
 
-        return view('AdminLTE/ruang-ujian-detail', compact('nama_instansis','foto_profil','user_admin_instansis','last_update_ruang','jumlah_ruang','master_ruang_ujian','rombongan_belajars','bank_soals','jawabans','bank_soal_penjodohans','detail_ujians','nilai'));
+        return view('AdminLTE/ruang-ujian-detail', compact('nama_instansis','foto_profil','user_admin_instansis','last_update_ruang','jumlah_ruang','master_ruang_ujian','rombongan_belajars','bank_soals','jawabans','bank_soal_penjodohans','detail_ujians','nilai','mapel_kelas_programs','ujian_ke'));
 
     }
 
@@ -355,27 +373,55 @@ class RuangUjianController extends Controller
     {
         $admin_instansi=UserAdminInstansi::where('user_id',Auth::user()->id)->first();
         $kelas_program=KelasProgram::where('id',$request->id)->first();
+        $mapel_kelas_programs=MapelKelasProgram::where('kelas_program_id',$request->id)->get();
+
+        foreach($mapel_kelas_programs as $mkp){
+            $mapel_kelas_program[]=$mkp->master_mapel_id;
+        }
+        // $paket_soals=PaketSoal::select('master_paket_soals.*')
+        //     ->join('master_paket_soals', 'paket_soals.master_paket_soal_id', '=', 'master_paket_soals.id')
+        //     ->groupByRaw('master_paket_soals.id')
+        //     ->where('master_paket_soals.user_admin_instansi_id',$admin_instansi->id)
+        //     ->where('master_paket_soals.master_kelas_id',$kelas_program->master_kelas_id)
+        //     ->where('master_paket_soals.master_mapel_id',$mapel_kelas_program->master_mapel_id)
+        //     ->get();
         
         $paket_soals=PaketSoal::select('master_paket_soals.*')
             ->join('master_paket_soals', 'paket_soals.master_paket_soal_id', '=', 'master_paket_soals.id')
             ->groupByRaw('master_paket_soals.id')
             ->where('master_paket_soals.user_admin_instansi_id',$admin_instansi->id)
             ->where('master_paket_soals.master_kelas_id',$kelas_program->master_kelas_id)
-            ->where('master_paket_soals.master_mapel_id',$kelas_program->master_mapel_id)
+            ->whereIn('master_paket_soals.master_mapel_id',$mapel_kelas_program)
             ->get();
-// dd($paket_soals);
+
+        // dd($paket_soals);
+
         return json_encode(array('data'=>$paket_soals));
     }
     
     public function ujian_siswa (Request $request)
     {
         //
+        $ujian_ke = NilaiUjian::where('master_ruang_ujian_id',$request->id_master_ruang_ujian)
+        ->where('user_siswa_id',Auth::user()->id)
+        ->max('ujian_ke');
 
-        $nilai_ujian=NilaiUjian::create([
-            'master_ruang_ujian_id' => $request->input('id_master_ruang_ujian'),
-            'user_siswa_id' => Auth::user()->id,
-            'total_nilai' => 0,
-        ]); 
+        if($ujian_ke){
+            $nilai_ujian=NilaiUjian::create([
+                'master_ruang_ujian_id' => $request->input('id_master_ruang_ujian'),
+                'user_siswa_id' => Auth::user()->id,
+                'total_nilai' => 0,
+                'ujian_ke' => $ujian_ke+1,
+            ]);    
+        }
+        else{
+            $nilai_ujian=NilaiUjian::create([
+                'master_ruang_ujian_id' => $request->input('id_master_ruang_ujian'),
+                'user_siswa_id' => Auth::user()->id,
+                'total_nilai' => 0,
+                'ujian_ke' => 1,
+            ]); 
+        }
 
         $total_nilai=0;
 
@@ -471,6 +517,8 @@ class RuangUjianController extends Controller
             }
         }
         
+        $total_nilai=$total_nilai/$request->jumlah_soal*100;
+
         $nilai_ujian->update([
             'total_nilai' => $total_nilai,
         ]); 
@@ -486,6 +534,9 @@ class RuangUjianController extends Controller
         $request=(explode("-",$id));
         $master_ruang_ujian_id=$request[0];
         $user_siswa_id=$request[1];
+        $id_created_at_nilai=$request[2];
+
+        $created_at_nilai=NilaiUjian::where('id',$id_created_at_nilai)->first();
         
         $id_user = Auth::user()->id;
 
@@ -514,6 +565,7 @@ class RuangUjianController extends Controller
         $bank_soals=DetailUjian::select('bank_soals.*')
             ->join('bank_soals','detail_ujians.bank_soal_id','=','bank_soals.id')
             ->where('master_ruang_ujian_id',$master_ruang_ujian_id)
+            ->where('detail_ujians.created_at',$created_at_nilai->created_at)
             ->where('user_siswa_id',$user_siswa_id)
             ->get();
     
@@ -521,17 +573,19 @@ class RuangUjianController extends Controller
             ->join('bank_soals','detail_ujians.bank_soal_id','=','bank_soals.id')
             ->join('jawabans','bank_soals.id','=','jawabans.banksoal_id')
             ->where('master_ruang_ujian_id',$master_ruang_ujian_id)
+            ->where('detail_ujians.created_at',$created_at_nilai->created_at)
             ->where('user_siswa_id',$user_siswa_id)
             ->get();
         
         $detail_ujians=DetailUjian::select('detail_ujians.*','bank_soals.tipe_soal','bank_soals.jawaban as jawaban_siswa')
             ->where('master_ruang_ujian_id',$master_ruang_ujian_id)
+            ->where('detail_ujians.created_at',$created_at_nilai->created_at)
             ->where('user_siswa_id',$user_siswa_id)
             ->join('bank_soals','detail_ujians.bank_soal_id','=','bank_soals.id')
             ->get();
 
         $nama_siswa=UserSiswa::join('users','user_siswas.user_id','=','users.id')->where('users.id',$user_siswa_id)->first();
-        // return $user_siswa_id;
+        // return $created_at_nilai->created_at;
 
         return view('AdminLTE/ruang-ujian-detail', compact('nama_instansis','foto_profil','user_admin_instansis','bank_soals','jawabans','detail_ujians','nama_siswa'));
 
@@ -540,24 +594,37 @@ class RuangUjianController extends Controller
     public function update_nilai(Request $request)
     {
         // id_detail_ujian, nilai_subjektif
-
         $detail_ujian = DetailUjian::where('id',$request->id_detail_ujian)->first();
 
-        $nilai_ujian = NilaiUjian::where('master_ruang_ujian_id',$detail_ujian->master_ruang_ujian_id)
-            ->where('user_siswa_id',$detail_ujian->user_siswa_id)
-            ->first();
-        
-        $total_nilai=$nilai_ujian->total_nilai+$request->nilai_subjektif;
-        
-        $nilai_ujian->update([
-            'total_nilai' => $total_nilai,
-        ]); 
-
-        // dd($request->nilai_subjektif);
+        $subjektif_lama=$detail_ujian->nilai;
 
         $detail_ujian->update([
             'nilai' => $request->input('nilai_subjektif'),
         ]); 
+
+        $subjektif_baru=$detail_ujian->nilai;
+
+        $nilai_ujian = NilaiUjian::where('master_ruang_ujian_id',$detail_ujian->master_ruang_ujian_id)
+            ->where('user_siswa_id',$detail_ujian->user_siswa_id)
+            ->where('created_at',$detail_ujian->created_at)
+            ->first();
+        
+        // dd($nilai_ujian);
+
+        $konversi_subjektif_lama=$subjektif_lama/$request->jumlah_soal*100;
+
+        $total_nilai_lama=$nilai_ujian->total_nilai-$konversi_subjektif_lama;
+
+        $konversi_subjektif_baru=$subjektif_baru/$request->jumlah_soal*100;
+
+        $total_nilai_baru=$total_nilai_lama+$konversi_subjektif_baru;
+        
+        $nilai_ujian->update([
+            'total_nilai' => $total_nilai_baru,
+        ]); 
+
+        // dd($request->nilai_subjektif);
+
 
         $nilai = DetailUjian::where('id',$request->id_detail_ujian)->first();
 

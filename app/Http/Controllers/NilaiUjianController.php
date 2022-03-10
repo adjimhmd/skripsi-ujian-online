@@ -119,7 +119,10 @@ class NilaiUjianController extends Controller
             ->join('kelas_programs', 'master_ruang_ujians.kelas_program_id', '=', 'kelas_programs.id')
             ->join('users', 'nilai_ujians.user_siswa_id', '=', 'users.id')
             ->join('user_siswas', 'users.id', '=', 'user_siswas.user_id')
+            // ->groupBy('master_ruang_ujian_id')
+            // ->orderBy('total_nilai','desc')
             ->where('user_siswa_id',$id)
+            ->whereRaw('total_nilai in (select max(total_nilai) from nilai_ujians group by (master_ruang_ujian_id))')
             ->get();
 
         // return$data_siswas;

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\HargaKelasProgram;
 use App\Models\KelasProgram;
 use App\Models\RombonganBelajar;
 use App\Models\User;
@@ -41,11 +42,11 @@ class OrderController extends Controller
      */
     public function store(Request $order)
     {
-        // return $order;
         $id_user = Auth::user()->id;
         $id_siswa = UserSiswa::select('id')->where('user_id',$id_user)->first();
         $profil=User::select('foto')->where('id',$id_user)->first();
-        $harga_kelas=KelasProgram::select('harga')->where('id',$order->id_kelas_program)->first();
+        $harga_kelas=HargaKelasProgram::where('id',$order->id_harga)->first();
+        // return $order;
 
         // harus melengkapi profil
         if($profil->foto==null){
@@ -72,18 +73,19 @@ class OrderController extends Controller
 
                 if(empty($snapToken)) {
 
-
                     $rombel=RombonganBelajar::create([
                         'kelas_program_id' => $order->id_kelas_program,
                         'user_siswa_id' => $id_siswa->id,
+                        'harga_kelas_program_id' => $order->id_harga,
                     ]);
-                    // return $rombel;
 
                     $new_order=RombonganBelajar::select('rombongan_belajars.*','rombongan_belajars.id as id_rombel',
                         'kelas_programs.*',
+                        'harga_kelas_programs.*',
                         'user_siswas.*',
                         'users.*')
                         ->join('kelas_programs', 'rombongan_belajars.kelas_program_id', '=', 'kelas_programs.id')
+                        ->join('harga_kelas_programs', 'kelas_programs.id', '=', 'harga_kelas_programs.kelas_program_id')
                         ->join('user_siswas', 'rombongan_belajars.user_siswa_id', '=', 'user_siswas.id')
                         ->join('users', 'user_siswas.user_id', '=', 'users.id')
                         ->where('rombongan_belajars.id',$rombel->id)
@@ -104,9 +106,11 @@ class OrderController extends Controller
             else {
                 $new_order=RombonganBelajar::select('rombongan_belajars.*','rombongan_belajars.id as id_rombel',
                     'kelas_programs.*',
+                    'harga_kelas_programs.*',
                     'user_siswas.*',
                     'users.*')
                     ->join('kelas_programs', 'rombongan_belajars.kelas_program_id', '=', 'kelas_programs.id')
+                    ->join('harga_kelas_programs', 'kelas_programs.id', '=', 'harga_kelas_programs.kelas_program_id')
                     ->join('user_siswas', 'rombongan_belajars.user_siswa_id', '=', 'user_siswas.id')
                     ->join('users', 'user_siswas.user_id', '=', 'users.id')
                     ->where('rombongan_belajars.id',$order->id_rombongan_belajar)
@@ -120,7 +124,6 @@ class OrderController extends Controller
                 $update_order->update([
                     'bukti_bayar' => $snapToken,
                 ]); 
-
 
                 return view('AdminLTE/invoice', compact('update_order', 'snapToken'));
             }

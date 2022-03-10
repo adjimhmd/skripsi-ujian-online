@@ -25,11 +25,11 @@
             <div style="display: table-cell; vertical-align: middle;" class="ml-2">
 
             @if($last_update_guru->isEmpty())
-                  <b>Data Paket Soal Kosong!</b> <br> {{'Jumlah : '.$jumlah_guru.' guru'}}
+                  <b>Data Guru Kosong!</b> <br> {{'Jumlah : '.$jumlah_guru.' Guru'}}
             @else
               @foreach($last_update_guru as $last)
                 @if ($loop->first)
-                <b>Pembaruan terakhir pada {{$last->updated_at->isoFormat('dddd, D MMMM Y hh:mm').' WITA'}} </b> <br> {{'Jumlah : '.$jumlah_guru.' guru'}}
+                <b>Pembaruan terakhir pada {{$last->updated_at->isoFormat('dddd, D MMMM Y hh:mm').' WITA'}} </b> <br> {{'Jumlah : '.$jumlah_guru.' Guru'}}
                 @endif
               @endforeach
             @endif
@@ -89,7 +89,8 @@
           
           <div class="card-body">
             <div class="row mb-4">
-              <button type="button" class="btn bg-purple shadow-sm btn_pilih" data-toggle="modal" data-target="#modal-default" data-id-user="{{$id}} " >Tambah Guru</button>
+              <button type="button" class="btn bg-purple shadow-sm btn_pilih" data-toggle="modal" data-target="#modal-default" data-id-user="{{$id}}">Tambah Guru</button>
+              <button type="button" class="btn btn-warning shadow-sm btn_terima_guru ml-2" data-toggle="modal" data-target="#modal-default" data-id-user="{{$id}}">Pendaftaran<span class="badge bg-success ml-1">{{$jumlah_guru_mendaftar}}</span></button>
             </div>
 
             <table id="example2" class="table table-hover table-valign-middle" style="table-layout: fixed">
@@ -157,7 +158,7 @@
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
 
-        <div class="modal-header border-0">
+        <div class="modal-header">
           <h5 class="modal-title me-auto">Daftar Guru</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -171,10 +172,11 @@
                   <thead>
                     <tr>
                       <th style="width: 5%; text-align: center;">No</th>
-                      <th style="width: 55%;">Data Guru</th>
-                      <th style="width: 10%; text-align: center;">Gender</th>
+                      <th style="width: 45%;">Data Guru</th>
+                      <th style="width: 8%; text-align: center;">Gender</th>
                       <th style="width: 15%; text-align: center;">NUPTK</th>
-                      <th style="width: 10%; text-align: center;">Aksi</th>
+                      <th style="width: 20%; text-align: center;">Narahubung</th>
+                      <th style="width: 7%; text-align: center;">Aksi</th>
                     </tr>
                   </thead>
                   <tbody id="bodyData">
@@ -284,11 +286,86 @@
           "</td>"+
           "<td><center>"+row.jenis_kelamin+"</center></td>"+
           "<td><center>"+row.nuptk+"</center></td>"+
+          "<td><i class='fas fa-envelope-open-text mr-1'></i>"+row.email+"<br><i class='fas fa-phone-alt mr-1'></i>"+row.no_telp+"</td>"+
           "<td><center><form method='POST' action='{{ route('simpan.guru') }}' enctype='multipart/form-data'>"+
             "<input type='hidden' name='_token' id='csrf-token' value='{{ csrf_token() }}' />"+
             "<input type='hidden' name='id_user' value='"+id_user+"'>"+
             "<input type='hidden' name='id_guru' value='"+row.id_guru+"'>"+
             "<button type='submit' class='btn bg-purple btn-sm'><i class='fas fa-check-circle'></i> Pilih</button>"+
+          "</form></center></td>";
+          bodyData+="</tr>";
+          i = i+1
+        })
+        $("#modal-default #bodyData").append(bodyData);
+        
+        
+        $("#tabel_modal").DataTable({
+          "paging": true,
+          "responsive": true, 
+          "autoWidth": false,
+          "pageLength": 10,
+          "scrollCollapse": true
+        }).buttons().container().appendTo('#tabel_modal_wrapper .col-md-6:eq(0)');
+        
+      }
+    });
+  }); 
+
+  // menampilkan tabel guru yang mendaftar
+  $('.btn_terima_guru').on('click',function(){
+    $("#modal-default #bodyData").empty();
+    var id_user = $(this).data('id-user');
+    // alert(id_user);
+
+    $.ajax({
+      url: "{{ route('terima.guru') }}",
+      type:'get',
+      dataType: 'json',
+      success: function(dataResult){
+
+        var resultData = dataResult.data;
+        var bodyData = '';
+        var profil = '';
+        var i = 1;
+        console.log(resultData);
+
+        $.each(resultData,function(index,row){
+
+          if(row.foto===null){
+            profil="{{asset('AdminLTE/dist/img/default-150x150.png')}}";
+          }else{
+            profil=row.foto;
+          }
+          
+          row.jenis_kelamin = row.jenis_kelamin.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+              return letter.toUpperCase();
+          });
+          
+          row.nama_mapel = row.nama_mapel.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+              return letter.toUpperCase();
+          });
+
+          bodyData+="<tr>"
+          bodyData+="<td style='text-align:center;'>"+i+"</td>"+
+          "<td>"+
+          "<div class='row'>"+
+          "<div class='col-xs-3'>"+
+            "<img src="+profil+" class='img-circle mr-4' alt='User Image' style='max-width:50px'>"+
+          "</div>"+
+          "<div class='col-xs-9'>"+
+            "<h6 style='margin-bottom:0;'><b>"+row.name+"</b></h6>"+
+            "<p style='margin-bottom:0;'>"+row.nama_mapel+"</p>"+
+          "</div>"+
+          "</div>"+
+          "</td>"+
+          "<td><center>"+row.jenis_kelamin+"</center></td>"+
+          "<td><center>"+row.nuptk+"</center></td>"+
+          "<td><i class='fas fa-envelope-open-text mr-1'></i>"+row.email+"<br><i class='fas fa-phone-alt mr-1'></i>"+row.no_telp+"</td>"+
+          "<td><center><form method='POST' action='{{ route('valid.guru') }}' enctype='multipart/form-data'>"+
+            "<input type='hidden' name='_token' id='csrf-token' value='{{ csrf_token() }}' />"+
+            "<input type='hidden' name='id_user' value='"+id_user+"'>"+
+            "<input type='hidden' name='id_guru' value='"+row.id_guru+"'>"+
+            "<button type='submit' class='btn bg-purple btn-sm'><i class='fas fa-check-circle'></i> Valid</button>"+
           "</form></center></td>";
           bodyData+="</tr>";
           i = i+1

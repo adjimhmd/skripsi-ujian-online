@@ -104,7 +104,10 @@
               </thead>
               <tbody>
                 @php ($no = 1)
+                @php ($id_paket_soal='')
                 @foreach($paket_soals as $paket_soal)
+                @if($id_paket_soal!=$paket_soal->id_paket_soal)
+                <!-- {{$no.') '.$id_paket_soal.'==='.$paket_soal->id_paket_soal}}<br> -->
                 <tr>
                   <td style="text-align: center;">{{$no++}}</td>
                   <td>{{'Kelas '.$paket_soal->kelas.' '.$paket_soal->tingkat.'/sederajat'}}</td>
@@ -122,9 +125,10 @@
                     <!-- @endif -->
                   </td>
                   <td>
-                    @if($paket_soal->user_guru_id==0) 
+                    @if($paket_soal->user_guru_id==NULL) 
                       <b style="color: red;">{{'Guru belum ditentukan!'}}</b><br>
                       <button type="button" class="btn btn-xs bg-secondary btn_guru shadow-sm" data-toggle="modal" data-target="#pilih_guru"
+                      data-keterangan="pilih_guru" 
                       data-jenjang="{{$paket_soal->kelas.' '.$paket_soal->tingkat.'/sederajat'}}" 
                       data-nama-mapel="{{ucwords($paket_soal->nama)}}" 
                       data-id-paket-soal="{{$paket_soal->id_paket_soal}}" 
@@ -132,29 +136,36 @@
                       data-id-master-mapel="{{$paket_soal->id_master_mapel}}">Pilih Guru
                       </button>
                     @else 
-                      @if($paket_soal->foto==null)
-                        <img src="{{asset('AdminLTE/dist/img/default-150x150.png')}}" class='img-circle mr-4 elevation-1' alt='User Image' style='max-width:50px'>
-                      @else
-                        <img src="{{'/'.$paket_soal->foto}}" class='img-circle mr-2 elevation-1' alt='User Image' style='max-width:50px'>
-                      @endif
-                      {{$paket_soal->name}}
+                      @foreach($paket_soals as $ps)
+                        @if($ps->id_paket_soal==$paket_soal->id_paket_soal)
+                        @if($ps->foto==null)
+                          <img src="{{asset('AdminLTE/dist/img/default-150x150.png')}}" class='img-circle mr-4 elevation-1 my-1' alt='User Image' style='max-width:50px'>
+                        @else
+                          <img src="{{'/'.$ps->foto}}" class='img-circle mr-2 elevation-1 my-1' alt='User Image' style='max-width:30px'>
+                        @endif
+                        {{$ps->name}}<br>
+                        @endif
+                      @endforeach
                     @endif
                   </td>
                   <td>
-                    @if($paket_soal->user_guru_id==0) 
+                    @if($paket_soal->user_guru_id==NULL) 
                       <a href="" class="btn btn-block btn-warning btn-sm shadow-sm" id="edit_paket_soal" data-toggle="modal" data-id="{{ $paket_soal->id_paket_soal }}">Edit</a>
                     @else
                       <button type="button" class="btn btn-block btn-sm bg-secondary btn_guru shadow-sm" data-toggle="modal" data-target="#pilih_guru"
-                      data-jenjang="{{$paket_soal->kelas.' '.$paket_soal->tingkat.'/sederajat'}}" 
+                      data-keterangan="tambah_guru" 
+                      data-jenjang="{{$paket_soal->id_guru_paket_soal}}" 
                       data-nama-mapel="{{ucwords($paket_soal->nama)}}" 
                       data-id-paket-soal="{{$paket_soal->id_paket_soal}}" 
                       data-id-instansi="{{$paket_soal->id_instansi}}" 
-                      data-id-master-mapel="{{$paket_soal->id_master_mapel}}">Ubah Guru
+                      data-id-master-mapel="{{$paket_soal->id_master_mapel}}">Tambah Guru
                       </button>
                     @endif
                     <a href="{{route('paket_soal.show',$paket_soal->id_paket_soal)}}" class="btn btn-block bg-purple btn-sm shadow-sm" >Detail Soal</a>
                   </td>
                 </tr>
+                @endif
+                @php ($id_paket_soal=$paket_soal->id_paket_soal)
                 @endforeach
               </tbody>
             </table>
@@ -177,7 +188,7 @@
                 <span aria-hidden="true">×</span>
               </button>
             </div>
-            <form method="POST" action="{{ route('paket_soal.store') }}" enctype="multipart/form-data" id="form_paket_soal">
+            <form method="POST" action="{{ route('paket_soal.store') }}" enctype="multipart/form-data" id="form_paket_soal" autocomplete="off">
             @csrf
 
               <div class="modal-body">
@@ -191,7 +202,7 @@
                   <!-- Nama -->
                   <div class="form-group col-12">
                     <label for="deskripsi">{{ __('Nama Paket Soal') }}</label>
-                    <input id="deskripsi" type="text" class="form-control @error('deskripsi') is-invalid @enderror" name="deskripsi" value="{{ old('deskripsi') }}" required autocomplete="deskripsi" autofocus placeholder="Nama paket soal yang akan dibuat">
+                    <input id="deskripsi" type="text" class="form-control @error('deskripsi') is-invalid @enderror" name="deskripsi" value="{{ old('deskripsi') }}" required placeholder="Nama paket soal yang akan dibuat">
 
                     @error('deskripsi')
                         <span class="invalid-feedback" role="alert">
@@ -422,23 +433,23 @@
         $("#pilih_guru #bodyData").empty();
         
         var jenjang = $(this).data('jenjang');
+        var keterangan = $(this).data('keterangan');
         var mapel = $(this).data('nama-mapel');
         var id_instansi = $(this).data('id-instansi');
         var id_master_mapel = $(this).data('id-master-mapel');
         var id_paket_soal = $(this).data('id-paket-soal');
 
-        // alert(id_instansi+' & '+id_master_mapel);
+        // alert(keterangan);
         
         $("#pilih_guru #judul_modal").html("<strong>List Guru Mata Pelajaran "+mapel+"</strong>");
 
         $.ajax({
           url: "{{ route('show.guru.paket') }}",
           type:'POST',
-          data: {_token:'{{ csrf_token() }}', id_instansi:id_instansi, id_master_mapel:id_master_mapel, id_paket_soal:id_paket_soal},
+          data: {_token:'{{ csrf_token() }}', jenjang:jenjang, keterangan:keterangan, id_instansi:id_instansi, id_master_mapel:id_master_mapel, id_paket_soal:id_paket_soal},
           cache: false,
           dataType: 'json',
           success: function(dataResult){
-            // console.log('dataResult'+dataResult.data);
             var resultData = dataResult.data;
             var bodyData = '';
             var profil = '';
@@ -466,7 +477,7 @@
                 });
 
                 bodyData+="<tr>"
-                bodyData+="<td class='py-4'><img src="+profil+" class='img-circle mr-4' alt='User Image' style='max-width:50px'>"+row.name+"</td>"+
+                bodyData+="<td class='py-4'><img src="+profil+" class='img-circle mr-4' alt='User Image' style='max-width:40px'>"+row.name+"</td>"+
                 "<td class='py-4'><center>"+row.jenis_kelamin+"</center></td>"+
                 "<td class='py-4'><center>"+row.nuptk+"</center></td>"+
                 "<td class='py-4'><center><button id='btn_pilih_guru' class='btn bg-purple btn-sm' data-id-user-guru='"+row.id_user_guru+"' data-id-paket-soal='"+id_paket_soal+"'><i class='fas fa-check-circle'></i> Pilih</button></center></td>";

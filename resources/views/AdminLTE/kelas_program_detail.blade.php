@@ -57,40 +57,153 @@
 
         <div class="card card-outline card-purple">
         
-        <div class="card-header">
-          <h1 class="card-title"><strong>
-            @if($data_kelas->tipe=='sekolah'){{'Kelas '.$data_kelas->deskripsi}}
-            @else{{'Program Kursus '.$data_kelas->deskripsi}}
-            @endif
-          </strong></h1>
-        </div>
-        <!-- /.card-header -->
-        
-        <div class="card-body py-auto">
+          <div class="card-header">
+            <h1 class="card-title"><strong>Rombongan Belajar</strong>
+              <small><i>
+              @if($data_kelas->tipe=='sekolah'){{' (Kelas '.$data_kelas->deskripsi.')'}}
+              @else{{' (Program Kursus '.$data_kelas->deskripsi.')'}}
+              @endif
+              </i></small>
+            </h1>
+          </div>
+          <!-- /.card-header -->
+
+          <div class="card-body"><!-- we are adding the accordion ID so Bootstrap's collapse plugin detects it -->
+            <div id="accordion">
               
-            <div class="row">
-              <div class="col-4">
-                <h6><b>
-                  @if($data_kelas->tipe=='sekolah')Harga Kelas
-                  @else Harga Program Kursus
-                  @endif
-                </b><br style="display: block; content: ''; margin-top: 0.2rem;">{{'Rp '.number_format($data_kelas->harga,0,',',',')}}</h6>
-              </div>
-              
-              <div class="col-4">
-                <h6><b>Master Kelas</b><br style="display: block; content: ''; margin-top: 0.2rem;">{{$data_kelas->kelas.' '.$data_kelas->tingkat.'/sederajat'.$tanda}}</h6>
+              <!-- Siswa Mendaftar -->
+              <div class="card card-light">
+
+                <div class="card-header">
+                  <h4 class="card-title w-100">
+                    <a class="d-block w-100" data-toggle="collapse" href="#collapseOne">
+                        <b>Siswa Mendaftar</b>
+                        <span class="badge bg-purple ml-1">
+                          @if($siswa_permintaans->count()!=0) {{$siswa_permintaans->count()}} @endif
+                        </span>
+                    </a>
+                  </h4>
+                </div>
+
+                <div id="collapseOne" class="collapse" data-parent="#accordion">
+                  <div class="card-body">
+
+                    <table class="table table-hover table-valign-middle" id="example1">
+                      <thead>
+                        <tr>
+                          <th style="width: 7%; text-align: center;">No</th>
+                          <th style="width: 35%;">Data Siswa</th>
+                          <th style="width: 20%; text-align: center;">NISN</th>
+                          <th style="width: 25%; text-align: center;">Kelas</th>
+                          <th style="width: 13%; text-align: center;">Aksi</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @php($no=1)
+                        @foreach($siswa_permintaans as $siswa_permintaan)
+                          @php($profil="{{}}")
+                          @php($profil="{{}}")
+                        <tr>
+                          <td style="text-align: center;">{{$no++}}</td>
+                          @if($siswa_permintaan->foto==null)
+                            <td><img src="{{asset('AdminLTE/dist/img/default-150x150.png')}}" class='img-circle mr-3' alt='User Image' style='max-width:35px'>{{$siswa_permintaan->name}}</td>
+                          @else
+                            <td><img src="{{'/'.$siswa_permintaan->foto}}" class='img-circle mr-3' alt='User Image' style='max-width:35px'>{{$siswa_permintaan->name}}</td>
+                          @endif
+                          <td style="text-align: center;">{{$siswa_permintaan->nisn}}</td>
+                          <td style="text-align: center;">{{$siswa_permintaan->kelas.' '.$siswa_permintaan->tingkat.'/sederajat'}}</td>
+                          <td style="text-align: center;">
+                          
+                            <a href="#verifikasi" class="btn btn-sm bg-purple btn_verif" data-toggle="modal" 
+                              data-id-rombel="{{ $siswa_permintaan->id_rombongan_belajar }}" 
+                              data-nama="{{ $siswa_permintaan->name }}" 
+                              data-email="{{ $siswa_permintaan->email }}"
+                              data-foto="{{ $siswa_permintaan->foto }}"
+                              data-tanggal_lahir="{{ \Carbon\Carbon::parse($siswa_permintaan->tanggal_lahir)->isoFormat('dddd, D MMMM Y') }}"
+                              data-jenis_kelamin="{{ ucwords($siswa_permintaan->jenis_kelamin) }}"
+                              data-telp="{{ $siswa_permintaan->no_telp }}"
+                              data-nisn="{{ $siswa_permintaan->nisn }}" 
+                              data-nama_wali="{{ $siswa_permintaan->nama_wali }}" 
+                              data-telp_wali="{{ $siswa_permintaan->email_wali }}" 
+                              data-bukti="{{ $siswa_permintaan->bukti_bayar }}"
+                              data-status="{{ '0' }}"><i class="fas fa-eye"></i>  Lihat
+                            </a>
+                          </td>
+                        </tr>
+                        @endforeach
+                      </tbody>
+                    </table>
+
+                  </div>
+                </div>
+                
               </div>
 
-              <div class="col-4">
-                <h6><b>Mata Pelajaran</b><br style="display: block; content: ''; margin-top: 0.2rem;">
-                  @if($data_kelas->materi) {{ucwords($data_kelas->nama_mapel).' - '.ucwords($data_kelas->materi)}}
-                  @else {{ucwords($data_kelas->nama_mapel)}}
-                  @endif
-                </h6>
+              <!-- Siswa Terdaftar -->
+              <div class="card card-light">
+
+                <div class="card-header">
+                  <h4 class="card-title w-100">
+                    <a class="d-block w-100" data-toggle="collapse" href="#collapseTwo">
+                        <b>Siswa Terdaftar</b>
+                        <span class="badge bg-purple ml-1">{{$siswa_kelass->count()}}</span>
+                    </a>
+                  </h4>
+                </div>
+
+                <div id="collapseTwo" class="collapse show" data-parent="#accordion">
+                  <div class="card-body">
+
+                    <table class="table table-hover table-valign-middle" id="example2">
+                      <thead>
+                        <tr>
+                          <th style="width: 7%; text-align: center;">No</th>
+                          <th style="width: 35%;">Data Siswa</th>
+                          <th style="width: 20%; text-align: center;">NISN</th>
+                          <th style="width: 25%; text-align: center;">Kelas</th>
+                          <th style="width: 13%; text-align: center;">Aksi</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @php($no=1)
+                        @foreach($siswa_kelass as $siswa_kelas)
+                        <tr>
+                          <td style="text-align: center;">{{$no++}}</td>
+                          @if($siswa_kelas->foto==null)
+                            <td><img src="{{asset('AdminLTE/dist/img/default-150x150.png')}}" class='img-circle mr-3' alt='User Image' style='max-width:35px'>{{$siswa_kelas->name}}</td>
+                          @else
+                            <td><img src="{{'/'.$siswa_kelas->foto}}" class='img-circle mr-3' alt='User Image' style='max-width:35px'>{{$siswa_kelas->name}}</td>
+                          @endif
+                          <td style="text-align: center;">{{$siswa_kelas->nisn}}</td>
+                          <td style="text-align: center;">{{$siswa_kelas->kelas.' '.$siswa_kelas->tingkat.'/sederajat'}}</td>
+                          <td style="text-align: center;">
+                            <a href="#verifikasi" class="btn btn-sm bg-purple btn_verif" data-toggle="modal" 
+                              data-id-rombel="{{ $siswa_kelas->id_rombongan_belajar }}" 
+                              data-nama="{{ $siswa_kelas->name }}" 
+                              data-email="{{ $siswa_kelas->email }}"
+                              data-foto="{{ $siswa_kelas->foto }}"
+                              data-tanggal_lahir="{{ \Carbon\Carbon::parse($siswa_kelas->tanggal_lahir)->isoFormat('dddd, D MMMM Y') }}"
+                              data-jenis_kelamin="{{ ucwords($siswa_kelas->jenis_kelamin) }}"
+                              data-telp="{{ $siswa_kelas->no_telp }}"
+                              data-nisn="{{ $siswa_kelas->nisn }}" 
+                              data-nama_wali="{{ $siswa_kelas->nama_wali }}" 
+                              data-telp_wali="{{ $siswa_kelas->email_wali }}" 
+                              data-bukti="{{ $siswa_kelas->bukti_bayar }}"
+                              data-status="{{ '1' }}"><i class="fas fa-eye"></i>  Lihat
+                            </a>
+                            <!-- <a href="{{route('kelas-program.show',1)}}" class="btn bg-purple btn-sm" >Detail</a> -->
+                          </td>
+                        </tr>
+                        @endforeach
+                      </tbody>
+                    </table>
+
+                  </div>
+                </div>
+
               </div>
+              
             </div>
-                  
-            
           </div>
           <!-- /.card-body -->
 
@@ -103,7 +216,7 @@
     <!-- /.row -->
 
 
-    <!-- Rombongan Belajar -->
+    <!-- Materi Pembelajaran -->
     <div class="row mb-2">
 
       <!-- About sekolah & Guru Box -->
@@ -171,7 +284,12 @@
         <div class="card">
         
           <div class="card-header border-0">
-            <h3 class="card-title"><b>{{'Rombongan Belajar '}}</b></h3>
+            <h3 class="card-title"><b>{{'Materi Pembelajaran Terpilih'}}</b>
+            <small><i>
+            @if($data_kelas->tipe=='sekolah'){{' (Kelas '.$data_kelas->deskripsi.')'}}
+            @else{{' (Program Kursus '.$data_kelas->deskripsi.')'}}
+            @endif
+            </i></small></h3>
 
             <div class="card-tools">
               <button type="button" class="btn btn-tool" data-card-widget="maximize">
@@ -191,48 +309,6 @@
             <!-- Table row -->
             <div class="row">
               <div class="col-12 table-responsive">
-
-                <table class="table table-hover table-valign-middle" id="example2">
-                  <thead>
-                    <tr>
-                      <th style="width: 5%; text-align: center;">No</th>
-                      <th style="width: 50%;">Data Siswa</th>
-                      <th style="width: 20%; text-align: center;">NISN</th>
-                      <th style="width: 20%; text-align: center;">Aksi</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @php($no=1)
-                    @foreach($siswa_kelass as $siswa_kelas)
-                    <tr>
-                      <td style="text-align: center;">{{$no++}}</td>
-                      @if($siswa_kelas->foto==null)
-                        <td><img src="{{asset('AdminLTE/dist/img/default-150x150.png')}}" class='img-circle mr-3' alt='User Image' style='max-width:35px'>{{$siswa_kelas->name}}</td>
-                      @else
-                        <td><img src="{{'/'.$siswa_kelas->foto}}" class='img-circle mr-3' alt='User Image' style='max-width:35px'>{{$siswa_kelas->name}}</td>
-                      @endif
-                      <td style="text-align: center;">{{$siswa_kelas->nisn}}</td>
-                      <td style="text-align: center;">
-                        <a href="#verifikasi" class="btn btn-sm bg-purple btn_verif" data-toggle="modal" 
-                          data-id-rombel="{{ $siswa_kelas->id_rombongan_belajar }}" 
-                          data-nama="{{ $siswa_kelas->name }}" 
-                          data-email="{{ $siswa_kelas->email }}"
-                          data-foto="{{ $siswa_kelas->foto }}"
-                          data-tanggal_lahir="{{ \Carbon\Carbon::parse($siswa_kelas->tanggal_lahir)->isoFormat('dddd, D MMMM Y') }}"
-                          data-jenis_kelamin="{{ ucwords($siswa_kelas->jenis_kelamin) }}"
-                          data-telp="{{ $siswa_kelas->no_telp }}"
-                          data-nisn="{{ $siswa_kelas->nisn }}" 
-                          data-nama_wali="{{ $siswa_kelas->nama_wali }}" 
-                          data-telp_wali="{{ $siswa_kelas->email_wali }}" 
-                          data-bukti="{{ $siswa_kelas->bukti_bayar }}"
-                          data-status="{{ '1' }}"><i class="fas fa-eye"></i>  Lihat
-                        </a>
-                        <!-- <a href="{{route('kelas-program.show',1)}}" class="btn bg-purple btn-sm" >Detail</a> -->
-                      </td>
-                    </tr>
-                    @endforeach
-                  </tbody>
-                </table>
               </div>
               <!-- /.col -->
             </div>
@@ -250,7 +326,12 @@
         <div class="card">
 
           <div class="card-header border-0">
-            <h3 class="card-title"><b>{{'Siswa Mendaftar '}}</b></h3>
+            <h3 class="card-title"><b>{{'Materi Pembelajaran Tersedia'}}</b>
+            <small><i>
+            @if($data_kelas->tipe=='sekolah'){{' (Kelas '.$data_kelas->deskripsi.')'}}
+            @else{{' (Program Kursus '.$data_kelas->deskripsi.')'}}
+            @endif
+            </i></small></h3>
 
             <div class="card-tools">
               <button type="button" class="btn btn-tool" data-card-widget="maximize">
@@ -270,51 +351,27 @@
             <!-- Table row -->
             <div class="row">
               <div class="col-12 table-responsive">
-
-                <table class="table table-hover table-valign-middle" id="example1">
+                
+                <table id="example" class="table table-hover table-valign-middle" style="table-layout: fixed">
                   <thead>
                     <tr>
-                      <th style="width: 5%; text-align: center;">No</th>
-                      <th style="width: 50%;">Data Siswa</th>
-                      <th style="width: 20%; text-align: center;">NISN</th>
-                      <th style="width: 20%; text-align: center;">Aksi</th>
+                      <th style="width: 1%; text-align: center;">Guru</th>
+                      <th style="width: 10%; text-align: center;">No</th>
+                      <th style="width: 35%;">Mata Pelajaran</th>
+                      <th style="width: 30%;">Materi</th>
+                      <th style="width: 14%; text-align: center;">Pilih</th>
                     </tr>
                   </thead>
                   <tbody>
-                    @php($no=1)
-                    @foreach($siswa_permintaans as $siswa_permintaan)
-                      @php($profil="{{}}")
-                      @php($profil="{{}}")
                     <tr>
-                      <td style="text-align: center;">{{$no++}}</td>
-                      @if($siswa_permintaan->foto==null)
-                        <td><img src="{{asset('AdminLTE/dist/img/default-150x150.png')}}" class='img-circle mr-3' alt='User Image' style='max-width:35px'>{{$siswa_permintaan->name}}</td>
-                      @else
-                        <td><img src="{{'/'.$siswa_permintaan->foto}}" class='img-circle mr-3' alt='User Image' style='max-width:35px'>{{$siswa_permintaan->name}}</td>
-                      @endif
-                      <td style="text-align: center;">{{$siswa_permintaan->nisn}}</td>
-                      <td style="text-align: center;">
-                      
-                        <a href="#verifikasi" class="btn btn-sm bg-purple btn_verif" data-toggle="modal" 
-                          data-id-rombel="{{ $siswa_permintaan->id_rombongan_belajar }}" 
-                          data-nama="{{ $siswa_permintaan->name }}" 
-                          data-email="{{ $siswa_permintaan->email }}"
-                          data-foto="{{ $siswa_permintaan->foto }}"
-                          data-tanggal_lahir="{{ \Carbon\Carbon::parse($siswa_permintaan->tanggal_lahir)->isoFormat('dddd, D MMMM Y') }}"
-                          data-jenis_kelamin="{{ ucwords($siswa_permintaan->jenis_kelamin) }}"
-                          data-telp="{{ $siswa_permintaan->no_telp }}"
-                          data-nisn="{{ $siswa_permintaan->nisn }}" 
-                          data-nama_wali="{{ $siswa_permintaan->nama_wali }}" 
-                          data-telp_wali="{{ $siswa_permintaan->email_wali }}" 
-                          data-bukti="{{ $siswa_permintaan->bukti_bayar }}"
-                          data-status="{{ '0' }}"><i class="fas fa-eye"></i>  Lihat
-                        </a>
-                      </td>
+                      <td><img src="{{asset('AdminLTE/dist/img/default-150x150.png')}}" class='img-circle mr-3' alt='User Image' style='max-width:35px'>Guru Satu (78912798172)</td>
+                      <td>1</td>
+                      <td>Bahasa Indonesia</td>
+                      <td>Video Tematik 1</td>
+                      <td>x</td>
                     </tr>
-                    @endforeach
                   </tbody>
                 </table>
-                
 
               </div>
               <!-- /.col -->
@@ -323,6 +380,7 @@
 
           </div>
           <!-- /.card-body -->
+
         </div>
 
       </div>
@@ -473,13 +531,53 @@
   });
 
 
+
+  var groupColumn = 0;
+    var table = $('#example').DataTable({
+        "paging": true,
+        "responsive": true, 
+        "autoWidth": false,
+        "scrollCollapse": true,
+        "columnDefs": [
+            { "visible": false, "targets": groupColumn }
+        ],
+        "order": [[ 1, 'asc' ]],
+        "displayLength": 10,
+        "drawCallback": function ( settings ) {
+            var api = this.api();
+            var rows = api.rows( {page:'current'} ).nodes();
+            var last=null;
+ 
+            api.column(groupColumn, {page:'current'} ).data().each( function ( group, i ) {
+                if ( last !== group ) {
+                    $(rows).eq( i ).before(
+                        '<tr class="group bg-light"><td colspan="6">'+group+'</td></tr>'
+                    );
+ 
+                    last = group;
+                }
+            } );
+        }
+    } );
+ 
+    // Order by the grouping
+    $('#example tbody').on( 'click', 'tr.group', function () {
+        var currentOrder = table.order()[0];
+        if ( currentOrder[0] === groupColumn && currentOrder[1] === 'asc' ) {
+            table.order( [ groupColumn, 'desc' ] ).draw();
+        }
+        else {
+            table.order( [ groupColumn, 'asc' ] ).draw();
+        }
+    });
+
   // datatable
   $(document).ready(function() {
     $("#example1").DataTable({
       "paging": true,
       "responsive": true, 
       "autoWidth": false,
-      "pageLength": 10,
+      "pageLength": 5,
       "scrollCollapse": true
     }).buttons().container().appendTo('#example2_wrapper .col-md-6:eq(0)');
     
@@ -487,7 +585,7 @@
       "paging": true,
       "responsive": true, 
       "autoWidth": false,
-      "pageLength": 10,
+      "pageLength": 5,
       "scrollCollapse": true
     }).buttons().container().appendTo('#example2_wrapper .col-md-6:eq(0)');
 

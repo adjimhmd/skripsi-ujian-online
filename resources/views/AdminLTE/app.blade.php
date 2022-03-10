@@ -94,14 +94,7 @@
                       @php($tipe='Lembaga Kursus')
                       @php($text='Program Kursus')
                     @endif
-                  @else
-                    @if($tipe_guru->tipe=='sekolah')
-                      @php($tipe='Sekolah')
-                      @php($text='Kelas')
-                    @elseif($tipe_guru->tipe=='lembaga_kursus')
-                      @php($tipe='Lembaga Kursus')
-                      @php($text='Program Kursus')
-                    @endif
+                  
                   @endif
                 @endif
               @endif

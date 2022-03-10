@@ -186,7 +186,7 @@
                             <a href="" id="edit" data-toggle="modal" data-id="{{ $harga_kelas_program->id }}" class="btn btn-warning btn-xs shadow-sm mb-2"><i class="fas fa-edit"></i> Edit</a>
                             @elseif (Auth::user()->hasRole('siswa'))
                             <form method='POST' action='{{ route("daftar.siswa") }}' enctype='multipart/form-data' style="display:inline">
-                            <!-- <form method='POST' action='{{ route("orders.store") }}' enctype='multipart/form-data'> -->
+                            <!-- <form method='POST' action='{{ route("orders.store") }}' enctype='multipart/form-data' style="display:inline"> -->
                               @csrf
                               <input type='hidden' name='id_kelas_program' value='{{$harga_kelas_program->kelas_program_id}}'>
                               <button type='submit' class='btn bg-purple btn-xs mb-2' disabled><i class='fas fa-check-circle'></i> Pilih</button>
@@ -198,7 +198,7 @@
                             <a href="" id="edit" data-toggle="modal" data-id="{{ $harga_kelas_program->id }}" class="btn btn-warning btn-xs shadow-sm mb-2"><i class="fas fa-edit"></i> Edit</a>
                             @elseif (Auth::user()->hasRole('siswa'))
                             <form method='POST' action='{{ route("daftar.siswa") }}' enctype='multipart/form-data' style="display:inline">
-                            <!-- <form method='POST' action='{{ route("orders.store") }}' enctype='multipart/form-data'> -->
+                            <!-- <form method='POST' action='{{ route("orders.store") }}' enctype='multipart/form-data' style="display:inline"> -->
                               @csrf
                               <input type='hidden' name='id_kelas_program' value='{{$harga_kelas_program->kelas_program_id}}'>
                               <button type='submit' class='btn bg-purple btn-xs mb-2'><i class='fas fa-check-circle'></i> Pilih</button>
@@ -209,8 +209,8 @@
                             @if (Auth::user()->hasRole('adm_instansi'))
                             <a href="" id="edit" data-toggle="modal" data-id="{{ $harga_kelas_program->id }}" class="btn btn-warning btn-xs shadow-sm mb-2"><i class="fas fa-edit"></i> Edit</a>
                             @elseif (Auth::user()->hasRole('siswa'))
-                            <form method='POST' action='{{ route("daftar.siswa") }}' enctype='multipart/form-data' style="display:inline">
-                            <!-- <form method='POST' action='{{ route("orders.store") }}' enctype='multipart/form-data'> -->
+                            <!-- <form method='POST' action='{{ route("daftar.siswa") }}' enctype='multipart/form-data' style="display:inline"> -->
+                            <form method='POST' action='{{ route("orders.store") }}' enctype='multipart/form-data' style="display:inline">
                               @csrf
                               <input type='hidden' name='id_kelas_program' value='{{$harga_kelas_program->kelas_program_id}}'>
                               <input type='hidden' name='id_harga' value='{{$harga_kelas_program->id}}'>
@@ -223,7 +223,11 @@
                     </td>
                     
                     <td style="text-align: center;"><center>
-                      <a href="{{route('kelas-program.show',$kelas_program->id_kelas_program)}}" class="btn bg-purple btn-sm shadow-sm" >Detail</a>
+                      @if (Auth::user()->hasRole('siswa'))
+                        <a href="{{route('kelas-program.show',$kelas_program->id_kelas_program)}}" class="btn bg-purple btn-sm shadow-sm">Materi</a>
+                      @else
+                        <a href="{{route('kelas-program.show',$kelas_program->id_kelas_program)}}" class="btn bg-purple btn-sm shadow-sm">Detail</a>
+                      @endif
                     </center></td>
                   </tr>
                 @endforeach
@@ -412,17 +416,6 @@
                   <input id="deskripsi" type="text" class="form-control @error('deskripsi') is-invalid @enderror" name="deskripsi" value="{{ old('deskripsi') }}" placeholder="Namanya apa?"required>
                 </div>
 
-                <!-- Harga -->
-                <div class="form-group col-6">
-                  <label for="jurusan">{{ __('Harga') }}</label>
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text">Rp.</span>
-                    </div>
-                    <input id="harga" type="number" class="form-control @error('harga') is-invalid @enderror" name="harga" value="{{ old('jurusan') }}" placeholder="Harga langganan" required>
-                  </div>
-                </div>
-
                 <!-- Jumlah Bulan -->
                 <div class="form-group col-6">
                   <label for="jumlah_bulan">{{ __('Jumlah Bulan') }}</label>
@@ -434,6 +427,17 @@
                   </div>
                   
                   
+                </div>
+
+                <!-- Harga -->
+                <div class="form-group col-6">
+                  <label for="jurusan">{{ __('Harga') }}</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Rp.</span>
+                    </div>
+                    <input id="harga" type="number" class="form-control @error('harga') is-invalid @enderror" name="harga" value="{{ old('jurusan') }}" placeholder="Harga langganan" required>
+                  </div>
                 </div>
 
                 <div class="form-group col-12">

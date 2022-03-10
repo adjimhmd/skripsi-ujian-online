@@ -20,6 +20,7 @@ class NilaiUjian extends Model
         'master_ruang_ujian_id',
         'user_siswa_id',
         'total_nilai',
+        'ujian_ke',
     ];
 
     public function master_ruang_ujians()

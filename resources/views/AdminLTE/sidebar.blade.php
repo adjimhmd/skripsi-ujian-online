@@ -205,8 +205,15 @@
 
           <li class="nav-item">
             <a href="{{ route('bank_soals.index') }}" class="nav-link {{ Route::currentRouteNamed('bank_soals.index') || Route::currentRouteNamed('bank_soals.edit') ? 'active' : '' }}">
-              <i class="nav-icon far fa-copy"></i>
+              <i class="nav-icon fas fa-briefcase"></i>
               <p>Bank Soal</p>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="{{ route('materi-pembelajaran.index') }}" class="nav-link {{ Route::currentRouteNamed('materi-pembelajaran.index') ? 'active' : '' }}">
+              <i class="nav-icon fas fa-swatchbook"></i>
+              <p>Materi Pembelajaran</p>
             </a>
           </li>
 

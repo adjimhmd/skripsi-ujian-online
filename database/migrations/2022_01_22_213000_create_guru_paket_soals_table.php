@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMasterPaketSoalsTable extends Migration
+class CreateGuruPaketSoalsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreateMasterPaketSoalsTable extends Migration
      */
     public function up()
     {
-        Schema::create('master_paket_soals', function (Blueprint $table) {
+        Schema::create('guru_paket_soals', function (Blueprint $table) {
             $table->id();
-            $table->integer('master_kelas_id')->unsigned();
-            $table->integer('master_mapel_id')->unsigned();
-            $table->integer('user_admin_instansi_id')->unsigned();
-            $table->string('deskripsi');
+            $table->integer('master_paket_soal_id')->unsigned();
+            $table->integer('user_guru_id')->unsigned();
             $table->timestamps();
         });
     }
@@ -30,6 +28,6 @@ class CreateMasterPaketSoalsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('master_paket_soals');
+        Schema::dropIfExists('guru_paket_soals');
     }
 }

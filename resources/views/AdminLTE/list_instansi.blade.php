@@ -68,8 +68,15 @@
           
           </div>
           <!-- /.card-header -->
-          
+
           <div class="card-body">
+
+            @if (Auth::user()->hasRole('guru'))
+            <div class="row mb-4">
+              <button type="button" class="btn btn-warning shadow-sm btn_terima_guru ml-2" data-toggle="modal" data-target="#modal-default" data-id-guru="{{$id_guru->id}}">Penawaran<span class="badge bg-success ml-1">{{$jumlah_tawaran}}</span></button>
+            </div>
+            @endif
+
             <!-- we are adding the accordion ID so Bootstrap's collapse plugin detects it -->
             <div id="accordion">
               
@@ -93,11 +100,7 @@
                           <th style="width: 5%; text-align: center;">No</th>
                           <th style="width: 30%;">Nama</th>
                           <th style="width: 55%;">Alamat</th>
-                          @if (Auth::user()->hasRole('siswa'))
                           <th style="width: 10%; text-align: center;">Aksi</th>
-                          @elseif (Auth::user()->hasRole('guru'))
-                          <th style="width: 10%; text-align: center;">Tingkat</th>
-                          @endif
                         </tr>
                       </thead>
                       <tbody>
@@ -105,7 +108,11 @@
                         @foreach($list_sekolah as $select_sekolah)
                         <tr>
                           <td style="text-align: center;">{{$no++}}</td>
-                          <td><b>{{ $select_sekolah->instansi }}</b><br>{{'NPSN: '.$select_sekolah->nomor_induk}}</td>
+                          <td>
+                            <b>{{ $select_sekolah->instansi }}</b>
+                            <span class="badge bg-purple ml-1">{{$select_sekolah->jenjang.'/sederajat'}}</span>
+                            <br>{{'NPSN: '.$select_sekolah->nomor_induk}}
+                          </td>
                           <td>
                             <strong>{{ ucwords($select_sekolah->alamat) }}</strong><br>
                             {{ ucwords(strtolower($select_sekolah->desa)).' - '.ucwords(strtolower($select_sekolah->kecamatan)).' - '.ucwords(strtolower($select_sekolah->kota)).' - '.ucwords(strtolower($select_sekolah->provinsi)) }}
@@ -129,17 +136,39 @@
                               </button> -->
 
                             @elseif (Auth::user()->hasRole('guru'))
-                              @if($select_sekolah->jenjang=='SD')
-                                <span class="badge badge-danger">{{$select_sekolah->jenjang.'/sederajat'}}</span>
-                              @elseif($select_sekolah->jenjang=='SMP')
-                                <span class="badge badge-primary">{{$select_sekolah->jenjang.'/sederajat'}}</span>
-                              @elseif($select_sekolah->jenjang=='SMA')
-                                <span class="badge badge-secondary">{{$select_sekolah->jenjang.'/sederajat'}}</span>
-                              @endif
+                              <form method='POST' action="{{ route('simpan.guru') }}" enctype='multipart/form-data'>
+                                @csrf
+                                <input type="hidden" name="id_instansi" value="{{$select_sekolah->id}}">
+                                <button type="submit" class="btn btn-sm btn-secondary" disabled> Daftar</button>
+                              </form>
                             @endif
                           </center></td>
                         </tr>
                         @endforeach
+
+                        @if($list_sekolah_semua)
+                        @foreach($list_sekolah_semua as $select_sekolah)
+                        <tr>
+                          <td style="text-align: center;">{{$no++}}</td>
+                          <td>
+                            <b>{{ $select_sekolah->instansi }}</b>
+                            <span class="badge bg-purple ml-1">{{$select_sekolah->jenjang.'/sederajat'}}</span>
+                            <br>{{'NPSN: '.$select_sekolah->nomor_induk}}
+                          </td>
+                          <td>
+                            <strong>{{ ucwords($select_sekolah->alamat) }}</strong><br>
+                            {{ ucwords(strtolower($select_sekolah->desa)).' - '.ucwords(strtolower($select_sekolah->kecamatan)).' - '.ucwords(strtolower($select_sekolah->kota)).' - '.ucwords(strtolower($select_sekolah->provinsi)) }}
+                          </td>
+                          <td><center>
+                              <form method='POST' action="{{ route('simpan.guru') }}" enctype='multipart/form-data'>
+                                @csrf
+                                <input type="hidden" name="id_instansi" value="{{$select_sekolah->id}}">
+                                <button type="submit" class="btn btn-sm bg-purple"> Daftar</button>
+                              </form>
+                          </center></td>
+                        </tr>
+                        @endforeach
+                        @endif
                       </tbody>
                     </table>
 
@@ -164,11 +193,7 @@
                           <th style="width: 5%; text-align: center;">No</th>
                           <th style="width: 30%;">Nama</th>
                           <th style="width: 55%;">Alamat</th>
-                          @if (Auth::user()->hasRole('siswa'))
                           <th style="width: 10%; text-align: center;">Aksi</th>
-                          @elseif (Auth::user()->hasRole('guru'))
-                          <th style="width: 10%; text-align: center;">Tingkat</th>
-                          @endif
                         </tr>
                       </thead>
                       <tbody>
@@ -176,8 +201,10 @@
                         @foreach($list_lembaga_kursus as $select_kursus)
                         <tr>
                           <td style="text-align: center;">{{$no++}}</td>
-                          <td><b>{{ $select_kursus->instansi }}</b><br>{{'NILEK: '.$select_kursus->nomor_induk}}</td>
-                            <h6><span class="badge badge-warning"></span></h6>
+                          <td>
+                            <b>{{ $select_kursus->instansi }}</b>
+                            <span class="badge bg-purple ml-1">{{$select_kursus->jenjang.'/sederajat'}}</span>
+                            <br>{{'NILEK: '.$select_kursus->nomor_induk}}
                           </td>
                           <td>
                             <strong>{{ ucwords($select_kursus->alamat) }}</strong><br>
@@ -201,17 +228,39 @@
                               </button> -->
 
                             @elseif (Auth::user()->hasRole('guru'))
-                              @if($select_kursus->jenjang=='SD')
-                                <span class="badge badge-danger">{{$select_kursus->jenjang.'/sederajat'}}</span>
-                              @elseif($select_kursus->jenjang=='SMP')
-                                <span class="badge badge-primary">{{$select_kursus->jenjang.'/sederajat'}}</span>
-                              @elseif($select_kursus->jenjang=='SMA')
-                                <span class="badge badge-secondary">{{$select_kursus->jenjang.'/sederajat'}}</span>
-                              @endif
+                              <form method='POST' action="{{ route('simpan.guru') }}" enctype='multipart/form-data'>
+                                @csrf
+                                <input type="hidden" name="id_instansi" value="{{$select_kursus->id}}">
+                                <button type="submit" class="btn btn-sm btn-secondary" disabled> Daftar</button>
+                              </form>
                             @endif
                           </center></td>
                         </tr>
                         @endforeach
+
+                        @if($list_lembaga_kursus_semua)
+                        @foreach($list_lembaga_kursus_semua as $select_kursus)
+                        <tr>
+                          <td style="text-align: center;">{{$no++}}</td>
+                          <td>
+                            <b>{{ $select_kursus->instansi }}</b>
+                            <span class="badge bg-purple ml-1">{{$select_kursus->jenjang.'/sederajat'}}</span>
+                            <br>{{'NILEK: '.$select_kursus->nomor_induk}}
+                          </td>
+                          <td>
+                            <strong>{{ ucwords($select_kursus->alamat) }}</strong><br>
+                            {{ ucwords(strtolower($select_kursus->desa)).' - '.ucwords(strtolower($select_kursus->kecamatan)).' - '.ucwords(strtolower($select_kursus->kota)).' - '.ucwords(strtolower($select_kursus->provinsi)) }}
+                          </td>
+                          <td><center>
+                            <form method='POST' action="{{ route('simpan.guru') }}" enctype='multipart/form-data'>
+                              @csrf
+                              <input type="hidden" name="id_instansi" value="{{$select_kursus->id}}">
+                              <button type="submit" class="btn btn-sm bg-purple"> Daftar</button>
+                            </form>
+                          </center></td>
+                        </tr>
+                        @endforeach
+                        @endif
                       </tbody>
                     </table>
 
@@ -330,6 +379,46 @@
 
   </div>
 
+              
+  <!-- modal pilih guru -->
+  <div class="modal fade" id="modal-default">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h5 class="modal-title me-auto">Daftar Lembaga Pendidikan</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          
+            <div class="row">
+              <div class="col-12 d-flex align-items-stretch flex-column">
+                <table id="validasi_guru" class="table table-hover table-valign-middle" style="table-layout: fixed">
+                  <thead>
+                    <tr>
+                      <th style="width: 5%; text-align: center;">No</th>
+                      <th style="width: 40%;">Nama</th>
+                      <th style="width: 45%;">Alamat</th>
+                      <th style="width: 10%; text-align: center;">Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody id="bodyData">
+
+                  </tbody>  
+                </table>
+              </div>
+            </div>
+
+        </div>
+
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
 
 </section>
 <!-- /.content -->
@@ -343,7 +432,10 @@
   $('#pilih_guru').on('hidden.bs.modal', function (e) {
     $('#tabel_modal').DataTable().destroy();
   })
-
+  $('#modal-default').on('hidden.bs.modal', function (e) {
+    $('#validasi_guru').DataTable().destroy();
+  })
+  
   // menampilkan tabel guru sesuai mapel
   $('.btn_pilih').on('click',function(){
     $("#pilih_guru #bodyData").empty();
@@ -502,6 +594,66 @@
     });
   }); 
 
+
+  // menampilkan tabel guru yang mendaftar
+  $('.btn_terima_guru').on('click',function(){
+    $("#modal-default #bodyData").empty();
+    var id_guru = $(this).data('id-guru');
+    // alert(id_guru);
+
+    $.ajax({
+      url: "{{ route('terima.lembaga') }}",
+      type:'get',
+      dataType: 'json',
+      success: function(dataResult){
+
+        var resultData = dataResult.data;
+        var bodyData = '';
+        var profil = '';
+        var i = 1;
+        console.log(resultData);
+
+        $.each(resultData,function(index,row){
+          // alert(row.jenjang)
+          if(row.tipe=='sekolah'){
+            row.nomor_induk='NPSN: '+row.nomor_induk;
+          }
+          else{
+            row.nomor_induk='NILEK: '+row.nomor_induk;
+          }
+
+          bodyData+="<tr>"
+          bodyData+="<td style='text-align:center;'>"+i+"</td>"+
+          "<td>"+
+          "<b>"+row.instansi+"</b>"+
+          "<span class='badge bg-purple ml-1'>"+row.jenjang+"/sederajat</span>"+
+          "<br>"+row.nomor_induk+
+          "</td>"+
+          "<td>"+
+          "<strong>"+row.alamat.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();})+"</strong><br>"+
+          row.desa.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();})+" - "+row.kecamatan.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();})+" - "+row.kota.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();})+" - "+row.provinsi.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();})+
+          "</td>"+
+          "<td><center><form method='POST' action='{{ route('valid.guru') }}' enctype='multipart/form-data'>"+
+            "<input type='hidden' name='_token' id='csrf-token' value='{{ csrf_token() }}' />"+
+            "<input type='hidden' name='id_guru_instansi' value='"+row.id_guru_instansi+"'>"+
+            "<button type='submit' class='btn bg-purple btn-sm'><i class='fas fa-check-circle'></i> Terima</button>"+
+          "</form></center></td>";
+          bodyData+="</tr>";
+          i = i+1
+        })
+        $("#modal-default #bodyData").append(bodyData);
+        
+        $("#validasi_guru").DataTable({
+          "paging": true,
+          "responsive": true, 
+          "autoWidth": false,
+          "pageLength": 10,
+          "scrollCollapse": true
+        }).buttons().container().appendTo('#validasi_guru_wrapper .col-md-6:eq(0)');
+        
+      }
+    });
+  }); 
   
   // $("#tabel_modal").DataTable({
   //   "stateSave": true,

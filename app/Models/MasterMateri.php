@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class MasterPaketSoal extends Model
+class MasterMateri extends Model
 {
     use HasFactory;
     
-    protected $table = "master_paket_soals";
+    protected $table = "master_materis";
 
     /**
      * The attributes that are mass assignable.
@@ -17,15 +17,15 @@ class MasterPaketSoal extends Model
      * @var array
      */
     protected $fillable = [
-        'master_kelas_id',
         'master_mapel_id',
-        'user_admin_instansi_id',
+        'user_guru_id',
         'deskripsi',
+        'link_gdrive',
     ];
 
-    public function master_kelas()
+    public function user_gurus()
     {
-    	return $this->belongsTo('App\MasterKelas');
+    	return $this->belongsTo('App\UserGuru');
     }
 
     public function master_mapels()
@@ -33,13 +33,8 @@ class MasterPaketSoal extends Model
     	return $this->belongsTo('App\MasterMapel');
     }
     
-    public function paket_soals()
+    public function materi_kelas_programs()
     {
-    	return $this->hasMany('App\PaketSoal');
-    }
-    
-    public function master_ruang_ujians()
-    {
-    	return $this->hasMany('App\MasterRuangUjian');
+    	return $this->hasMany('App\MateriKelasProgram');
     }
 }

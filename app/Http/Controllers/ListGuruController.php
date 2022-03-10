@@ -36,7 +36,9 @@ class ListGuruController extends Controller
             ->orderBy('guru_instansis.updated_at', 'desc')
             ->get();
 
-        $jumlah_guru = GuruInstansi::select('*')->count();
+        $jumlah_guru = GuruInstansi::where('status','1')->count();
+
+        $jumlah_guru_mendaftar = GuruInstansi::where('status','0-guru')->count();
 
         $foto_profil = User::select('foto')
             ->where('id', '=', $id)
@@ -68,9 +70,10 @@ class ListGuruController extends Controller
             ->join('master_mapels', 'spesialisasis.master_mapel_id', '=', 'master_mapels.id')
             ->groupBy('guru_instansis.user_guru_id')
             ->where('guru_instansis.instansi_pendidikan_id',$id_instansi)
+            ->where('guru_instansis.status','1')
             ->get();
 
-        return view('AdminLTE/master-guru', compact('id','nama_instansis','foto_profil','user_admin_instansis','last_update_guru', 'jumlah_guru','list_gurus'));
+        return view('AdminLTE/master-guru', compact('id','nama_instansis','foto_profil','user_admin_instansis','last_update_guru', 'jumlah_guru','jumlah_guru_mendaftar','list_gurus'));
 
     }
 
@@ -150,8 +153,9 @@ class ListGuruController extends Controller
     {
         //
         $id_instansis=UserAdminInstansi::where('user_id',Auth::user()->id)->pluck('instansi_pendidikan_id')->toArray();
+        
         $guru_instansis=GuruInstansi::whereIn('instansi_pendidikan_id',$id_instansis)->pluck('user_guru_id')->toArray();
-        // return$guru_instansis;
+
         $list_gurus=DB::table('user_gurus')
             ->select('users.*','user_gurus.*','user_gurus.id as id_guru')
             ->selectRaw('group_concat(master_mapels.nama) as nama_mapel')
@@ -163,25 +167,103 @@ class ListGuruController extends Controller
             ->get();
 
             
-        // dd($list_gurus);
+        // dd($guru_instansis);
+        return json_encode(array('data'=>$list_gurus));
+
+    }
+    
+    public function terima_guru()
+    {
+        //
+        $id_instansis=UserAdminInstansi::where('user_id',Auth::user()->id)->pluck('instansi_pendidikan_id')->toArray();
+        
+        $guru_instansis=GuruInstansi::whereIn('instansi_pendidikan_id',$id_instansis)->where('status','0-guru')->pluck('user_guru_id')->toArray();
+
+        $list_gurus=DB::table('user_gurus')
+            ->select('users.*','user_gurus.*','user_gurus.id as id_guru')
+            ->selectRaw('group_concat(master_mapels.nama) as nama_mapel')
+            ->join('spesialisasis', 'user_gurus.id', '=', 'spesialisasis.user_guru_id')
+            ->join('master_mapels', 'spesialisasis.master_mapel_id', '=', 'master_mapels.id')
+            ->join('users', 'user_gurus.user_id', '=', 'users.id')
+            ->whereIn('user_gurus.id',$guru_instansis)
+            ->groupBy('spesialisasis.user_guru_id')
+            ->get();
+
+            
+        // dd($guru_instansis);
         return json_encode(array('data'=>$list_gurus));
 
     }
     
     public function simpan_guru(Request $request)
     {
-        //
-        $id_instansi=UserAdminInstansi::select('instansi_pendidikans.id as id_instansi_pendidikan')
-            ->join('instansi_pendidikans', 'user_admin_instansis.instansi_pendidikan_id', '=', 'instansi_pendidikans.id')
-            ->where('user_id',$request->id_user)
+        $role = DB::table('model_has_roles')
+            ->select('role_id')
+            ->where('model_id', '=', Auth::user()->id)
             ->first();
-            
-        GuruInstansi::create([
-            'instansi_pendidikan_id' => $id_instansi->id_instansi_pendidikan,
-            'user_guru_id' => $request->id_guru,
-            'status' => '1',
-        ]); 
+        
+        $id_user_guru=UserGuru::where('user_id',Auth::user()->id)->first();
 
-        return redirect()->route('list-guru.index');
+        // if bukan guru
+        if($role->role_id!=2){
+            $id_instansi=UserAdminInstansi::select('instansi_pendidikans.id as id_instansi_pendidikan')
+                ->join('instansi_pendidikans', 'user_admin_instansis.instansi_pendidikan_id', '=', 'instansi_pendidikans.id')
+                ->where('user_id',$request->id_user)
+                ->first();
+            
+            GuruInstansi::create([
+                'instansi_pendidikan_id' => $id_instansi->id_instansi_pendidikan,
+                'user_guru_id' => $request->id_guru,
+                'status' => '0-lembaga',
+            ]); 
+
+            return redirect()->route('list-guru.index');
+        }
+        else{
+            $id_instansi=UserAdminInstansi::select('instansi_pendidikans.id as id_instansi_pendidikan')
+                ->join('instansi_pendidikans', 'user_admin_instansis.instansi_pendidikan_id', '=', 'instansi_pendidikans.id')
+                ->where('instansi_pendidikan_id',$request->id_instansi)
+                ->first();
+            
+            GuruInstansi::create([
+                'instansi_pendidikan_id' => $id_instansi->id_instansi_pendidikan,
+                'user_guru_id' => $id_user_guru->id,
+                'status' => '0-guru',
+            ]); 
+            
+            return redirect()->route('list-instansi.index');
+        }
+
+    }
+    
+    public function valid_guru(Request $request)
+    {
+        // return$request;
+        $role = DB::table('model_has_roles')
+        ->select('role_id')
+        ->where('model_id', '=', Auth::user()->id)
+        ->first();
+    
+        // if bukan guru
+        if($role->role_id!=2){
+            $id_instansi=UserAdminInstansi::where('user_id',$request->id_user)->first();
+
+            $id_guru_instansi=GuruInstansi::where('user_guru_id',$request->id_guru)
+                ->where('instansi_pendidikan_id',$id_instansi->instansi_pendidikan_id)
+                ->first();
+
+            $guru_instansis = GuruInstansi::find($id_guru_instansi->id);
+            $guru_instansis->update([
+                'status' => '1',
+            ]); 
+            return redirect()->route('list-guru.index');
+        }
+        else{
+            $guru_instansis = GuruInstansi::find($request->id_guru_instansi);
+            $guru_instansis->update([
+                'status' => '1',
+            ]); 
+            return redirect()->route('list-instansi.index');
+        }
     }
 }

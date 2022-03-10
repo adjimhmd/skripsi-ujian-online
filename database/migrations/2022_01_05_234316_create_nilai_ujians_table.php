@@ -18,6 +18,7 @@ class CreateNilaiUjiansTable extends Migration
             $table->bigInteger('master_ruang_ujian_id')->unsigned();
             $table->bigInteger('user_siswa_id')->unsigned();
             $table->double('total_nilai');
+            $table->tinyInteger('ujian_ke');
             $table->timestamps();
         });
     }

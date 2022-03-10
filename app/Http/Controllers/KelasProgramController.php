@@ -248,7 +248,6 @@ class KelasProgramController extends Controller
             $data_guru='';
         };
 
-        
         $data_kelas = KelasProgram::select(
             'kelas_programs.id as id_kelas_program','kelas_programs.*',
             'harga_kelas_programs.harga',
@@ -266,26 +265,28 @@ class KelasProgramController extends Controller
         $siswa_kelass = RombonganBelajar::select(
             'user_siswas.id as id_siswa','user_siswas.*',
             'users.id as id_user','users.*',
-            'rombongan_belajars.id as id_rombongan_belajar','rombongan_belajars.*')
+            'rombongan_belajars.id as id_rombongan_belajar','rombongan_belajars.*',
+            'master_kelas.*')
             ->join('user_siswas', 'rombongan_belajars.user_siswa_id', '=', 'user_siswas.id')
+            ->join('master_kelas', 'user_siswas.master_kelas_id', '=', 'master_kelas.id')
             ->join('users', 'user_siswas.user_id', '=', 'users.id')
             ->join('kelas_programs', 'rombongan_belajars.kelas_program_id', '=', 'kelas_programs.id')
             ->where('kelas_programs.id', '=', $id)
             ->where('rombongan_belajars.status', '=', '1')
             ->get();
 
-        // return$data_kelas;
         $siswa_permintaans = RombonganBelajar::select(
             'user_siswas.id as id_siswa','user_siswas.*',
             'users.id as id_user','users.*',
-            'rombongan_belajars.id as id_rombongan_belajar','rombongan_belajars.*')
+            'rombongan_belajars.id as id_rombongan_belajar','rombongan_belajars.*',
+            'master_kelas.*')
             ->join('user_siswas', 'rombongan_belajars.user_siswa_id', '=', 'user_siswas.id')
+            ->join('master_kelas', 'user_siswas.master_kelas_id', '=', 'master_kelas.id')
             ->join('users', 'user_siswas.user_id', '=', 'users.id')
             ->join('kelas_programs', 'rombongan_belajars.kelas_program_id', '=', 'kelas_programs.id')
             ->where('kelas_programs.id', '=', $id)
             ->where('rombongan_belajars.status', '=', '0')
             ->get();
-        // return$siswa_permintaans;
 
         return view('AdminLTE/kelas_program_detail',compact('nama_instansis','foto_profil','id','user_admin_instansis','data_kelas','siswa_kelass','siswa_permintaans','tipe_siswa'));
 

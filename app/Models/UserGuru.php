@@ -36,4 +36,9 @@ class UserGuru extends Model
     {
     	return $this->hasMany('App\MasterPaketSoal');
     }
+
+    public function master_materi()
+    {
+    	return $this->hasMany('App\MasterMateri');
+    }
 }

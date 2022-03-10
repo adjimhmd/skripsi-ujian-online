@@ -78,6 +78,8 @@
                       @if($bs->tipe_soal==='true-false') @php($jml_truefalse++) @endif
                     @endforeach
 
+                    @php($jumlah_soal=$jml_objektif+$jml_subjektif+$jml_penjodohan+$jml_truefalse)
+
                     @if($jml_objektif>0)
                     <div class="card card-light">
                       <div class="card-header">
@@ -167,13 +169,13 @@
                                 <input type="number" step="0.1" class="form-control form-control-sm" value="{{$detail_ujian->nilai}}" id="nilai_subjektif_{{$detail_ujian->id}}" maxlength="1" min="0" max="1">
                               </div>
                               <div class="col-auto my-auto">
-                                <button type="button" class="btn btn-warning btn-sm update_nilai shadow-sm" data-id-detail-ujian="{{ $detail_ujian->id }}">Update Nilai</button>
+                                <button type="button" class="btn btn-warning btn-sm update_nilai shadow-sm" data-id-detail-ujian="{{ $detail_ujian->id }}" data-jumlah-soal="{{ $jumlah_soal }}">Update Nilai</button>
                               </div>
                               <div class="col-auto my-auto">
                                 <button type="button" class="btn bg-purple btn-sm lihat_pembahasan shadow-sm" data-toggle="modal" data-target="#lihat-pembahasan" data-pembahasan="{{ $bank_soal->pembahasan }}" data-kunci-jawaban="{{ $bank_soal->jawaban }}">Lihat Kunci Jawaban & Pembahasan</button>
                               </div><br>
                             </div>
-                            <small><b><i class="far fa-question-circle mr-2"></i>Note: </b>Rentang nilai adalah 0 s/d 1</small>
+                            <small style="color: red;"><b><i class="far fa-question-circle mr-2"></i>Note: </b>Rentang nilai adalah 0 s/d 1</small>
                             <hr><br>
 
                             <!-- <textarea id="{{'pilihan_siswa_'.$no_subjektif++}}" class="form-control pilihan_siswa pilihan" disabled>{!!$bank_soal->jawaban!!}</textarea> -->
@@ -397,10 +399,10 @@
                 <div class="col-4">
                   <h6>
                     <b>Mata Pelajaran</b><br style="display: block; content: ''; margin-top: 0.2rem;">
-                    @if($master_ruang_ujian->materi)
-                    {{ucwords($master_ruang_ujian->nama).' - '.ucwords($master_ruang_ujian->materi)}}
+                    @if($mapel_kelas_programs->materi)
+                    {{ucwords($mapel_kelas_programs->nama).' - '.ucwords($mapel_kelas_programs->materi)}}
                     @else
-                    {{ucwords($master_ruang_ujian->nama)}}
+                    {{ucwords($mapel_kelas_programs->nama)}}
                     @endif
                   </h6>
                   <h6>
@@ -422,7 +424,12 @@
 
                     @if (Auth::user()->hasRole('siswa'))
                     <div class="berlangsung">
-                      @if($detail_ujians->count()==0)
+                    <small style="color: red;"><b><i class="far fa-info-circle mr-2"></i>Note: </b>
+                      @if($ujian_ke) {{'Kamu sudah menerjakan '.$ujian_ke}}
+                      @else {{'Kamu belum mengerjakan ujian'}}
+                      @endif {{'dari '.$master_ruang_ujian->batas.' kesempatan ujian'}}</small><br>
+                      
+                      @if($detail_ujians->count()==0 or $master_ruang_ujian->batas>$ujian_ke)
                         <button type="button" class="btn bg-purple mt-4 kerjakan">Kerjakan Sekarang</button>
                       @else
                         <button type="button" class="btn bg-purple mt-4 kerjakan" disabled>Kamu Sudah Mengerjakan</button>
@@ -482,9 +489,12 @@
                       @if($bs->tipe_soal==='subjektif') @php($jml_subjektif++) @endif
                       @if($bs->tipe_soal==='penjodohan') @php($jml_penjodohan++) @endif
                       @if($bs->tipe_soal==='true-false') @php($jml_truefalse++) @endif
-                      <input type="hidden" name="id_master_ruang_ujian" value="{{$master_ruang_ujian->id_master_ruang_ujian}}">
                     @endforeach
 
+                    @php($jumlah_soal=$jml_objektif+$jml_subjektif+$jml_penjodohan+$jml_truefalse)
+                    <input type="hidden" name="id_master_ruang_ujian" value="{{$master_ruang_ujian->id_master_ruang_ujian}}">
+                    <input type="hidden" name="jumlah_soal" value="{{$jumlah_soal}}">
+                    
                     @if($jml_objektif>0)
                     <div class="card card-light">
                       <div class="card-header">
@@ -707,7 +717,7 @@
         <div class="col-md-12">
           <div class="card">
 
-              <div class="card-header border-0">
+              <div class="card-header">
                 <h3 class="card-title"><b>Nilai Ujian Siswa</b></h3>
 
                 <div class="card-tools">
@@ -725,71 +735,51 @@
               
               <div class="card-body">
 
-                <table id="example" class="table table-hover table-valign-middle">
+                <table id="example2" class="table table-hover table-valign-middle">
                 <thead>
                   <tr>
-                    <th style="width: 5%; text-align: center;">No</th>
-                    <th style="width: 37%;">Data Siswa</th>
-                    <th style="width: 12%; text-align: center;;">Pilihan Ganda</th>
-                    <th style="width: 12%; text-align: center;;">Essay</th>
-                    <th style="width: 12%; text-align: center;;">Penjodohan</th>
-                    <th style="width: 12%; text-align: center;;">True-False</th>
-                    @if(Auth::user()->hasRole('guru'))
-                    <th style="width: 8%; text-align: center;">Aksi</th>
-                    @endif
+                    <th style="width: 10%; text-align: center;">No</th>
+                    <th style="width: 60%;">Data Siswa</th>
+                    <th style="width: 30%; text-align: center;">Keterangan Ujian</th>
                   </tr>
                 </thead>
                 <tbody>
 
+                  @php($data_siswaaa='.')
                   @php($no_nilai=1)  
                   @foreach($rombongan_belajars as $rombongan_belajar)
+                      @foreach($nilai as $n)
+                        @if($rombongan_belajar->id_user==$n->user_siswa_id)
                   <tr>
-                    <td style="text-align: center;">{{$no_nilai++}}</td>
-                    <td>
-                      @if($rombongan_belajar->foto==null)
-                        <img src="{{asset('AdminLTE/dist/img/default-150x150.png')}}"  class="img-circle mr-3" alt="User Image" style="max-width:50px"> 
+                    <td style="text-align: center;">
+                      @if($data_siswaaa!=$rombongan_belajar->name)
+                        <b>{{$no_nilai++}}</b>
                       @else
-                        <img src="{{'/'.$rombongan_belajar->foto}}"  class="img-circle mr-3" alt="User Image" style="max-width:50px"> 
+                        <p style="color: transparent;">{{$no_nilai}}</p>
+                      @endif
+                    </td>
+                    <td>
+                    @if($data_siswaaa!=$rombongan_belajar->name)
+                      @if($rombongan_belajar->foto==null)
+                        <img src="{{asset('AdminLTE/dist/img/default-150x150.png')}}"  class="img-circle mr-3" alt="User Image" style="max-width:35px"> 
+                      @else
+                        <img src="{{'/'.$rombongan_belajar->foto}}"  class="img-circle mr-3" alt="User Image" style="max-width:35px"> 
                       @endif
                       {{$rombongan_belajar->name}}
-                    </td>
-                    @php($nilaiObjektif=0)  
-                    @php($jumlahObjektif=0)  
-                    @php($nilaiSubjektif=0)  
-                    @php($jumlahSubjektif=0)  
-                    @php($nilaiPenjodohan=0)  
-                    @php($jumlahPenjodohan=0)  
-                    @php($nilaiTruefalse=0)  
-                    @php($jumlahTruefalse=0)  
-
-                    @foreach($nilai as $n)
-                      @if($n->user_siswa_id==$rombongan_belajar->id_user and $n->tipe_soal=='objektif')
-                        @php($nilaiObjektif+=$n->nilai)  
-                        @php($jumlahObjektif++)  
-                      @endif
-                      @if($n->user_siswa_id==$rombongan_belajar->id_user and $n->tipe_soal=='subjektif')
-                        @php($nilaiSubjektif+=$n->nilai)  
-                        @php($jumlahSubjektif++)  
-                      @endif
-                      @if($n->user_siswa_id==$rombongan_belajar->id_user and $n->tipe_soal=='penjodohan')
-                        @php($nilaiPenjodohan+=$n->nilai)  
-                        @php($jumlahPenjodohan++)  
-                      @endif
-                      @if($n->user_siswa_id==$rombongan_belajar->id_user and $n->tipe_soal=='true-false')
-                        @php($nilaiTruefalse+=$n->nilai)  
-                        @php($jumlahTruefalse++)  
-                      @endif
-                    @endforeach
-
-                    <td style="text-align: center;">{{'Benar: '.$nilaiObjektif.'/'.$jumlahObjektif.' soal'}}</td>
-                    <td style="text-align: center;">{{'Benar: '.$nilaiSubjektif.'/'.$jumlahSubjektif.' soal'}}</td>
-                    <td style="text-align: center;">{{'Benar: '.$nilaiPenjodohan.'/'.$jumlahPenjodohan.' soal'}}</td>
-                    <td style="text-align: center;">{{'Benar: '.$nilaiTruefalse.'/'.$jumlahTruefalse.' soal'}}</td>
-      
-                    @if(Auth::user()->hasRole('guru'))
-                    <td><a href="{{route('hasil.ujian',$master_ruang_ujian->id_master_ruang_ujian.'-'.$rombongan_belajar->id_user)}}" class="btn btn-sm bg-purple btn-block shadow-sm" >Lihat</a></td>
+                      <small><b>{{' (NISN: '.$rombongan_belajar->nisn.')'}}</b></small>
                     @endif
+                    @php($data_siswaaa=$rombongan_belajar->name)
+                    </td>
+                    <td style="text-align: center;">
+                          {{'Ujian ke-'.$n->ujian_ke.' | Nilai: '.$n->total_nilai}}
+                          @if(Auth::user()->hasRole('guru'))
+                          <a href="{{route('hasil.ujian',$master_ruang_ujian->id_master_ruang_ujian.'-'.$rombongan_belajar->id_user.'-'.$n->id)}}" class="btn btn-xs bg-purple shadow-sm ml-2" ><i class="fas fa-eye"></i> Jawaban</a>
+                          @endif
+                          <br>
+                    </td>
                   </tr>
+                        @endif
+                      @endforeach
                   @endforeach
                 </tbody>
                 </table>
@@ -827,7 +817,8 @@
   $(document).on('click', '.update_nilai', function(){
     var id_detail_ujian = $(this).data('id-detail-ujian');
     var nilai_subjektif = $("#nilai_subjektif_"+id_detail_ujian).val();
-    
+    var jumlah_soal = $(this).data('jumlah-soal');
+
     if(nilai_subjektif>1){
       toastr.error('Nilai melebihi batas (range 0-1)');
       return false;
@@ -839,7 +830,8 @@
         data: {
           _token:'{{ csrf_token() }}',
           id_detail_ujian:id_detail_ujian,
-          nilai_subjektif:nilai_subjektif
+          nilai_subjektif:nilai_subjektif,
+          jumlah_soal:jumlah_soal
         },
         dataType:'json',
         success: function(dataResult){
@@ -1260,6 +1252,15 @@
       "searching": false,
       "lengthChange": false,
     }).buttons().container().appendTo('#example_wrapper .col-md-6:eq(0)');
+
+    $("#example2").DataTable({
+      "paging": true,
+      "responsive": true, 
+      "autoWidth": false,
+      "pageLength": 10,
+      "scrollCollapse": true,
+      "order": [[ 0, "asc" ]],
+    }).buttons().container().appendTo('#example2_wrapper .col-md-6:eq(0)');
 
   });
 

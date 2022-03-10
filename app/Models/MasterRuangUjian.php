@@ -22,6 +22,7 @@ class MasterRuangUjian extends Model
         'master_tahun_ajaran_id',
         'kelas_program_id',
         'instansi_pendidikan_id',
+        'batas',
         'durasi',
         'waktu_mulai',
         'waktu_selesai',

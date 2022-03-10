@@ -40,7 +40,8 @@
       23 => 'App\\Providers\\AuthServiceProvider',
       24 => 'App\\Providers\\EventServiceProvider',
       25 => 'App\\Providers\\RouteServiceProvider',
-      26 => 'Intervention\\Image\\ImageServiceProvider',
+      26 => 'App\\Providers\\GoogleDriveServiceProvider',
+      27 => 'Intervention\\Image\\ImageServiceProvider',
     ),
     'aliases' => 
     array (
@@ -351,6 +352,7 @@
   'filesystems' => 
   array (
     'default' => 'local',
+    'cloud' => 'google',
     'disks' => 
     array (
       'local' => 
@@ -375,6 +377,14 @@
         'url' => NULL,
         'endpoint' => NULL,
         'use_path_style_endpoint' => false,
+      ),
+      'google' => 
+      array (
+        'driver' => 'google',
+        'clientId' => '263159019971-r5kei4he0p23r1tqo2u9vpsicsajqivn.apps.googleusercontent.com',
+        'clientSecret' => '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',
+        'refreshToken' => '1//046YVBgI-ZtL1CgYIARAAGAQSNwF-L9Ir_alaroj7sFt9S6QbVm-KcRnLZdJdAEKI6sDPHfmIRg4cv5XSzukPdEE9pzIke3oi0pU',
+        'folderId' => '1J6QWm3abeVR8wEwcupvRFIWqt9f2p6If',
       ),
     ),
     'links' => 
