@@ -146,7 +146,7 @@
                         @if($list_kelas->status==null)
                           <small class="badge bg-maroon mb-2"><i class="fas fa-times"></i>{{' Belum bayar'}}</small><br>
                         @elseif($list_kelas->status=='0')
-                          <small class="badge badge-warning mb-2"><i class="fas fa-exclamation"></i>{{' Menunggu'}}</small><br>
+                          <small class="badge badge-warning mb-2"><i class="fas fa-exclamation"></i>{{' Menungguu'}}</small><br>
                         @elseif($list_kelas->status=='1')
                           <small class="badge badge-success mb-2"><i class="fas fa-check"></i>{{' Terdaftar'}}</small><br>
                         @endif

@@ -37,54 +37,47 @@
     @endif
 
 
-    <div class="row mt-3 mb-2">
-
-      <!-- About sekolah & Guru Box -->
+    <!-- About sekolah & Guru Box -->
+    <!-- <div class="row mt-3 mb-2">
       
       <div class="col-12">
 
         <div class="card card-outline card-purple">
         
-        <div class="card-header">
-          <h1 class="card-title"><strong>{{'Paket Soal '.$kelas_program->deskripsi}}</strong></h1>
-        </div>
-        <!-- /.card-header -->
-        
-        <div class="card-body py-auto">
-              
-            <div class="row">
-              <div class="col-4">
-                <h6><b>Data Guru: </b><br style="display: block; content: ''; margin-top: 0.2rem;">{{$kelas_program->name.' - '.$kelas_program->nuptk}}</h6>
-              </div>
-              
-              <div class="col-4">
-                <h6><b>Master Kelas</b><br style="display: block; content: ''; margin-top: 0.2rem;">{{$kelas_program->kelas.' '.$kelas_program->tingkat.'/sederajat'.$tanda}}</h6>
-              </div>
-
-              <div class="col-4">
-                <h6><b>Mata Pelajaran</b><br style="display: block; content: ''; margin-top: 0.2rem;">
-                  @if($kelas_program->materi) {{ucwords($kelas_program->nama).' - '.ucwords($kelas_program->materi)}}
-                  @else {{ucwords($kelas_program->nama)}}
-                  @endif
-                </h6>
-              </div>
-            </div>
-                  
-            
+          <div class="card-header">
+            <h1 class="card-title"><strong>{{'Paket Soal '.$kelas_program->deskripsi}}</strong></h1>
           </div>
-          <!-- /.card-body -->
+          
+          <div class="card-body py-auto">
+              <div class="row">
+                <div class="col-4">
+                  <h6><b>Data Guru: </b><br style="display: block; content: ''; margin-top: 0.2rem;">{{$kelas_program->name.' - '.$kelas_program->nuptk}}</h6>
+                </div>
+                
+                <div class="col-4">
+                  <h6><b>Master Kelas</b><br style="display: block; content: ''; margin-top: 0.2rem;">{{$kelas_program->kelas.' '.$kelas_program->tingkat.'/sederajat'.$tanda}}</h6>
+                </div>
+
+                <div class="col-4">
+                  <h6><b>Mata Pelajaran</b><br style="display: block; content: ''; margin-top: 0.2rem;">
+                    @if($kelas_program->materi) {{ucwords($kelas_program->nama).' - '.ucwords($kelas_program->materi)}}
+                    @else {{ucwords($kelas_program->nama)}}
+                    @endif
+                  </h6>
+                </div>
+              </div>
+          </div>
 
         </div>
-        <!-- /.card -->
 
       </div>
-    </div>
+    </div> -->
     <!-- /.row -->
     
     <!-- Bank Soal Terpilih -->
-    <div class="row mb-2">
+    <div class="row mt-3 mb-2">
       <div class="col-md-12">
-        <div class="card">
+        <div class="card card-outline card-purple">
           
           <form method="POST" action="{{ route('hapus.soal') }}" enctype="multipart/form-data">
             @csrf
@@ -141,7 +134,8 @@
                             <td style="text-align: center;">{{$no++}}</td>
                             <td class="media_tabel">{!! $select_soal_objektif->soal !!}<h6>
                               <span class="badge bg-secondary">{{'Kelas '. $select_soal_objektif->kelas.' '.$select_soal_objektif->tingkat.'/sederajat'}}</span>
-                              <span class="badge bg-secondary">{{ucwords($select_soal_objektif->nama).' - '.ucwords($select_soal_objektif->materi)}}</span></h6><br>
+                              <span class="badge bg-secondary">{{ucwords($select_soal_objektif->nama).''.ucwords($select_soal_objektif->materi)}}</span></h6><br>
+
                               <div class="icheck-danger d-inline">
                                 <input type="checkbox" name="hapus_soal[]" value="{{$select_soal_objektif->id_paket_soal}}" id="{{$select_soal_objektif->id_paket_soal}}">
                                 <label for="{{$select_soal_objektif->id_paket_soal}}">HAPUS SOAL</label><br><br>
@@ -166,7 +160,14 @@
                               @endforeach
                               </ol>
                               <b>KUNCI JAWABAN : {{$kunci}}</b><br><br>
-                              <button type="button" class="btn bg-purple btn-sm lihat_pembahasan" data-toggle="modal" data-target="#lihat-pembahasan" data-pembahasan="{{ $bahasan_objektif }}">Lihat Pembahasan</button><br>
+                              <button type="button" class="btn bg-purple btn-sm lihat_pembahasan" data-toggle="modal" data-target="#lihat-pembahasan" data-pembahasan="{{ $bahasan_objektif }}">Lihat Pembahasan</button>
+                              <b class="ml-1">| Pemilik Soal </b>
+                              @if($select_soal_objektif->foto==null)
+                                <img src="{{asset('AdminLTE/dist/img/default-150x150.png')}}" class='img-circle mx-2 elevation-1 my-1' alt='User Image' style='max-width:35px'>
+                              @else
+                                <img src="{{'/'.$select_soal_objektif->foto}}" class='img-circle mx-2 elevation-1 my-1' alt='User Image' style='max-width:35px'>
+                              @endif
+                              {{$select_soal_objektif->name}}
                             </td>
                           </tr>
                           @endforeach
@@ -207,7 +208,7 @@
                             <td style="text-align: center;">{{$no++}}</td>
                             <td class="media_tabel">{!! $select_soal_subjektif->soal !!}<h6>
                               <span class="badge bg-secondary">{{'Kelas '. $select_soal_subjektif->kelas.' '.$select_soal_subjektif->tingkat.'/sederajat'}}</span>
-                              <span class="badge bg-secondary">{{ucwords($select_soal_subjektif->nama).' - '.ucwords($select_soal_subjektif->materi)}}</span></h6><br>
+                              <span class="badge bg-secondary">{{ucwords($select_soal_subjektif->nama).''.ucwords($select_soal_subjektif->materi)}}</span></h6><br>
                               <div class="icheck-danger d-inline">
                                 <input type="checkbox" name="hapus_soal[]" value="{{$select_soal_subjektif->id_paket_soal}}" id="{{$select_soal_subjektif->id_paket_soal}}">
                                 <label for="{{$select_soal_subjektif->id_paket_soal}}">HAPUS SOAL</label><br><br>
@@ -215,7 +216,14 @@
                             </td>
                             <td class="media_tabel">
                               {!! $select_soal_subjektif->jawaban !!}
-                                <button type="button" class="btn shadow-sm bg-purple btn-sm mb-1 lihat_pembahasan" data-toggle="modal" data-target="#lihat-pembahasan" data-pembahasan="{{ $select_soal_subjektif->pembahasan }}">Lihat Pembahasan</button><br>
+                                <button type="button" class="btn shadow-sm bg-purple btn-sm mb-1 lihat_pembahasan" data-toggle="modal" data-target="#lihat-pembahasan" data-pembahasan="{{ $select_soal_subjektif->pembahasan }}">Lihat Pembahasan</button>
+                                <b class="ml-1">| Pemilik Soal </b>
+                                @if($select_soal_subjektif->foto==null)
+                                  <img src="{{asset('AdminLTE/dist/img/default-150x150.png')}}" class='img-circle mx-2 elevation-1 my-1' alt='User Image' style='max-width:35px'>
+                                @else
+                                  <img src="{{'/'.$select_soal_subjektif->foto}}" class='img-circle mx-2 elevation-1 my-1' alt='User Image' style='max-width:35px'>
+                                @endif
+                                {{$select_soal_subjektif->name}}
                             </td>
                           </tr>
                           @endforeach
@@ -255,7 +263,7 @@
                             <td style="text-align: center;">{{$no++}}</td>
                             <td class="media_tabel">{!! $select_soal_penjodohan->soal !!}<h6>
                               <span class="badge bg-secondary">{{'Kelas '. $select_soal_penjodohan->kelas.' '.$select_soal_penjodohan->tingkat.'/sederajat'}}</span>
-                              <span class="badge bg-secondary">{{ucwords($select_soal_penjodohan->nama).' - '.ucwords($select_soal_penjodohan->materi)}}</span></h6><br>
+                              <span class="badge bg-secondary">{{ucwords($select_soal_penjodohan->nama).''.ucwords($select_soal_penjodohan->materi)}}</span></h6><br>
                               <div class="icheck-danger d-inline">
                                 <input type="checkbox" name="hapus_soal[]" value="{{$select_soal_penjodohan->id_paket_soal}}" id="{{$select_soal_penjodohan->id_paket_soal}}">
                                 <label for="{{$select_soal_penjodohan->id_paket_soal}}">HAPUS SOAL</label><br><br>
@@ -263,7 +271,14 @@
                             </td>
                             <td class="media_tabel">
                               {!! $select_soal_penjodohan->jawaban !!}
-                                <button type="button" class="btn shadow-sm bg-purple btn-sm mb-1 lihat_pembahasan" data-toggle="modal" data-target="#lihat-pembahasan" data-pembahasan="{{ $select_soal_penjodohan->pembahasan }}">Lihat Pembahasan</button><br>
+                              <button type="button" class="btn shadow-sm bg-purple btn-sm mb-1 lihat_pembahasan" data-toggle="modal" data-target="#lihat-pembahasan" data-pembahasan="{{ $select_soal_penjodohan->pembahasan }}">Lihat Pembahasan</button>
+                              <b class="ml-1">| Pemilik Soal </b>
+                              @if($select_soal_penjodohan->foto==null)
+                                <img src="{{asset('AdminLTE/dist/img/default-150x150.png')}}" class='img-circle mx-2 elevation-1 my-1' alt='User Image' style='max-width:35px'>
+                              @else
+                                <img src="{{'/'.$select_soal_penjodohan->foto}}" class='img-circle mx-2 elevation-1 my-1' alt='User Image' style='max-width:35px'>
+                              @endif
+                              {{$select_soal_penjodohan->name}}
                             </td>
                           </tr>
                           @endforeach
@@ -292,8 +307,8 @@
                         <thead>
                           <tr>
                             <th style="width: 5%; text-align: center;">NO</th>
-                            <th style="width: 85%; text-align: center;">SOAL</th>
-                            <th style="width: 10%; text-align: center;">JAWABAN</th>
+                            <th style="width: 65%; text-align: center;">SOAL</th>
+                            <th style="width: 30%; text-align: center;">JAWABAN</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -303,7 +318,7 @@
                             <td style="text-align: center;">{{$no++}}</td>
                             <td class="media_tabel">{!! $select_soal_truefalse->soal !!}<h6>
                               <span class="badge bg-secondary">{{'Kelas '. $select_soal_truefalse->kelas.' '.$select_soal_truefalse->tingkat.'/sederajat'}}</span>
-                              <span class="badge bg-secondary">{{ucwords($select_soal_truefalse->nama).' - '.ucwords($select_soal_truefalse->materi)}}</span></h6><br>
+                              <span class="badge bg-secondary">{{ucwords($select_soal_truefalse->nama).''.ucwords($select_soal_truefalse->materi)}}</span></h6><br>
                               <div class="icheck-danger d-inline">
                                 <input type="checkbox" name="hapus_soal[]" value="{{$select_soal_truefalse->id_paket_soal}}" id="{{$select_soal_truefalse->id_paket_soal}}">
                                 <label for="{{$select_soal_truefalse->id_paket_soal}}">HAPUS SOAL</label><br><br>
@@ -320,8 +335,15 @@
                                 <input type="radio" checked id="salah">
                                 <label for="salah">Salah</label>
                               </div>
-                              @endif<br><br>
-                              <button type="button" class="btn shadow-sm bg-purple btn-sm mb-1 lihat_pembahasan" data-toggle="modal" data-target="#lihat-pembahasan" data-pembahasan="{{ $select_soal_truefalse->pembahasan }}">Pembahasan</button>
+                              @endif
+                              <button type="button" class="btn shadow-sm bg-purple btn-sm ml-2 mb-1 lihat_pembahasan" data-toggle="modal" data-target="#lihat-pembahasan" data-pembahasan="{{ $select_soal_truefalse->pembahasan }}">Lihat Pembahasan</button><br><br>
+                              <b class="ml-1">Pemilik Soal </b>
+                              @if($select_soal_truefalse->foto==null)
+                                <img src="{{asset('AdminLTE/dist/img/default-150x150.png')}}" class='img-circle mx-2 elevation-1 my-1' alt='User Image' style='max-width:35px'>
+                              @else
+                                <img src="{{'/'.$select_soal_truefalse->foto}}" class='img-circle mx-2 elevation-1 my-1' alt='User Image' style='max-width:35px'>
+                              @endif
+                              {{$select_soal_truefalse->name}}
                             </td>
                           </tr>
                           @endforeach
@@ -455,7 +477,7 @@
                             <td style="text-align: center;">{{$no++}}</td>
                             <td class="media_tabel">{!! $select_soal_objektif->soal !!}<h6>
                               <span class="badge bg-secondary">{{'Kelas '. $select_soal_objektif->kelas.' '.$select_soal_objektif->tingkat.'/sederajat'}}</span>
-                              <span class="badge bg-secondary">{{ucwords($select_soal_objektif->nama).' - '.ucwords($select_soal_objektif->materi)}}</span></h6><br>
+                              <span class="badge bg-secondary">{{ucwords($select_soal_objektif->nama).''.ucwords($select_soal_objektif->materi)}}</span></h6><br>
                               <div class="icheck-primary d-inline">
                                 <input type="checkbox" name="pilih_objektif[]" value="{{$select_soal_objektif->id_bank_soal}}" id="{{$select_soal_objektif->id_bank_soal}}">
                                 <label for="{{$select_soal_objektif->id_bank_soal}}">PILIH SOAL</label><br><br>
@@ -480,7 +502,14 @@
                               @endforeach
                               </ol>
                               <b>KUNCI JAWABAN : {{$kunci}}</b><br><br>
-                              <button type="button" class="btn bg-purple btn-sm lihat_pembahasan" data-toggle="modal" data-target="#lihat-pembahasan" data-pembahasan="{{ $bahasan_objektif }}">Lihat Pembahasan</button><br>
+                              <button type="button" class="btn bg-purple btn-sm lihat_pembahasan" data-toggle="modal" data-target="#lihat-pembahasan" data-pembahasan="{{ $bahasan_objektif }}">Lihat Pembahasan</button>
+                              <b class="ml-1">| Pemilik Soal </b>
+                              @if($select_soal_objektif->foto==null)
+                                <img src="{{asset('AdminLTE/dist/img/default-150x150.png')}}" class='img-circle mx-2 elevation-1 my-1' alt='User Image' style='max-width:35px'>
+                              @else
+                                <img src="{{'/'.$select_soal_objektif->foto}}" class='img-circle mx-2 elevation-1 my-1' alt='User Image' style='max-width:35px'>
+                              @endif
+                              {{$select_soal_objektif->name}}
                             </td>
                           </tr>
                           @endforeach
@@ -525,7 +554,14 @@
                             </td>
                             <td class="media_tabel">
                               {!! $select_soal_subjektif->jawaban !!}
-                                <button type="button" class="btn shadow-sm bg-purple btn-sm mb-1 lihat_pembahasan" data-toggle="modal" data-target="#lihat-pembahasan" data-pembahasan="{{ $select_soal_subjektif->pembahasan }}">Lihat Pembahasan</button><br>
+                              <button type="button" class="btn shadow-sm bg-purple btn-sm mb-1 lihat_pembahasan" data-toggle="modal" data-target="#lihat-pembahasan" data-pembahasan="{{ $select_soal_subjektif->pembahasan }}">Lihat Pembahasan</button>
+                              <b class="ml-1">| Pemilik Soal </b>
+                              @if($select_soal_subjektif->foto==null)
+                                <img src="{{asset('AdminLTE/dist/img/default-150x150.png')}}" class='img-circle mx-2 elevation-1 my-1' alt='User Image' style='max-width:35px'>
+                              @else
+                                <img src="{{'/'.$select_soal_subjektif->foto}}" class='img-circle mx-2 elevation-1 my-1' alt='User Image' style='max-width:35px'>
+                              @endif
+                              {{$select_soal_subjektif->name}}
                             </td>
                           </tr>
                           @endforeach
@@ -569,7 +605,14 @@
                             </td>
                             <td class="media_tabel">
                               {!! $select_soal_penjodohan->jawaban !!}
-                                <button type="button" class="btn shadow-sm bg-purple btn-sm mb-1 lihat_pembahasan" data-toggle="modal" data-target="#lihat-pembahasan" data-pembahasan="{{ $select_soal_penjodohan->pembahasan }}">Lihat Pembahasan</button><br>
+                              <button type="button" class="btn shadow-sm bg-purple btn-sm mb-1 lihat_pembahasan" data-toggle="modal" data-target="#lihat-pembahasan" data-pembahasan="{{ $select_soal_penjodohan->pembahasan }}">Lihat Pembahasan</button>
+                              <b class="ml-1">| Pemilik Soal </b>
+                              @if($select_soal_penjodohan->foto==null)
+                                <img src="{{asset('AdminLTE/dist/img/default-150x150.png')}}" class='img-circle mx-2 elevation-1 my-1' alt='User Image' style='max-width:35px'>
+                              @else
+                                <img src="{{'/'.$select_soal_penjodohan->foto}}" class='img-circle mx-2 elevation-1 my-1' alt='User Image' style='max-width:35px'>
+                              @endif
+                              {{$select_soal_penjodohan->name}}
                             </td>
                           </tr>
                           @endforeach
@@ -594,8 +637,8 @@
                         <thead>
                           <tr>
                             <th style="width: 5%; text-align: center;">NO</th>
-                            <th style="width: 85%; text-align: center;">SOAL</th>
-                            <th style="width: 10%; text-align: center;">JAWABAN</th>
+                            <th style="width: 65%; text-align: center;">SOAL</th>
+                            <th style="width: 30%; text-align: center;">JAWABAN</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -622,8 +665,15 @@
                                 <input type="radio" checked id="salah">
                                 <label for="salah">Salah</label>
                               </div>
-                              @endif<br><br>
-                              <button type="button" class="btn shadow-sm bg-purple btn-sm mb-1 lihat_pembahasan" data-toggle="modal" data-target="#lihat-pembahasan" data-pembahasan="{{ $select_soal_truefalse->pembahasan }}">Pembahasan</button>
+                              @endif
+                              <button type="button" class="btn shadow-sm bg-purple btn-sm ml-2 mb-1 lihat_pembahasan" data-toggle="modal" data-target="#lihat-pembahasan" data-pembahasan="{{ $select_soal_truefalse->pembahasan }}">Lihat Pembahasan</button><br><br>
+                              <b class="ml-1">Pemilik Soal </b>
+                              @if($select_soal_truefalse->foto==null)
+                                <img src="{{asset('AdminLTE/dist/img/default-150x150.png')}}" class='img-circle mx-2 elevation-1 my-1' alt='User Image' style='max-width:35px'>
+                              @else
+                                <img src="{{'/'.$select_soal_truefalse->foto}}" class='img-circle mx-2 elevation-1 my-1' alt='User Image' style='max-width:35px'>
+                              @endif
+                              {{$select_soal_truefalse->name}}
                             </td>
                           </tr>
                           @endforeach

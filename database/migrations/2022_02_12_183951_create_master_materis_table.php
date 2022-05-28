@@ -17,6 +17,7 @@ class CreateMasterMaterisTable extends Migration
             $table->id();
             $table->integer('user_guru_id')->unsigned();
             $table->integer('master_mapel_id')->unsigned();
+            $table->integer('master_kelas_id')->unsigned();
             $table->string('deskripsi')->nullable();
             $table->string('link_gdrive')->nullable();
             $table->timestamps();

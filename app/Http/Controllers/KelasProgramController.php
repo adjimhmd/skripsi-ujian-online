@@ -9,7 +9,9 @@ use App\Models\KelasProgram;
 use App\Models\MapelKelasProgram;
 use App\Models\MasterKelas;
 use App\Models\MasterMapel;
+use App\Models\MasterMateri;
 use App\Models\MasterTahunAjaran;
+use App\Models\MateriKelasProgram;
 use App\Models\RombonganBelajar;
 use App\Models\Spesialisasi;
 use Illuminate\Http\Request;
@@ -20,6 +22,7 @@ use App\Models\UserGuru;
 use App\Models\UserSiswa;
 use DB;
 use Illuminate\Support\Facades\Validator;
+use PDO;
 
 class KelasProgramController extends Controller
 {
@@ -261,19 +264,19 @@ class KelasProgramController extends Controller
             ->join('instansi_pendidikans', 'kelas_programs.instansi_pendidikan_id', '=', 'instansi_pendidikans.id')
             ->where('kelas_programs.id', '=', $id)
             ->first();
-        
-        $siswa_kelass = RombonganBelajar::select(
-            'user_siswas.id as id_siswa','user_siswas.*',
-            'users.id as id_user','users.*',
-            'rombongan_belajars.id as id_rombongan_belajar','rombongan_belajars.*',
-            'master_kelas.*')
-            ->join('user_siswas', 'rombongan_belajars.user_siswa_id', '=', 'user_siswas.id')
-            ->join('master_kelas', 'user_siswas.master_kelas_id', '=', 'master_kelas.id')
-            ->join('users', 'user_siswas.user_id', '=', 'users.id')
-            ->join('kelas_programs', 'rombongan_belajars.kelas_program_id', '=', 'kelas_programs.id')
-            ->where('kelas_programs.id', '=', $id)
-            ->where('rombongan_belajars.status', '=', '1')
-            ->get();
+
+        // $siswa_kelass = RombonganBelajar::select(
+        //     'user_siswas.id as id_siswa','user_siswas.*',
+        //     'users.id as id_user','users.*',
+        //     'rombongan_belajars.id as id_rombongan_belajar','rombongan_belajars.*',
+        //     'master_kelas.*')
+        //     ->join('user_siswas', 'rombongan_belajars.user_siswa_id', '=', 'user_siswas.id')
+        //     ->join('master_kelas', 'user_siswas.master_kelas_id', '=', 'master_kelas.id')
+        //     ->join('users', 'user_siswas.user_id', '=', 'users.id')
+        //     ->join('kelas_programs', 'rombongan_belajars.kelas_program_id', '=', 'kelas_programs.id')
+        //     ->where('kelas_programs.id', '=', $id)
+        //     ->where('rombongan_belajars.status', '=', '1')
+        //     ->get();
 
         $siswa_permintaans = RombonganBelajar::select(
             'user_siswas.id as id_siswa','user_siswas.*',
@@ -285,10 +288,64 @@ class KelasProgramController extends Controller
             ->join('users', 'user_siswas.user_id', '=', 'users.id')
             ->join('kelas_programs', 'rombongan_belajars.kelas_program_id', '=', 'kelas_programs.id')
             ->where('kelas_programs.id', '=', $id)
-            ->where('rombongan_belajars.status', '=', '0')
+            // ->where('rombongan_belajars.status', '=', '0')
+            ->get();
+        
+        $master_materi_tepilihs = MasterMateri::select('master_materis.*','users.name','users.foto','master_mapels.nama','master_kelas.tingkat','master_kelas.kelas','materi_kelas_programs.*','materi_kelas_programs.id as id_materi_kelas_program')
+            ->join('materi_kelas_programs', 'master_materis.id', '=', 'materi_kelas_programs.master_materi_id')
+            ->join('master_kelas', 'master_materis.master_kelas_id', '=', 'master_kelas.id')
+            ->join('master_mapels', 'master_materis.master_mapel_id', '=', 'master_mapels.id')
+            ->join('user_gurus', 'master_materis.user_guru_id', '=', 'user_gurus.id')
+            ->join('users', 'user_gurus.user_id', '=', 'users.id')
+            ->where('materi_kelas_programs.kelas_program_id',$data_kelas->id_kelas_program)
             ->get();
 
-        return view('AdminLTE/kelas_program_detail',compact('nama_instansis','foto_profil','id','user_admin_instansis','data_kelas','siswa_kelass','siswa_permintaans','tipe_siswa'));
+        foreach($master_materi_tepilihs as $mmt){
+            $array_master_materi[]=$mmt->master_materi_id;
+        }
+
+        $guru_instansi=GuruInstansi::select('user_guru_id')
+            ->where('instansi_pendidikan_id',$data_kelas->id_instansi_pendidikan)
+            ->where('status','1')
+            ->get();
+
+        foreach($guru_instansi as $gi){
+            $array_user_guru_id[]=$gi->user_guru_id;
+        }
+
+        $status_bayar='';
+        if ($roles=='siswa'){
+
+            $user_siswa = UserSiswa::select('id')->where('user_id',$id_user)->first();
+            $status_bayar = RombonganBelajar::select('status')
+                ->where('kelas_program_id',$data_kelas->id_kelas_program)
+                ->where('user_siswa_id',$user_siswa->id)
+                ->first();
+        }
+
+        if($master_materi_tepilihs->count()>0){
+            $master_materis = MasterMateri::select('master_materis.*','users.name','users.foto','master_mapels.nama','master_kelas.tingkat','master_kelas.kelas')
+                ->join('master_kelas', 'master_materis.master_kelas_id', '=', 'master_kelas.id')
+                ->join('master_mapels', 'master_materis.master_mapel_id', '=', 'master_mapels.id')
+                ->join('user_gurus', 'master_materis.user_guru_id', '=', 'user_gurus.id')
+                ->join('users', 'user_gurus.user_id', '=', 'users.id')
+                ->where('master_materis.master_kelas_id',$data_kelas->id_master_kelas)
+                ->whereNotIn('master_materis.id',$array_master_materi)
+                ->whereIn('master_materis.user_guru_id',$array_user_guru_id)
+                ->get();
+        }
+        else{
+            $master_materis = MasterMateri::select('master_materis.*','users.name','users.foto','master_mapels.nama','master_kelas.tingkat','master_kelas.kelas')
+                ->join('master_kelas', 'master_materis.master_kelas_id', '=', 'master_kelas.id')
+                ->join('master_mapels', 'master_materis.master_mapel_id', '=', 'master_mapels.id')
+                ->join('user_gurus', 'master_materis.user_guru_id', '=', 'user_gurus.id')
+                ->join('users', 'user_gurus.user_id', '=', 'users.id')
+                ->where('master_materis.master_kelas_id',$data_kelas->id_master_kelas)
+                ->whereIn('master_materis.user_guru_id',$array_user_guru_id)
+                ->get();
+        }
+
+        return view('AdminLTE/kelas_program_detail',compact('nama_instansis','foto_profil','id','user_admin_instansis','data_kelas','siswa_permintaans','tipe_siswa','master_materis','master_materi_tepilihs','status_bayar'));
 
             
     }
@@ -417,5 +474,39 @@ class KelasProgramController extends Controller
         $request->session()->flash('success', 'Harga berhasil diperbarui!');
 
         return json_encode(array('data'=>$kelas_program));
+    }
+
+    public function pilih_materi(Request $request){
+        $materi_kelas_program=MateriKelasProgram::create([
+            'kelas_program_id' => $request->input('id_kelas_program'),
+            'master_materi_id' => $request->input('id_master_materi'),
+            'status' => 'private',
+        ]); 
+
+        $request->session()->flash('success', 'Materi berhasil dipilih!');
+
+        return back();
+        // return redirect()->route('kelas-program.index');
+    }
+
+    public function hapus_materi(Request $request){
+        // dd($request->id);
+        $materi_kelas_program = MateriKelasProgram::find($request->id);
+        $materi_kelas_program->delete();
+
+        $request->session()->flash('danger', 'Materi terpilih telah dihapus!');
+        return response()->json([ 'success' => true ]);
+    }
+
+    public function update_private(Request $request){
+        $materi_kelas_program = MateriKelasProgram::find($request->id_materi_kelas_program);
+        
+        $materi_kelas_program->update([
+            'status' => $request->status,
+        ]); 
+
+        // $request->session()->flash('success', 'Berhasil, materi menjadi '.$request->status.'!');
+
+        return json_encode(array('data'=>$materi_kelas_program));
     }
 }

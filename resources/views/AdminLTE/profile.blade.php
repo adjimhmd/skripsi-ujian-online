@@ -34,7 +34,11 @@
     @endforeach
 
     <div class="row">
+      @if (Auth::user()->hasRole('siswa'))
       <div class="col-md-12">
+      @elseif (Auth::user()->hasRole('guru'))
+      <div class="col-md-9">
+      @endif
         <form class="form-horizontal" method="POST" action="{{ route('profile.update',$id) }}" enctype="multipart/form-data">
           @csrf
           @method('PATCH')
@@ -243,7 +247,8 @@
               @endforeach
 
             @elseif (Auth::user()->hasRole('guru'))
-            <!-- user guru ga pake foreach biar ga tampil ulang2 card profilnya, sesuai tabel user_gurus -->
+
+                <!-- user guru ga pake foreach biar ga tampil ulang2 card profilnya, sesuai tabel user_gurus -->
                 <input type="hidden" id="fp" value="{{$user_guru->foto}}">
 
                 <!-- Profile Image -->
@@ -604,9 +609,95 @@
           <!-- /.card -->
         </form>
           
-
       </div>
       <!-- /.col -->
+
+      @if (Auth::user()->hasRole('guru'))
+      <div class="col-md-3">
+        <div class="card">
+
+            <div class="card-header">
+              <h3 class="card-title"><b>{{'Penilaian'}}</b></h3>
+
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="maximize">
+                  <i class="fas fa-expand"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+              </div>
+              <!-- /.card-tools -->
+            
+            </div>
+            <!-- /.card-header -->
+
+            <div class="card-body">
+              <div class="text-center">
+                <img style="width:40px;" src="{{asset('img/star-select.png')}}">
+                <h5 class="mt-2"><b>Poin {{$poin}}/5</b></h5>
+              </div>
+
+              <table id="example" class="table table-hover table-valign-middle" style="table-layout: fixed">
+                <thead style="display: none;">
+                  <tr>
+                    <th>Foto</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @foreach($ratings as $rating)
+                  <tr>
+                    <td>
+                      <div class="row">
+                        <div class="col-3"> 
+                          @if($rating->foto==null)
+                            <img src="{{asset('AdminLTE/dist/img/default-150x150.png')}}" class="img-circle" alt="User Image" style="max-width:40px"> 
+                          @else
+                            <img src="{{'/'.$rating->foto}}" class="img-circle" alt="User Image" style="max-width:40px"> 
+                          @endif
+                        </div> 
+                        <div class="col-9"> 
+                          <p style="line-height:15px;margin:0px;">{{$rating->name}}<br></p>
+                          @for($i=0; $i<$rating->angka; $i++)
+                          <img style="width:10px;" src="{{asset('img/star-select.png')}}">
+                          @endfor
+                        </div> 
+                        <div class="col-12">
+                          {{$rating->komentar}} 
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  @endforeach
+                  
+                </tbody>
+              </table>
+
+                  <!-- <hr><div class="row"> 
+                    <div class="col-xs-3"> 
+                      <img src="{{asset('AdminLTE/dist/img/default-150x150.png')}}"  class="img-circle mr-3" alt="User Image" style="max-width:50px"> 
+                    </div> 
+                    <div class="col-xs-9"> 
+                      Siswa 1<br>
+                      <img style="width:10px;" src="{{asset('img/star-select.png')}}">
+                      <img style="width:10px;" src="{{asset('img/star-select.png')}}">
+                    </div> 
+                  </div> 
+                  <hr><div class="row"> 
+                    <div class="col-xs-3"> 
+                      <img src="{{asset('AdminLTE/dist/img/default-150x150.png')}}"  class="img-circle mr-3" alt="User Image" style="max-width:50px"> 
+                    </div> 
+                    <div class="col-xs-9"> 
+                      Siswa 1<br>
+                      <img style="width:10px;" src="{{asset('img/star-select.png')}}">
+                      <img style="width:10px;" src="{{asset('img/star-select.png')}}">
+                    </div> 
+                  </div>  -->
+            </div>
+
+        </div>
+      </div>
+      @endif
 
     </div>
     <!-- /.row -->
@@ -638,6 +729,7 @@
   $("#img_profile").change(function(){
       readURL(this);
   });
+  
 
   $(document).ready(function() {
     var bla = $('#fp').val();
@@ -660,6 +752,18 @@
         maxDate: new Date()
     });
     
+
+  $("#example").DataTable({
+    "dom": 'lrtip',
+    "bLengthChange" : false,
+    "bInfo":false, 
+    "pagingType": 'simple',
+    "paging": true,
+    "responsive": true, 
+    "autoWidth": false,
+    "pageLength": 5,
+    "scrollCollapse": true
+  }).buttons().container().appendTo('#example_wrapper .col-md-6:eq(0)');
   });
 
   $("form").submit(function() {

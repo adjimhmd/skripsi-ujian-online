@@ -8,6 +8,7 @@ use App\Models\UserSiswa;
 use App\Models\UserGuru;
 use App\Models\MasterKelas;
 use App\Models\MasterMapel;
+use App\Models\Rating;
 use App\Models\UserAdminInstansi;
 use Auth;
 use Intervention\Image\ImageManagerStatic as Image;
@@ -69,8 +70,20 @@ class ProfileController extends Controller
 
         $list_spesialisasi = MasterMapel::orderBy('nama', 'asc')->get();
 
-        // return$spesialisasi;
-        return view('AdminLTE/profile',compact('foto_profil','list_kelas','user_siswas','user_admin_instansis','user_guru','user_admins','id','list_spesialisasi','selectedSpesialisasi'));
+        $ratings = Rating::select('ratings.*','users.name','users.foto')
+            ->where('user_guru_id',$user_guru->id_guru)
+            ->join('user_siswas','ratings.user_siswa_id','user_siswas.id')
+            ->join('users','user_siswas.user_id','users.id')
+            ->get();
+
+        $poin=0;
+        foreach($ratings as $r){
+            $poin=$poin+$r->angka;
+        }
+
+        $poin=$poin/$ratings->count();
+        // return$poin;
+        return view('AdminLTE/profile',compact('foto_profil','list_kelas','user_siswas','user_admin_instansis','user_guru','user_admins','id','list_spesialisasi','selectedSpesialisasi','poin','ratings'));
     }
 
     /**

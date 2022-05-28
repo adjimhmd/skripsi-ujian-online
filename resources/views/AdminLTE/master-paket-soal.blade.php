@@ -139,7 +139,7 @@
                       @foreach($paket_soals as $ps)
                         @if($ps->id_paket_soal==$paket_soal->id_paket_soal)
                         @if($ps->foto==null)
-                          <img src="{{asset('AdminLTE/dist/img/default-150x150.png')}}" class='img-circle mr-4 elevation-1 my-1' alt='User Image' style='max-width:50px'>
+                          <img src="{{asset('AdminLTE/dist/img/default-150x150.png')}}" class='img-circle mr-4 elevation-1 my-1' alt='User Image' style='max-width:30px'>
                         @else
                           <img src="{{'/'.$ps->foto}}" class='img-circle mr-2 elevation-1 my-1' alt='User Image' style='max-width:30px'>
                         @endif

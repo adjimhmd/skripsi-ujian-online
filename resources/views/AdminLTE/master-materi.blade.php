@@ -99,8 +99,8 @@
               <thead>
                 <tr>
                   <th style="width: 4%; text-align: center;">No</th>
-                  <th style="width: 40%;">Deskripsi</th>
-                  <th style="width: 20%;">Mata Pelajaran</th>
+                  <th style="width: 30%;">Deskripsi</th>
+                  <th style="width: 30%;">Kelas & Mata Pelajaran</th>
                   <th style="width: 25%;">Guru</th>
                   <th style="width: 11%; text-align: center;">Aksi</th>
                 </tr>
@@ -110,9 +110,16 @@
                 @foreach($master_materis as $master_materi)
                 <tr>
                   <td style="text-align: center;">{{$no++}}</td>
-                  <td>{{$master_materi->deskripsi}}<br>{{$master_materi->link_gdrive}}</td>
-                  <td>{{ucwords($master_materi->nama)}}</td>
-                  <td>{{$master_materi->name}}</td>
+                  <td><b>{{$master_materi->deskripsi}}</b><a href="{{$master_materi->link_gdrive}}" target="_blank"> (Lihat Materi)</a></td>
+                  <td>
+                    <span class="badge bg-secondary shadow-sm">{{'Kelas '. $master_materi->kelas.' '.$master_materi->tingkat.'/sederajat'}}</span>
+                    <span class="badge bg-secondary shadow-sm">{{ucwords($master_materi->nama)}}</span>
+                  </td>
+                  @if($master_materi->foto==null)
+                    <td><img src="{{asset('AdminLTE/dist/img/default-150x150.png')}}" class='img-circle mr-3' alt='User Image' style='max-width:40px'>{{$master_materi->name}}</td>
+                  @else
+                    <td><img src="{{'/'.$master_materi->foto}}" class='img-circle mr-3' alt='User Image' style='max-width:40px'>{{$master_materi->name}}</td>
+                  @endif
                   <td style="text-align: center;">
                     <a href="" class="btn btn-warning btn-sm" id="editProgramMapel" data-toggle="modal" data-id="{{ $master_materi->id }}">Edit</a>
                     <button onclick="return false" id="delete_kelas" class="btn btn-sm bg-maroon"data-id="{{ $master_materi->id }}">Delete</button>
@@ -148,6 +155,18 @@
                         <div class="form-group col-12">
                           <label for="deskripsi">{{ __('Deskripsi') }}</label>
                           <input id="deskripsi" type="text" class="form-control @error('deskripsi') is-invalid @enderror" name="deskripsi" value="{{ old('deskripsi') }}" required placeholder="Deskripsi singkat materi pembelajaran">
+                        </div>
+
+                        <!-- Kelas -->
+                        <div class="form-group col-12">
+                          <label for="kelas">{{ __('Kelas') }}</label>
+
+                          <select id="kelas" class="form-control select2 @error('kelas') is-invalid @enderror" name="kelas" required autofocus>
+                            <option value="" selected disabled>Pilih jenjang kelas</option>
+                            @foreach($master_kelass as $master_kelas)
+                                <option {{old('kelas') =="$master_kelas->id" ? "selected" : ""}} value="{{$master_kelas->id}}">{{$master_kelas->kelas.ucwords(' '.$master_kelas->tingkat)}}</option>
+                            @endforeach
+                          </select>
                         </div>
 
                         <!-- Mapel -->
@@ -227,6 +246,18 @@
                         <div class="form-group col-12">
                           <label for="deskripsi">{{ __('Deskripsi') }}</label>
                           <input id="deskripsi" type="text" class="form-control @error('deskripsi') is-invalid @enderror" name="deskripsi" value="{{ old('deskripsi') }}" required placeholder="Deskripsi singkat materi pembelajaran">
+                        </div>
+
+                        <!-- Kelas -->
+                        <div class="form-group col-12">
+                          <label for="kelas2">{{ __('Kelas') }}</label>
+
+                          <select id="kelas2" class="form-control select2 @error('kelas') is-invalid @enderror" name="kelas2" required autofocus>
+                            <option value="" selected disabled>Pilih jenjang kelas</option>
+                            @foreach($master_kelass as $master_kelas)
+                                <option {{old('kelas') =="$master_kelas->id" ? "selected" : ""}} value="{{$master_kelas->id}}">{{$master_kelas->kelas.ucwords(' '.$master_kelas->tingkat)}}</option>
+                            @endforeach
+                          </select>
                         </div>
 
                         <!-- Mapel -->
@@ -334,6 +365,7 @@
 
             $('#modal_edit #id_master_materi').val(data.data.id);
             $('#modal_edit #deskripsi').val(data.data.deskripsi);
+            $('#modal_edit #kelas2').val(data.data.master_kelas_id).prop('selected', true).trigger('change');
             $('#modal_edit #mapel2').val(data.data.master_mapel_id).prop('selected', true).trigger('change');
             // $('#modal_edit #file_materi').val(data.data.semester).prop('selected', true).trigger('change');
             $('#modal_edit').modal('show');
@@ -383,6 +415,7 @@
         event.preventDefault()
         var id = $("#id_master_materi").val();
         var deskripsi = $("#modal_edit #deskripsi").val();
+        var kelas = $("#modal_edit #kelas2").val();
         var mapel = $("#modal_edit #mapel2").val();
         // var file_materi = $("#modal_edit #file_materi2").val();
 
@@ -397,6 +430,7 @@
           formData.append('file_materi', $('#modal_edit #file_materi2')[0].files[0]); 
           formData.append('id', id);
           formData.append('deskripsi', deskripsi);
+          formData.append('kelas', kelas);
           formData.append('mapel', mapel);
           formData.append('_method', "PUT");
           formData.append('_token', "{{ csrf_token() }}");
@@ -418,6 +452,7 @@
               else{
                 $('#modal_edit #id_master_materi').val(id);
                 $('#modal_edit #deskripsi').val(deskripsi);
+                $('#modal_edit #kelas2').val(kelas).prop('selected', true).trigger('change');
                 $('#modal_edit #mapel2').val(mapel).prop('selected', true).trigger('change');
                 $('#modal_edit').modal('show');
               }

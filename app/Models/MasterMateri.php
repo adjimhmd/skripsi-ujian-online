@@ -18,6 +18,7 @@ class MasterMateri extends Model
      */
     protected $fillable = [
         'master_mapel_id',
+        'master_kelas_id',
         'user_guru_id',
         'deskripsi',
         'link_gdrive',
@@ -31,6 +32,11 @@ class MasterMateri extends Model
     public function master_mapels()
     {
     	return $this->belongsTo('App\MasterMapel');
+    }
+
+    public function master_kelas()
+    {
+    	return $this->belongsTo('App\MasterKelas');
     }
     
     public function materi_kelas_programs()

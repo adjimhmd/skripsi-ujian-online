@@ -24,7 +24,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::dYwGaohONCoFoTK5',
+            '_route' => 'generated::boH0r1lf1cue73OV',
           ),
           1 => NULL,
           2 => 
@@ -141,7 +141,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::s0oOJHHIm9vf7ZRI',
+            '_route' => 'generated::UHCCSjhEJryecS6F',
           ),
           1 => NULL,
           2 => 
@@ -196,7 +196,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::kVddKXTezfU5ww1M',
+            '_route' => 'generated::ZlMZHQKPSE3y1Ibh',
           ),
           1 => NULL,
           2 => 
@@ -287,7 +287,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::FxZazB094uzQWDLo',
+            '_route' => 'generated::7tG8tPdMKxMeiJU1',
           ),
           1 => NULL,
           2 => 
@@ -1014,6 +1014,25 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
+      '/rating' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'rating',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
       '/nilai-ujian' => 
       array (
         0 => 
@@ -1635,6 +1654,63 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
+      '/pilih_materi' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'pilih.materi',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/hapus_materi' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'hapus.materi',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/update_private' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'update.private',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
       '/list-guru' => 
       array (
         0 => 
@@ -1775,7 +1851,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::djzm7N36FnqjKnir',
+            '_route' => 'generated::HtThhICv4UYLiUcq',
           ),
           1 => NULL,
           2 => 
@@ -1851,7 +1927,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::98YTHCrm6J6mUqhz',
+            '_route' => 'generated::ltghtflCvjXkX6bn',
           ),
           1 => NULL,
           2 => 
@@ -1868,7 +1944,7 @@ app('router')->setCompiledRoutes(
     ),
     2 => 
     array (
-      0 => '{^(?|/p(?|a(?|ssword/reset/([^/]++)(*:37)|ket_soal/([^/]++)(?|(*:64)|/edit(*:76)|(*:83)))|rofile/([^/]++)(?|(*:110)|/edit(*:123)|(*:131)))|/email/verify/([^/]++)/([^/]++)(*:172)|/upload\\-verifikasi/([^/]++)(*:208)|/instansi\\-pendidikan/([^/]++)(?|(*:249)|/edit(*:262)|(*:270))|/list\\-(?|instansi/([^/]++)(?|(*:309)|/edit(*:322)|(*:330))|guru/([^/]++)(?|(*:355)|/edit(*:368)|(*:376)))|/verifikasi/([^/]++)(?|(*:409)|/edit(*:422)|(*:430))|/ma(?|ster\\-(?|mapel/([^/]++)(?|(*:471)|/edit(*:484)|(*:492))|kelas/([^/]++)(?|(*:518)|/edit(*:531)|(*:539))|tahun\\-ajaran/([^/]++)(?|(*:573)|/edit(*:586)|(*:594)))|teri\\-pembelajaran/([^/]++)(?|(*:634)|/edit(*:647)|(*:655)))|/ruang\\-ujian/([^/]++)(?|(*:690)|/edit(*:703)|(*:711))|/nilai\\-ujian/([^/]++)(?|(*:745)|/edit(*:758)|(*:766))|/detail\\-nilai\\-ujian/([^/]++)(*:805)|/hasil\\-ujian/([^/]++)(*:835)|/bank_soals/([^/]++)(?|(*:866)|/edit(*:879)|(*:887))|/kelas\\-program/([^/]++)(?|(*:923)|/edit(*:936)|(*:944))|/orders/([^/]++)(?|(*:972)|/edit(*:985)|(*:993)))/?$}sDu',
+      0 => '{^(?|/p(?|a(?|ssword/reset/([^/]++)(*:37)|ket_soal/([^/]++)(?|(*:64)|/edit(*:76)|(*:83)))|rofile/([^/]++)(?|(*:110)|/edit(*:123)|(*:131)))|/email/verify/([^/]++)/([^/]++)(*:172)|/upload\\-verifikasi/([^/]++)(*:208)|/instansi\\-pendidikan/([^/]++)(?|(*:249)|/edit(*:262)|(*:270))|/list\\-(?|instansi/([^/]++)(?|(*:309)|/edit(*:322)|(*:330))|guru/([^/]++)(?|(*:355)|/edit(*:368)|(*:376)))|/verifikasi/([^/]++)(?|(*:409)|/edit(*:422)|(*:430))|/ma(?|ster\\-(?|mapel/([^/]++)(?|(*:471)|/edit(*:484)|(*:492))|kelas/([^/]++)(?|(*:518)|/edit(*:531)|(*:539))|tahun\\-ajaran/([^/]++)(?|(*:573)|/edit(*:586)|(*:594)))|teri\\-pembelajaran/([^/]++)(?|(*:634)|/edit(*:647)|(*:655)))|/r(?|uang\\-ujian/([^/]++)(?|(*:693)|/edit(*:706)|(*:714))|ating\\-(?|guru/([^/]++)(*:746)|instansi/([^/]++)(*:771)))|/nilai\\-ujian/([^/]++)(?|(*:806)|/edit(*:819)|(*:827))|/detail\\-nilai\\-ujian/([^/]++)(*:866)|/hasil\\-ujian/([^/]++)(*:896)|/bank_soals/([^/]++)(?|(*:927)|/edit(*:940)|(*:948))|/kelas\\-program/([^/]++)(?|(*:984)|/edit(*:997)|(*:1005))|/orders/([^/]++)(?|(*:1034)|/edit(*:1048)|(*:1057)))/?$}sDu',
     ),
     3 => 
     array (
@@ -2821,7 +2897,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      690 => 
+      693 => 
       array (
         0 => 
         array (
@@ -2844,7 +2920,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      703 => 
+      706 => 
       array (
         0 => 
         array (
@@ -2867,7 +2943,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      711 => 
+      714 => 
       array (
         0 => 
         array (
@@ -2909,7 +2985,53 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      745 => 
+      746 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'rating.guru',
+          ),
+          1 => 
+          array (
+            0 => 'rating_guru',
+          ),
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      771 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'rating.instansi',
+          ),
+          1 => 
+          array (
+            0 => 'rating_instansi',
+          ),
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      806 => 
       array (
         0 => 
         array (
@@ -2932,7 +3054,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      758 => 
+      819 => 
       array (
         0 => 
         array (
@@ -2955,7 +3077,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      766 => 
+      827 => 
       array (
         0 => 
         array (
@@ -2997,7 +3119,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      805 => 
+      866 => 
       array (
         0 => 
         array (
@@ -3020,7 +3142,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      835 => 
+      896 => 
       array (
         0 => 
         array (
@@ -3043,7 +3165,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      866 => 
+      927 => 
       array (
         0 => 
         array (
@@ -3066,7 +3188,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      879 => 
+      940 => 
       array (
         0 => 
         array (
@@ -3089,7 +3211,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      887 => 
+      948 => 
       array (
         0 => 
         array (
@@ -3131,7 +3253,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      923 => 
+      984 => 
       array (
         0 => 
         array (
@@ -3154,7 +3276,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      936 => 
+      997 => 
       array (
         0 => 
         array (
@@ -3177,7 +3299,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      944 => 
+      1005 => 
       array (
         0 => 
         array (
@@ -3219,7 +3341,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      972 => 
+      1034 => 
       array (
         0 => 
         array (
@@ -3242,7 +3364,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      985 => 
+      1048 => 
       array (
         0 => 
         array (
@@ -3265,7 +3387,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      993 => 
+      1057 => 
       array (
         0 => 
         array (
@@ -3322,7 +3444,7 @@ app('router')->setCompiledRoutes(
   ),
   'attributes' => 
   array (
-    'generated::dYwGaohONCoFoTK5' => 
+    'generated::boH0r1lf1cue73OV' => 
     array (
       'methods' => 
       array (
@@ -3337,15 +3459,15 @@ app('router')->setCompiledRoutes(
           0 => 'api',
           1 => 'auth:api',
         ),
-        'uses' => 'C:32:"Opis\\Closure\\SerializableClosure":289:{@MB4zzuMIZEDcLjJtlPHwIKxMUcmB1VuVHIRE7ji6sWE=.a:5:{s:3:"use";a:0:{}s:8:"function";s:77:"function (\\Illuminate\\Http\\Request $request) {
+        'uses' => 'C:32:"Opis\\Closure\\SerializableClosure":289:{@Vk0Zhck6r/ZtBK7lgX/1UkeQ8Xw7UKj5cJttvsCLLXI=.a:5:{s:3:"use";a:0:{}s:8:"function";s:77:"function (\\Illuminate\\Http\\Request $request) {
     return $request->user();
-}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"000000001e4d0872000000005677449f";}}',
+}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000707c6547000000006b962452";}}',
         'namespace' => NULL,
         'prefix' => 'api',
         'where' => 
         array (
         ),
-        'as' => 'generated::dYwGaohONCoFoTK5',
+        'as' => 'generated::boH0r1lf1cue73OV',
       ),
       'fallback' => false,
       'defaults' => 
@@ -3541,7 +3663,7 @@ app('router')->setCompiledRoutes(
       'lockSeconds' => NULL,
       'waitSeconds' => NULL,
     ),
-    'generated::s0oOJHHIm9vf7ZRI' => 
+    'generated::UHCCSjhEJryecS6F' => 
     array (
       'methods' => 
       array (
@@ -3562,7 +3684,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::s0oOJHHIm9vf7ZRI',
+        'as' => 'generated::UHCCSjhEJryecS6F',
       ),
       'fallback' => false,
       'defaults' => 
@@ -3650,7 +3772,7 @@ app('router')->setCompiledRoutes(
       'lockSeconds' => NULL,
       'waitSeconds' => NULL,
     ),
-    'generated::kVddKXTezfU5ww1M' => 
+    'generated::ZlMZHQKPSE3y1Ibh' => 
     array (
       'methods' => 
       array (
@@ -3671,7 +3793,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::kVddKXTezfU5ww1M',
+        'as' => 'generated::ZlMZHQKPSE3y1Ibh',
       ),
       'fallback' => false,
       'defaults' => 
@@ -3869,7 +3991,7 @@ app('router')->setCompiledRoutes(
       'lockSeconds' => NULL,
       'waitSeconds' => NULL,
     ),
-    'generated::FxZazB094uzQWDLo' => 
+    'generated::7tG8tPdMKxMeiJU1' => 
     array (
       'methods' => 
       array (
@@ -3890,7 +4012,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::FxZazB094uzQWDLo',
+        'as' => 'generated::7tG8tPdMKxMeiJU1',
       ),
       'fallback' => false,
       'defaults' => 
@@ -6391,6 +6513,42 @@ app('router')->setCompiledRoutes(
       'lockSeconds' => NULL,
       'waitSeconds' => NULL,
     ),
+    'rating' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'rating',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'role:siswa',
+        ),
+        'uses' => 'App\\Http\\Controllers\\RuangUjianController@rating',
+        'controller' => 'App\\Http\\Controllers\\RuangUjianController@rating',
+        'namespace' => NULL,
+        'prefix' => NULL,
+        'where' => 
+        array (
+        ),
+        'as' => 'rating',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+    ),
     'nilai-ujian.index' => 
     array (
       'methods' => 
@@ -8038,6 +8196,80 @@ app('router')->setCompiledRoutes(
       'lockSeconds' => NULL,
       'waitSeconds' => NULL,
     ),
+    'rating.guru' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'rating-guru/{rating_guru}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'role:siswa|guru',
+        ),
+        'uses' => 'App\\Http\\Controllers\\ProfileController@show',
+        'controller' => 'App\\Http\\Controllers\\ProfileController@show',
+        'namespace' => NULL,
+        'prefix' => NULL,
+        'where' => 
+        array (
+        ),
+        'as' => 'rating.guru',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+    ),
+    'rating.instansi' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'rating-instansi/{rating_instansi}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'role:siswa|guru',
+        ),
+        'uses' => 'App\\Http\\Controllers\\ProfileController@show',
+        'controller' => 'App\\Http\\Controllers\\ProfileController@show',
+        'namespace' => NULL,
+        'prefix' => NULL,
+        'where' => 
+        array (
+        ),
+        'as' => 'rating.instansi',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+    ),
     'show.kota' => 
     array (
       'methods' => 
@@ -8159,7 +8391,7 @@ app('router')->setCompiledRoutes(
         'middleware' => 
         array (
           0 => 'web',
-          1 => 'role:adm_instansi|siswa|guru',
+          1 => 'role:adm_instansi|siswa',
         ),
         'as' => 'kelas-program.index',
         'uses' => 'App\\Http\\Controllers\\KelasProgramController@index',
@@ -8196,7 +8428,7 @@ app('router')->setCompiledRoutes(
         'middleware' => 
         array (
           0 => 'web',
-          1 => 'role:adm_instansi|siswa|guru',
+          1 => 'role:adm_instansi|siswa',
         ),
         'as' => 'kelas-program.create',
         'uses' => 'App\\Http\\Controllers\\KelasProgramController@create',
@@ -8232,7 +8464,7 @@ app('router')->setCompiledRoutes(
         'middleware' => 
         array (
           0 => 'web',
-          1 => 'role:adm_instansi|siswa|guru',
+          1 => 'role:adm_instansi|siswa',
         ),
         'as' => 'kelas-program.store',
         'uses' => 'App\\Http\\Controllers\\KelasProgramController@store',
@@ -8269,7 +8501,7 @@ app('router')->setCompiledRoutes(
         'middleware' => 
         array (
           0 => 'web',
-          1 => 'role:adm_instansi|siswa|guru',
+          1 => 'role:adm_instansi|siswa',
         ),
         'as' => 'kelas-program.show',
         'uses' => 'App\\Http\\Controllers\\KelasProgramController@show',
@@ -8306,7 +8538,7 @@ app('router')->setCompiledRoutes(
         'middleware' => 
         array (
           0 => 'web',
-          1 => 'role:adm_instansi|siswa|guru',
+          1 => 'role:adm_instansi|siswa',
         ),
         'as' => 'kelas-program.edit',
         'uses' => 'App\\Http\\Controllers\\KelasProgramController@edit',
@@ -8343,7 +8575,7 @@ app('router')->setCompiledRoutes(
         'middleware' => 
         array (
           0 => 'web',
-          1 => 'role:adm_instansi|siswa|guru',
+          1 => 'role:adm_instansi|siswa',
         ),
         'as' => 'kelas-program.update',
         'uses' => 'App\\Http\\Controllers\\KelasProgramController@update',
@@ -8379,7 +8611,7 @@ app('router')->setCompiledRoutes(
         'middleware' => 
         array (
           0 => 'web',
-          1 => 'role:adm_instansi|siswa|guru',
+          1 => 'role:adm_instansi|siswa',
         ),
         'as' => 'kelas-program.destroy',
         'uses' => 'App\\Http\\Controllers\\KelasProgramController@destroy',
@@ -8533,6 +8765,114 @@ app('router')->setCompiledRoutes(
         array (
         ),
         'as' => 'update.harga',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+    ),
+    'pilih.materi' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'pilih_materi',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'role:adm_instansi',
+        ),
+        'uses' => 'App\\Http\\Controllers\\KelasProgramController@pilih_materi',
+        'controller' => 'App\\Http\\Controllers\\KelasProgramController@pilih_materi',
+        'namespace' => NULL,
+        'prefix' => NULL,
+        'where' => 
+        array (
+        ),
+        'as' => 'pilih.materi',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+    ),
+    'hapus.materi' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'hapus_materi',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'role:adm_instansi',
+        ),
+        'uses' => 'App\\Http\\Controllers\\KelasProgramController@hapus_materi',
+        'controller' => 'App\\Http\\Controllers\\KelasProgramController@hapus_materi',
+        'namespace' => NULL,
+        'prefix' => NULL,
+        'where' => 
+        array (
+        ),
+        'as' => 'hapus.materi',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+    ),
+    'update.private' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'update_private',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'role:adm_instansi',
+        ),
+        'uses' => 'App\\Http\\Controllers\\KelasProgramController@update_private',
+        'controller' => 'App\\Http\\Controllers\\KelasProgramController@update_private',
+        'namespace' => NULL,
+        'prefix' => NULL,
+        'where' => 
+        array (
+        ),
+        'as' => 'update.private',
       ),
       'fallback' => false,
       'defaults' => 
@@ -8950,7 +9290,7 @@ app('router')->setCompiledRoutes(
       'lockSeconds' => NULL,
       'waitSeconds' => NULL,
     ),
-    'generated::djzm7N36FnqjKnir' => 
+    'generated::HtThhICv4UYLiUcq' => 
     array (
       'methods' => 
       array (
@@ -8971,7 +9311,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::djzm7N36FnqjKnir',
+        'as' => 'generated::HtThhICv4UYLiUcq',
       ),
       'fallback' => false,
       'defaults' => 
@@ -9236,7 +9576,7 @@ app('router')->setCompiledRoutes(
       'lockSeconds' => NULL,
       'waitSeconds' => NULL,
     ),
-    'generated::98YTHCrm6J6mUqhz' => 
+    'generated::ltghtflCvjXkX6bn' => 
     array (
       'methods' => 
       array (
@@ -9250,17 +9590,17 @@ app('router')->setCompiledRoutes(
         array (
           0 => 'web',
         ),
-        'uses' => 'C:32:"Opis\\Closure\\SerializableClosure":354:{@2cEal0OXRKBEIxrdQNXoKL/VGmxAOWuyvdW3vo4vGXw=.a:5:{s:3:"use";a:0:{}s:8:"function";s:141:"function() {
+        'uses' => 'C:32:"Opis\\Closure\\SerializableClosure":354:{@jIhLqfEgPuHREB1Bibu9xqYmFq3V75M7jAifz5I/dRA=.a:5:{s:3:"use";a:0:{}s:8:"function";s:141:"function() {
   \\Storage::disk(\'google\')->put(\'test.txt\', \'Hello World\');
   $url = \\Storage::disk(\'google\')->url(\'test.txt\');
   return $url;
-}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"000000001e4d07bd000000005677449f";}}',
+}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000707c6980000000006b962452";}}',
         'namespace' => NULL,
         'prefix' => NULL,
         'where' => 
         array (
         ),
-        'as' => 'generated::98YTHCrm6J6mUqhz',
+        'as' => 'generated::ltghtflCvjXkX6bn',
       ),
       'fallback' => false,
       'defaults' => 

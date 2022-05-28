@@ -190,8 +190,9 @@ class PaketSoalController extends Controller
             ->where('master_paket_soals.id',$id)
             ->first();
 
-        $soal_objektif_terpilih = PaketSoal::select('paket_soals.id as id_paket_soal', 'bank_soals.id as id_bank_soal','bank_soals.*','master_mapels.*','master_kelas.*')
+        $soal_objektif_terpilih = PaketSoal::select('paket_soals.id as id_paket_soal', 'bank_soals.id as id_bank_soal','bank_soals.*','master_mapels.*','master_kelas.*','users.name','users.foto')
             ->join('bank_soals', 'paket_soals.bank_soal_id', '=', 'bank_soals.id')
+            ->join('users', 'bank_soals.user_id', '=', 'users.id')
             ->join('master_mapels', 'bank_soals.master_mapel_id', '=', 'master_mapels.id')
             ->join('master_kelas', 'bank_soals.master_kelas_id', '=', 'master_kelas.id')
             ->orderBy('bank_soals.updated_at', 'desc')
@@ -202,8 +203,9 @@ class PaketSoalController extends Controller
             ->where('bank_soals.tipe_soal', '=', 'objektif')
             ->get();
 
-        $soal_subjektif_terpilih = PaketSoal::select('paket_soals.id as id_paket_soal', 'bank_soals.id as id_bank_soal','bank_soals.*','master_mapels.*','master_kelas.*')
+        $soal_subjektif_terpilih = PaketSoal::select('paket_soals.id as id_paket_soal', 'bank_soals.id as id_bank_soal','bank_soals.*','master_mapels.*','master_kelas.*','users.name','users.foto')
             ->join('bank_soals', 'paket_soals.bank_soal_id', '=', 'bank_soals.id')
+            ->join('users', 'bank_soals.user_id', '=', 'users.id')
             ->join('master_mapels', 'bank_soals.master_mapel_id', '=', 'master_mapels.id')
             ->join('master_kelas', 'bank_soals.master_kelas_id', '=', 'master_kelas.id')
             ->orderBy('bank_soals.updated_at', 'desc')
@@ -214,8 +216,9 @@ class PaketSoalController extends Controller
             ->where('bank_soals.tipe_soal', '=', 'subjektif')
             ->get();
         
-        $soal_penjodohan_terpilih = PaketSoal::select('paket_soals.id as id_paket_soal', 'bank_soals.id as id_bank_soal','bank_soals.*','master_mapels.*','master_kelas.*')
+        $soal_penjodohan_terpilih = PaketSoal::select('paket_soals.id as id_paket_soal', 'bank_soals.id as id_bank_soal','bank_soals.*','master_mapels.*','master_kelas.*','users.name','users.foto')
             ->join('bank_soals', 'paket_soals.bank_soal_id', '=', 'bank_soals.id')
+            ->join('users', 'bank_soals.user_id', '=', 'users.id')
             ->join('master_mapels', 'bank_soals.master_mapel_id', '=', 'master_mapels.id')
             ->join('master_kelas', 'bank_soals.master_kelas_id', '=', 'master_kelas.id')
             ->orderBy('bank_soals.updated_at', 'desc')
@@ -226,8 +229,9 @@ class PaketSoalController extends Controller
             ->where('bank_soals.tipe_soal', '=', 'penjodohan')
             ->get();
         
-        $soal_truefalse_terpilih = PaketSoal::select('paket_soals.id as id_paket_soal', 'bank_soals.id as id_bank_soal','bank_soals.*','master_mapels.*','master_kelas.*')
+        $soal_truefalse_terpilih = PaketSoal::select('paket_soals.id as id_paket_soal', 'bank_soals.id as id_bank_soal','bank_soals.*','master_mapels.*','master_kelas.*','users.name','users.foto')
             ->join('bank_soals', 'paket_soals.bank_soal_id', '=', 'bank_soals.id')
+            ->join('users', 'bank_soals.user_id', '=', 'users.id')
             ->join('master_mapels', 'bank_soals.master_mapel_id', '=', 'master_mapels.id')
             ->join('master_kelas', 'bank_soals.master_kelas_id', '=', 'master_kelas.id')
             ->orderBy('bank_soals.updated_at', 'desc')
@@ -244,7 +248,8 @@ class PaketSoalController extends Controller
         $id_soal_truefalse=$soal_truefalse_terpilih->pluck('id_bank_soal');
         
 
-        $list_soal_objektif = BankSoal::select('bank_soals.id as id_bank_soal','bank_soals.*','master_mapels.*','master_kelas.*')
+        $list_soal_objektif = BankSoal::select('bank_soals.id as id_bank_soal','bank_soals.*','master_mapels.*','master_kelas.*','users.name','users.foto')
+            ->join('users', 'bank_soals.user_id', '=', 'users.id')
             ->join('master_mapels', 'bank_soals.master_mapel_id', '=', 'master_mapels.id')
             ->join('master_kelas', 'bank_soals.master_kelas_id', '=', 'master_kelas.id')
             ->orderBy('bank_soals.updated_at', 'desc')
@@ -265,7 +270,8 @@ class PaketSoalController extends Controller
             ->where('bank_soals.tipe_soal', '=', 'objektif')
             ->get();
 
-        $list_soal_subjektif = BankSoal::select('bank_soals.id as id_bank_soal','bank_soals.*','master_mapels.*','master_kelas.*')
+        $list_soal_subjektif = BankSoal::select('bank_soals.id as id_bank_soal','bank_soals.*','master_mapels.*','master_kelas.*','users.name','users.foto')
+            ->join('users', 'bank_soals.user_id', '=', 'users.id')
             ->join('master_mapels', 'bank_soals.master_mapel_id', '=', 'master_mapels.id')
             ->join('master_kelas', 'bank_soals.master_kelas_id', '=', 'master_kelas.id')
             ->orderBy('bank_soals.updated_at', 'desc')
@@ -276,7 +282,8 @@ class PaketSoalController extends Controller
             ->whereNotIn('bank_soals.id', $id_soal_subjektif)
             ->get();
         
-        $list_soal_penjodohan = BankSoal::select('bank_soals.id as id_bank_soal','bank_soals.*','master_mapels.*','master_kelas.*')
+        $list_soal_penjodohan = BankSoal::select('bank_soals.id as id_bank_soal','bank_soals.*','master_mapels.*','master_kelas.*','users.name','users.foto')
+            ->join('users', 'bank_soals.user_id', '=', 'users.id')
             ->join('master_mapels', 'bank_soals.master_mapel_id', '=', 'master_mapels.id')
             ->join('master_kelas', 'bank_soals.master_kelas_id', '=', 'master_kelas.id')
             ->orderBy('bank_soals.updated_at', 'desc')
@@ -287,7 +294,8 @@ class PaketSoalController extends Controller
             ->whereNotIn('bank_soals.id', $id_soal_penjodohan)
             ->get();
         
-        $list_soal_truefalse = BankSoal::select('bank_soals.id as id_bank_soal','bank_soals.*','master_mapels.*','master_kelas.*')
+        $list_soal_truefalse = BankSoal::select('bank_soals.id as id_bank_soal','bank_soals.*','master_mapels.*','master_kelas.*','users.name','users.foto')
+            ->join('users', 'bank_soals.user_id', '=', 'users.id')
             ->join('master_mapels', 'bank_soals.master_mapel_id', '=', 'master_mapels.id')
             ->join('master_kelas', 'bank_soals.master_kelas_id', '=', 'master_kelas.id')
             ->orderBy('bank_soals.updated_at', 'desc')

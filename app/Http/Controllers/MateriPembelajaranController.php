@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MasterKelas;
 use App\Models\MasterMapel;
 use App\Models\MasterMateri;
 use App\Models\Spesialisasi;
@@ -52,7 +53,9 @@ class MateriPembelajaranController extends Controller
 
         $jumlah_master_materi = MasterMateri::select('*')->count();
 
-        $master_materis = MasterMateri::select('*')->orderBy('master_mapel_id')->get();
+        // $master_materis = MasterMateri::select('*')->orderBy('master_mapel_id')->get();
+
+        $master_kelass = MasterKelas::select('*')->orderBy('kelas')->get();
 
         $id_user_guru = UserGuru::select('*')->where('user_id',$id)->first();
 
@@ -67,7 +70,8 @@ class MateriPembelajaranController extends Controller
             ->where('users.id', '=', $id)
             ->get();
 
-        $master_materis = MasterMateri::select('master_materis.*','users.name','users.foto','master_mapels.nama')
+        $master_materis = MasterMateri::select('master_materis.*','users.name','users.foto','master_mapels.nama','master_kelas.tingkat','master_kelas.kelas')
+            ->join('master_kelas', 'master_materis.master_kelas_id', '=', 'master_kelas.id')
             ->join('master_mapels', 'master_materis.master_mapel_id', '=', 'master_mapels.id')
             ->join('user_gurus', 'master_materis.user_guru_id', '=', 'user_gurus.id')
             ->join('users', 'user_gurus.user_id', '=', 'users.id')
@@ -77,7 +81,7 @@ class MateriPembelajaranController extends Controller
 
         // return $master_mapels;
 
-        return view('AdminLTE/master-materi', compact('foto_profil','user_admin_instansis','last_update_master_materi', 'jumlah_master_materi', 'master_materis','master_mapels'));
+        return view('AdminLTE/master-materi', compact('foto_profil','user_admin_instansis','last_update_master_materi', 'jumlah_master_materi', 'master_materis','master_mapels','master_kelass'));
     }
 
     /**
@@ -120,6 +124,7 @@ class MateriPembelajaranController extends Controller
         MasterMateri::create([
             'user_guru_id' => $id_user_guru->id,
             'master_mapel_id' => $request->input('mapel'),
+            'master_kelas_id' => $request->input('kelas'),
             'deskripsi' => $request->input('deskripsi'),
             'link_gdrive' => Storage::disk('google')->url($file_name),
         ]); 
@@ -191,10 +196,13 @@ class MateriPembelajaranController extends Controller
                 // save to google drive
                 Storage::disk('google')->put($file_name, file_get_contents(public_path('media\\'.$file_name)));
                 File::delete(public_path('media\\'.$file_name));
-
+                
+                Storage::disk('google')->delete($output[1]);
+        
                 $master_materis->update([
                     'user_guru_id' => $id_user_guru->id,
                     'master_mapel_id' => $request->input('mapel'),
+                    'master_kelas_id' => $request->input('kelas'),
                     'deskripsi' => $request->input('deskripsi'),
                     'link_gdrive' => Storage::disk('google')->url($file_name),
                 ]); 
@@ -204,6 +212,7 @@ class MateriPembelajaranController extends Controller
                 $master_materis->update([
                     'user_guru_id' => $id_user_guru->id,
                     'master_mapel_id' => $request->input('mapel'),
+                    'master_kelas_id' => $request->input('kelas'),
                     'deskripsi' => $request->input('deskripsi'),
                 ]); 
             }

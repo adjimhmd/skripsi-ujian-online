@@ -60,6 +60,7 @@ Route::resource('master-kelas', App\Http\Controllers\MasterKelasController::clas
 Route::resource('master-tahun-ajaran', App\Http\Controllers\MasterTahunAjaranController::class)->middleware('role:adm_sistem');
 
 Route::resource('ruang-ujian', App\Http\Controllers\RuangUjianController::class)->middleware('role:adm_instansi|siswa|guru');
+Route::post('rating', [App\Http\Controllers\RuangUjianController::class, 'rating'])->name('rating')->middleware('role:siswa');
 
 Route::resource('nilai-ujian', App\Http\Controllers\NilaiUjianController::class)->middleware('role:adm_instansi');
 Route::post('email-nilai', [App\Http\Controllers\NilaiUjianController::class, 'email'])->name('email.nilai')->middleware('role:adm_instansi');
@@ -80,16 +81,21 @@ Route::post('pilih_soal', [App\Http\Controllers\PaketSoalController::class, 'pil
 Route::post('hapus_soal', [App\Http\Controllers\PaketSoalController::class, 'hapus_soal'])->name('hapus.soal')->middleware('role:guru|adm_instansi');
 
 Route::resource('profile', App\Http\Controllers\ProfileController::class)->middleware('role:siswa|guru|adm_instansi|adm_sistem');
+Route::get('rating-guru/{rating_guru}', [App\Http\Controllers\ProfileController::class, 'show'])->name('rating.guru')->middleware('role:siswa|guru');
+Route::get('rating-instansi/{rating_instansi}', [App\Http\Controllers\ProfileController::class, 'show'])->name('rating.instansi')->middleware('role:siswa|guru');
 
 Route::post('show_kota', [App\Http\Controllers\InstansiPendidikanController::class, 'show_kota'])->name('show.kota')->middleware('role:adm_instansi');
 Route::post('show_kecamatan', [App\Http\Controllers\InstansiPendidikanController::class, 'show_kecamatan'])->name('show.kecamatan')->middleware('role:adm_instansi');
 Route::post('show_desa', [App\Http\Controllers\InstansiPendidikanController::class, 'show_desa'])->name('show.desa')->middleware('role:adm_instansi');
 
-Route::resource('kelas-program', App\Http\Controllers\KelasProgramController::class)->middleware('role:adm_instansi|siswa|guru');
+Route::resource('kelas-program', App\Http\Controllers\KelasProgramController::class)->middleware('role:adm_instansi|siswa');
 Route::post('show_guru', [App\Http\Controllers\KelasProgramController::class, 'show_guru'])->name('show.guru')->middleware('role:adm_instansi');
 Route::post('update_guru', [App\Http\Controllers\KelasProgramController::class, 'update_guru'])->name('update.guru')->middleware('role:adm_instansi');
 Route::post('edit_harga', [App\Http\Controllers\KelasProgramController::class, 'edit_harga'])->name('edit.harga')->middleware('role:adm_instansi');
 Route::post('update_harga', [App\Http\Controllers\KelasProgramController::class, 'update_harga'])->name('update.harga')->middleware('role:adm_instansi');
+Route::post('pilih_materi', [App\Http\Controllers\KelasProgramController::class, 'pilih_materi'])->name('pilih.materi')->middleware('role:adm_instansi');
+Route::post('hapus_materi', [App\Http\Controllers\KelasProgramController::class, 'hapus_materi'])->name('hapus.materi')->middleware('role:adm_instansi');
+Route::post('update_private', [App\Http\Controllers\KelasProgramController::class, 'update_private'])->name('update.private')->middleware('role:adm_instansi');
 
 Route::resource('list-guru', App\Http\Controllers\ListGuruController::class)->middleware('role:adm_instansi');
 Route::get('daftar_guru', [App\Http\Controllers\ListGuruController::class, 'daftar_guru'])->name('daftar.guru')->middleware('role:adm_instansi');

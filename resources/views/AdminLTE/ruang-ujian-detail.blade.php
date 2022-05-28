@@ -418,22 +418,28 @@
                     <h1>UJIAN BELUM DIMULAI</h1>
 
                   @elseif(\Carbon\Carbon::now()->gte($master_ruang_ujian->waktu_mulai) && \Carbon\Carbon::now()->lte($master_ruang_ujian->waktu_selesai))
-                    <h5 class="berlangsung">UJIAN SEDANG BERLANGSUNG</h5>
+                    <h3 class="berlangsung">UJIAN SEDANG BERLANGSUNG</h3>
                     <input type="hidden" data-countdown="{{$master_ruang_ujian->waktu_selesai}}">
                     <h1 id="demo"></h1>
 
                     @if (Auth::user()->hasRole('siswa'))
                     <div class="berlangsung">
-                    <small style="color: red;"><b><i class="far fa-info-circle mr-2"></i>Note: </b>
-                      @if($ujian_ke) {{'Kamu sudah menerjakan '.$ujian_ke}}
-                      @else {{'Kamu belum mengerjakan ujian'}}
-                      @endif {{'dari '.$master_ruang_ujian->batas.' kesempatan ujian'}}</small><br>
+                    <h6 style="color: red;"><b><i class="far fa-info-circle mr-2"></i>Note: </b>
+                      @if($ujian_ke) {{'Kamu sudah mengerjakan '.$ujian_ke.' dari '.$master_ruang_ujian->batas.' kesempatan ujian'}}
+                      @else {{'Kamu belum mengerjakan ujian dari '.$master_ruang_ujian->batas.' kesempatan ujian'}}
+                      @endif</h6>
                       
                       @if($detail_ujians->count()==0 or $master_ruang_ujian->batas>$ujian_ke)
                         <button type="button" class="btn bg-purple mt-4 kerjakan">Kerjakan Sekarang</button>
                       @else
                         <button type="button" class="btn bg-purple mt-4 kerjakan" disabled>Kamu Sudah Mengerjakan</button>
                       @endif
+
+                      
+                      @if($rating_ruang_ujian->isEmpty())
+                        <button type="button" class="btn btn-warning mt-4" data-toggle="modal" data-target="#modal-default"><i class="fa fa-star"></i> Penilaian</button>
+                      @endif
+
                     </div>
                     @endif
 
@@ -454,6 +460,83 @@
         
       </div>
       <!-- /.row -->
+
+      <div class="modal fade" id="modal-default">
+        <div class="modal-dialog">
+          <div class="modal-content">
+
+            <form method="POST" action="{{ route('rating') }}" enctype="multipart/form-data" autocomplete="off">
+              @csrf
+              <input type="hidden" name="id_master_ruang_ujian" value="{{$master_ruang_ujian->id_master_ruang_ujian}}">
+              <div class="modal-header">
+                <h4 class="modal-title">Default Modal</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <input type="hidden" id="{{'lembaga_'.$master_ruang_ujian->id_instansi_pendidikan}}" name="lembaga" value="">
+                <h6><center>Berikan Ulasan Untuk</center></h6>
+                <h3><center>{{$master_ruang_ujian->instansi_pendidikan}}</center></h3>
+                <div class="row">
+                  <div class="col-12 d-flex justify-content-center mb-2">
+                    <button type="button" class="btn bg-transparent rating-lembaga" id="{{'btn_'.$master_ruang_ujian->id_instansi_pendidikan.'_1'}}"><img id="{{'img_'.$master_ruang_ujian->id_instansi_pendidikan.'_1'}}" src="{{asset('/img/star-unselect.png')}}" style='width:25px'></button>
+
+                    <button type="button" class="btn bg-transparent rating-lembaga" id="{{'btn_'.$master_ruang_ujian->id_instansi_pendidikan.'_2'}}"><img id="{{'img_'.$master_ruang_ujian->id_instansi_pendidikan.'_2'}}" src="{{asset('/img/star-unselect.png')}}" style='width:25px'></button>
+
+                    <button type="button" class="btn bg-transparent rating-lembaga" id="{{'btn_'.$master_ruang_ujian->id_instansi_pendidikan.'_3'}}"><img id="{{'img_'.$master_ruang_ujian->id_instansi_pendidikan.'_3'}}" src="{{asset('/img/star-unselect.png')}}" style='width:25px'></button>
+
+                    <button type="button" class="btn bg-transparent rating-lembaga" id="{{'btn_'.$master_ruang_ujian->id_instansi_pendidikan.'_4'}}"><img id="{{'img_'.$master_ruang_ujian->id_instansi_pendidikan.'_4'}}" src="{{asset('/img/star-unselect.png')}}" style='width:25px'></button>
+
+                    <button type="button" class="btn bg-transparent rating-lembaga" id="{{'btn_'.$master_ruang_ujian->id_instansi_pendidikan.'_5'}}"><img id="{{'img_'.$master_ruang_ujian->id_instansi_pendidikan.'_5'}}" src="{{asset('/img/star-unselect.png')}}" style='width:25px'></button>
+                  </div>
+                  <div class="col-12 d-flex justify-content-center">
+                    <textarea class="form-control" rows="3" placeholder="Berikan komentarmu" style="width: 99%"></textarea>
+                  </div>
+                </div>
+
+                @foreach($data_guru_banksoal as $dg)
+                <br><hr>
+                <input type="hidden" id="{{'guru_'.$dg->id}}" name="guru[]" value="">
+                <div class="row">
+                  <div class="col-12 d-flex justify-content-center">
+                    @if($dg->foto==null)
+                      <img src="{{asset('AdminLTE/dist/img/default-150x150.png')}}" class='img-circle elevation-1' alt='User Image' style='max-width:40px'>
+                    @else
+                      <img src="{{'/'.$dg->foto}}" class='img-circle elevation-1' alt='User Image' style='max-width:40px'>
+                    @endif
+                    <h5 class="my-auto ml-2">{{$dg->name}}</h5>
+                  </div>
+                  <div class="col-12 d-flex justify-content-center mb-2">
+                    <button type="button" class="btn bg-transparent rating-guru" id="{{'btn_'.$dg->id.'_1'}}"><img id="{{'img_'.$dg->id.'_1'}}" src="{{asset('/img/star-unselect.png')}}" style='width:25px'></button>
+                    
+                    <button type="button" class="btn bg-transparent rating-guru" id="{{'btn_'.$dg->id.'_2'}}"><img id="{{'img_'.$dg->id.'_2'}}" src="{{asset('/img/star-unselect.png')}}" style='width:25px'></button>
+                    
+                    <button type="button" class="btn bg-transparent rating-guru" id="{{'btn_'.$dg->id.'_3'}}"><img id="{{'img_'.$dg->id.'_3'}}" src="{{asset('/img/star-unselect.png')}}" style='width:25px'></button>
+                    
+                    <button type="button" class="btn bg-transparent rating-guru" id="{{'btn_'.$dg->id.'_4'}}"><img id="{{'img_'.$dg->id.'_4'}}" src="{{asset('/img/star-unselect.png')}}" style='width:25px'></button>
+                    
+                    <button type="button" class="btn bg-transparent rating-guru" id="{{'btn_'.$dg->id.'_5'}}"><img id="{{'img_'.$dg->id.'_5'}}" src="{{asset('/img/star-unselect.png')}}" style='width:25px'></button>
+                    
+                    <br><br>
+                  </div>
+                  <div class="col-12 d-flex justify-content-center">
+                    <textarea class="form-control" rows="3" placeholder="Berikan komentarmu" style="width: 99%"></textarea>
+                  </div>
+                </div>
+                @endforeach
+
+              </div>
+              <div class="modal-footer justify-content-between">
+                <button id="submit" type="submit" class="btn bg-purple btn-block">Simpan Data</button>
+              </div>
+            </form>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!-- /.modal -->
       
       @if (Auth::user()->hasRole('siswa'))
       <div class="row mb-2" id="row_soal" hidden>
@@ -1108,6 +1191,143 @@
 
   // Initialize Select2 Elements
   $(document).ready(function() {
+    $('.rating-lembaga').click(function () {
+      var id_btn  = $(this).attr('id').split("_");
+      var id_img  = '#img_'+id_btn[1]+'_'+id_btn[2];
+      var src     = $(id_img).attr('src').match(/img\/.*$/i)[0];
+
+      if(id_btn[2]=='1'){
+        $("#lembaga_"+id_btn[1]).val(id_btn[1]+'-1');
+        $('#img_'+id_btn[1]+'_1').prop("src", "{{asset('img/star-select.png')}}");
+        $('#img_'+id_btn[1]+'_2').prop("src", "{{asset('img/star-unselect.png')}}");
+        $('#img_'+id_btn[1]+'_3').prop("src", "{{asset('img/star-unselect.png')}}");
+        $('#img_'+id_btn[1]+'_4').prop("src", "{{asset('img/star-unselect.png')}}");
+        $('#img_'+id_btn[1]+'_5').prop("src", "{{asset('img/star-unselect.png')}}");
+      }
+      else if(id_btn[2]=='2'){
+        $("#lembaga_"+id_btn[1]).val(id_btn[1]+'-2');
+        $('#img_'+id_btn[1]+'_1').prop("src", "{{asset('img/star-select.png')}}");
+        $('#img_'+id_btn[1]+'_2').prop("src", "{{asset('img/star-select.png')}}");
+        $('#img_'+id_btn[1]+'_3').prop("src", "{{asset('img/star-unselect.png')}}");
+        $('#img_'+id_btn[1]+'_4').prop("src", "{{asset('img/star-unselect.png')}}");
+        $('#img_'+id_btn[1]+'_5').prop("src", "{{asset('img/star-unselect.png')}}");
+      }
+      else if(id_btn[2]=='3'){
+        $("#lembaga_"+id_btn[1]).val(id_btn[1]+'-3');
+        $('#img_'+id_btn[1]+'_1').prop("src", "{{asset('img/star-select.png')}}");
+        $('#img_'+id_btn[1]+'_2').prop("src", "{{asset('img/star-select.png')}}");
+        $('#img_'+id_btn[1]+'_3').prop("src", "{{asset('img/star-select.png')}}");
+        $('#img_'+id_btn[1]+'_4').prop("src", "{{asset('img/star-unselect.png')}}");
+        $('#img_'+id_btn[1]+'_5').prop("src", "{{asset('img/star-unselect.png')}}");
+      }
+      else if(id_btn[2]=='4'){
+        $("#lembaga_"+id_btn[1]).val(id_btn[1]+'-4');
+        $('#img_'+id_btn[1]+'_1').prop("src", "{{asset('img/star-select.png')}}");
+        $('#img_'+id_btn[1]+'_2').prop("src", "{{asset('img/star-select.png')}}");
+        $('#img_'+id_btn[1]+'_3').prop("src", "{{asset('img/star-select.png')}}");
+        $('#img_'+id_btn[1]+'_4').prop("src", "{{asset('img/star-select.png')}}");
+        $('#img_'+id_btn[1]+'_5').prop("src", "{{asset('img/star-unselect.png')}}");
+      }
+      else if(id_btn[2]=='5'){
+        $("#lembaga_"+id_btn[1]).val(id_btn[1]+'-5');
+        $('#img_'+id_btn[1]+'_1').prop("src", "{{asset('img/star-select.png')}}");
+        $('#img_'+id_btn[1]+'_2').prop("src", "{{asset('img/star-select.png')}}");
+        $('#img_'+id_btn[1]+'_3').prop("src", "{{asset('img/star-select.png')}}");
+        $('#img_'+id_btn[1]+'_4').prop("src", "{{asset('img/star-select.png')}}");
+        $('#img_'+id_btn[1]+'_5').prop("src", "{{asset('img/star-select.png')}}");
+      }
+      else{
+        $("#lembaga_"+id_btn[1]).val(id_btn[1]+'-0');
+      }
+    });
+
+    $('.rating-guru').click(function () {
+      var id_btn  = $(this).attr('id').split("_");
+      var id_img  = '#img_'+id_btn[1]+'_'+id_btn[2];
+      var src     = $(id_img).attr('src').match(/img\/.*$/i)[0];
+      
+      if(id_btn[2]=='1'){
+        $("#guru_"+id_btn[1]).val(id_btn[1]+'-1');
+        $('#img_'+id_btn[1]+'_1').prop("src", "{{asset('img/star-select.png')}}");
+        $('#img_'+id_btn[1]+'_2').prop("src", "{{asset('img/star-unselect.png')}}");
+        $('#img_'+id_btn[1]+'_3').prop("src", "{{asset('img/star-unselect.png')}}");
+        $('#img_'+id_btn[1]+'_4').prop("src", "{{asset('img/star-unselect.png')}}");
+        $('#img_'+id_btn[1]+'_5').prop("src", "{{asset('img/star-unselect.png')}}");
+      }
+      else if(id_btn[2]=='2'){
+        $("#guru_"+id_btn[1]).val(id_btn[1]+'-2');
+        $('#img_'+id_btn[1]+'_1').prop("src", "{{asset('img/star-select.png')}}");
+        $('#img_'+id_btn[1]+'_2').prop("src", "{{asset('img/star-select.png')}}");
+        $('#img_'+id_btn[1]+'_3').prop("src", "{{asset('img/star-unselect.png')}}");
+        $('#img_'+id_btn[1]+'_4').prop("src", "{{asset('img/star-unselect.png')}}");
+        $('#img_'+id_btn[1]+'_5').prop("src", "{{asset('img/star-unselect.png')}}");
+      }
+      else if(id_btn[2]=='3'){
+        $("#guru_"+id_btn[1]).val(id_btn[1]+'-3');
+        $('#img_'+id_btn[1]+'_1').prop("src", "{{asset('img/star-select.png')}}");
+        $('#img_'+id_btn[1]+'_2').prop("src", "{{asset('img/star-select.png')}}");
+        $('#img_'+id_btn[1]+'_3').prop("src", "{{asset('img/star-select.png')}}");
+        $('#img_'+id_btn[1]+'_4').prop("src", "{{asset('img/star-unselect.png')}}");
+        $('#img_'+id_btn[1]+'_5').prop("src", "{{asset('img/star-unselect.png')}}");
+      }
+      else if(id_btn[2]=='4'){
+        $("#guru_"+id_btn[1]).val(id_btn[1]+'-4');
+        $('#img_'+id_btn[1]+'_1').prop("src", "{{asset('img/star-select.png')}}");
+        $('#img_'+id_btn[1]+'_2').prop("src", "{{asset('img/star-select.png')}}");
+        $('#img_'+id_btn[1]+'_3').prop("src", "{{asset('img/star-select.png')}}");
+        $('#img_'+id_btn[1]+'_4').prop("src", "{{asset('img/star-select.png')}}");
+        $('#img_'+id_btn[1]+'_5').prop("src", "{{asset('img/star-unselect.png')}}");
+      }
+      else if(id_btn[2]=='5'){
+        $("#guru_"+id_btn[1]).val(id_btn[1]+'-5');
+        $('#img_'+id_btn[1]+'_1').prop("src", "{{asset('img/star-select.png')}}");
+        $('#img_'+id_btn[1]+'_2').prop("src", "{{asset('img/star-select.png')}}");
+        $('#img_'+id_btn[1]+'_3').prop("src", "{{asset('img/star-select.png')}}");
+        $('#img_'+id_btn[1]+'_4').prop("src", "{{asset('img/star-select.png')}}");
+        $('#img_'+id_btn[1]+'_5').prop("src", "{{asset('img/star-select.png')}}");
+      }
+      else{
+        $("#guru_"+id_btn[1]).val(id_btn[1]+'-0');
+      }
+    });
+    // $('#rating1').click(function () {
+    //   var img = $('#img1').attr('src').match(/img\/.*$/i)[0];
+      
+    //   if(img=='img/star-unselect.png'){
+    //     $("#img1").prop("src", "{{asset('img/star-select.png')}}");
+    //   }
+    //   else{
+    //     $("#img2").prop("src", "{{asset('img/star-unselect.png')}}");
+    //     $("#img3").prop("src", "{{asset('img/star-unselect.png')}}");
+    //   }
+    // });
+
+    // $('#rating2').click(function () {
+    //   var img = $('#img2').attr('src').match(/img\/.*$/i)[0];
+      
+    //   if(img=='img/star-unselect.png'){
+    //     $("#img1").prop("src", "{{asset('img/star-select.png')}}");
+    //     $("#img2").prop("src", "{{asset('img/star-select.png')}}");
+    //   }
+    //   else{
+    //     $("#img3").prop("src", "{{asset('img/star-unselect.png')}}");
+    //   }
+    // });
+    // $('#rating3').click(function () {
+    //   var img = $('#img3').attr('src').match(/img\/.*$/i)[0];
+      
+    //   if(img=='img/star-unselect.png'){
+    //     $("#img1").prop("src", "{{asset('img/star-select.png')}}");
+    //     $("#img2").prop("src", "{{asset('img/star-select.png')}}");
+    //     $("#img3").prop("src", "{{asset('img/star-select.png')}}");
+    //   }
+    //   else{
+    //     $("#img1").prop("src", "{{asset('img/star-unselect.png')}}");
+    //     $("#img2").prop("src", "{{asset('img/star-unselect.png')}}");
+    //     $("#img3").prop("src", "{{asset('img/star-unselect.png')}}");
+    //   }
+    // });
+
     // $("#div_soal_objektif_0").prop("hidden",false);
     $("#div_soal_0").prop("hidden",false);
     

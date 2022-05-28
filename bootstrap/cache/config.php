@@ -382,8 +382,8 @@
       array (
         'driver' => 'google',
         'clientId' => '263159019971-r5kei4he0p23r1tqo2u9vpsicsajqivn.apps.googleusercontent.com',
-        'clientSecret' => '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',
-        'refreshToken' => '1//046YVBgI-ZtL1CgYIARAAGAQSNwF-L9Ir_alaroj7sFt9S6QbVm-KcRnLZdJdAEKI6sDPHfmIRg4cv5XSzukPdEE9pzIke3oi0pU',
+        'clientSecret' => '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',
+        'refreshToken' => '1//0485kK-JjHoWJCgYIARAAGAQSNwF-L9Irf0FFwdvHtPZ5jynIaC4lRAvtJkSTvx-vZrwyMlPzAssDesCTeU4lq4gqI3wEWtI4sNU',
         'folderId' => '1J6QWm3abeVR8wEwcupvRFIWqt9f2p6If',
       ),
     ),
