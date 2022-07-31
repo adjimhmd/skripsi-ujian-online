@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\InstansiPendidikan;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\UserSiswa;
@@ -9,8 +10,10 @@ use App\Models\UserGuru;
 use App\Models\MasterKelas;
 use App\Models\MasterMapel;
 use App\Models\Rating;
+use App\Models\Spesialisasi;
 use App\Models\UserAdminInstansi;
 use Auth;
+use Illuminate\Support\Facades\Route;
 use Intervention\Image\ImageManagerStatic as Image;
 
 class ProfileController extends Controller
@@ -70,19 +73,57 @@ class ProfileController extends Controller
 
         $list_spesialisasi = MasterMapel::orderBy('nama', 'asc')->get();
 
-        $ratings = Rating::select('ratings.*','users.name','users.foto')
-            ->where('user_guru_id',$user_guru->id_guru)
-            ->join('user_siswas','ratings.user_siswa_id','user_siswas.id')
-            ->join('users','user_siswas.user_id','users.id')
-            ->get();
-
         $poin=0;
-        foreach($ratings as $r){
-            $poin=$poin+$r->angka;
+        $ratings='';
+
+        if(Auth::user()->hasRole('guru')){
+                
+            $ratings = Rating::select('ratings.*','users.name','users.foto')
+                ->where('user_guru_id',$user_guru->id_guru)
+                ->join('user_siswas','ratings.user_siswa_id','user_siswas.id')
+                ->join('users','user_siswas.user_id','users.id')
+                ->get();
+
+            $rating_notNull = Rating::whereNotNull('angka')
+                ->where('user_guru_id',$user_guru->id_guru)
+                ->join('user_siswas','ratings.user_siswa_id','user_siswas.id')
+                ->join('users','user_siswas.user_id','users.id')
+                ->count();
+        }
+        else if(Auth::user()->hasRole('adm_instansi')){
+
+            foreach($user_admin_instansis as $user_admin_instansi){
+                $id_instansi = $user_admin_instansi->id_instansi;
+            }
+
+            $ratings = Rating::select('ratings.*','users.name','users.foto')
+                ->where('instansi_pendidikan_id',$id_instansi)
+                ->join('user_siswas','ratings.user_siswa_id','user_siswas.id')
+                ->join('users','user_siswas.user_id','users.id')
+                ->get();
+
+            $rating_notNull = Rating::whereNotNull('angka')
+                ->where('instansi_pendidikan_id',$id_instansi)
+                ->join('user_siswas','ratings.user_siswa_id','user_siswas.id')
+                ->join('users','user_siswas.user_id','users.id')
+                ->count();
         }
 
-        $poin=$poin/$ratings->count();
-        // return$poin;
+        
+
+
+        $poin=0;
+        if($ratings!=''){
+            foreach($ratings as $r){
+                $poin=$poin+$r->angka;
+            }
+            
+            if($ratings->count()>0){
+                $poin=$poin/$rating_notNull;
+            }
+        }
+
+
         return view('AdminLTE/profile',compact('foto_profil','list_kelas','user_siswas','user_admin_instansis','user_guru','user_admins','id','list_spesialisasi','selectedSpesialisasi','poin','ratings'));
     }
 
@@ -116,6 +157,78 @@ class ProfileController extends Controller
     public function show($id)
     {
         //
+        $id_yang_login = Auth::user()->id;
+            
+        $user_admin_instansis='';
+        if (Auth::user()->hasRole('adm_instansi')){
+            $user_admin_instansis = User::select('users.*','user_admin_instansis.id as id_adm_instansi','user_admin_instansis.*','instansi_pendidikans.id as id_instansi','instansi_pendidikans.*')
+                ->join('user_admin_instansis', 'users.id', '=', 'user_admin_instansis.user_id')
+                ->join('instansi_pendidikans', 'user_admin_instansis.instansi_pendidikan_id', '=', 'instansi_pendidikans.id')
+                ->where('users.id', '=', $id_yang_login)
+                ->get();
+        }
+
+        $foto_profil = User::select('foto')
+            ->where('id', '=', $id_yang_login)
+            ->get();
+
+        $user_guru='';
+        $spesialisasis='';
+
+        if(Route::currentRouteName()=='rating.guru'){
+            $data_diri=UserGuru::select('users.*','user_gurus.*')
+                ->join('users','user_gurus.user_id','users.id')
+                ->where('users.id',$id)
+                ->first();
+
+            $spesialisasis=Spesialisasi::select('master_mapels.*')
+                ->where('spesialisasis.user_guru_id',$data_diri->id)
+                ->join('master_mapels','spesialisasis.master_mapel_id','master_mapels.id')
+                ->get();
+
+            $ratings = Rating::select('ratings.*','users.name','users.foto')
+                ->where('user_guru_id',$data_diri->id)
+                ->join('user_siswas','ratings.user_siswa_id','user_siswas.id')
+                ->join('users','user_siswas.user_id','users.id')
+                ->get();
+
+            $rating_notNull = Rating::whereNotNull('angka')
+                ->where('user_guru_id',$data_diri->id)
+                ->join('user_siswas','ratings.user_siswa_id','user_siswas.id')
+                ->join('users','user_siswas.user_id','users.id')
+                ->count();
+        }
+        else if(Route::currentRouteName()=='rating.instansi'){
+            $data_diri=InstansiPendidikan::select('instansi_pendidikans.*','indonesia_villages.name as desa','indonesia_districts.name as kecamatan','indonesia_cities.name as kota','indonesia_provinces.name as provinsi')
+                ->join('indonesia_villages','instansi_pendidikans.desa_id','indonesia_villages.id')
+                ->join('indonesia_districts','indonesia_villages.district_id','indonesia_districts.id')
+                ->join('indonesia_cities','indonesia_districts.city_id','indonesia_cities.id')
+                ->join('indonesia_provinces','indonesia_cities.province_id','indonesia_provinces.id')
+                ->where('instansi_pendidikans.id',$id)
+                ->first();
+
+            $ratings = Rating::select('ratings.*','users.name','users.foto')
+                ->where('instansi_pendidikan_id',$data_diri->id)
+                ->join('user_siswas','ratings.user_siswa_id','user_siswas.id')
+                ->join('users','user_siswas.user_id','users.id')
+                ->get();
+
+            $rating_notNull = Rating::whereNotNull('angka')
+                ->where('instansi_pendidikan_id',$data_diri->id)
+                ->join('user_siswas','ratings.user_siswa_id','user_siswas.id')
+                ->join('users','user_siswas.user_id','users.id')
+                ->count();
+        }
+
+        $poin=0;
+        foreach($ratings as $r){
+            $poin=$poin+$r->angka;
+        }
+        if($ratings->count()>0){
+            $poin=$poin/$rating_notNull;
+        }
+
+        return view('AdminLTE/rating',compact('user_admin_instansis','foto_profil','poin','ratings','data_diri','spesialisasis'));
     }
 
     /**

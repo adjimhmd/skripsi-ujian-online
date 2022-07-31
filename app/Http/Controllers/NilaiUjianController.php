@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DetailUjian;
+use App\Models\KomentarUjian;
 use App\Models\MasterPaketSoal;
 use App\Models\MasterTahunAjaran;
 use App\Models\NilaiUjian;
@@ -121,12 +122,21 @@ class NilaiUjianController extends Controller
             ->join('user_siswas', 'users.id', '=', 'user_siswas.user_id')
             // ->groupBy('master_ruang_ujian_id')
             // ->orderBy('total_nilai','desc')
-            ->where('user_siswa_id',$id)
+            ->where('nilai_ujians.user_siswa_id',$id)
             ->whereRaw('total_nilai in (select max(total_nilai) from nilai_ujians group by (master_ruang_ujian_id))')
             ->get();
 
-        // return$data_siswas;
-        return view('AdminLTE/nilai-ujian-detail',compact('user_admin_instansis','foto_profil','nama_instansis','data_siswas'));
+        foreach($data_siswas as $ds){
+            $id_master_ruang_ujian[]=$ds->id_master_ruang_ujian;
+        }
+
+        $komentar_ujian=KomentarUjian::select('komentar_ujians.*','users.name','users.foto')
+            ->join('user_gurus', 'komentar_ujians.user_guru_id', '=', 'user_gurus.id')
+            ->join('users', 'user_gurus.user_id', '=', 'users.id')
+            ->whereIn('master_ruang_ujian_id',$id_master_ruang_ujian)
+            ->get();
+
+        return view('AdminLTE/nilai-ujian-detail',compact('user_admin_instansis','foto_profil','nama_instansis','data_siswas','komentar_ujian'));
     }
 
     /**
@@ -182,15 +192,25 @@ class NilaiUjianController extends Controller
             ->where('user_siswa_id',$request->id_user)
             ->get();
 
+            
+        
         foreach($data_siswas as $data_siswa){
             $nama_wali=$data_siswa->nama_wali;
             $email_wali=$data_siswa->email_wali;
             $id_tahun_ajaran=$data_siswa->id_tahun_ajaran;
+
+            $id_master_ruang_ujian[]=$data_siswa->id_master_ruang_ujian;
         }
+
+        $komentar_ujian=KomentarUjian::select('komentar_ujians.*','users.name','users.foto')
+            ->join('user_gurus', 'komentar_ujians.user_guru_id', '=', 'user_gurus.id')
+            ->join('users', 'user_gurus.user_id', '=', 'users.id')
+            ->whereIn('master_ruang_ujian_id',$id_master_ruang_ujian)
+            ->get();
 
         //isi Mail::to(...) dengan email tujuan yang kalian inginkan
         // Mail::to($tujuan)->send(new LatihanEmail());
-        $data = array('nama_instansis'=>$nama_instansis,'data_siswas'=>$data_siswas);
+        $data = array('nama_instansis'=>$nama_instansis,'data_siswas'=>$data_siswas,'komentar_ujian'=>$komentar_ujian);
         // dd($data);
 
         Mail::send('AdminLTE/nilai-ujian-email', $data, function($message) use ($nama_wali,$email_wali)

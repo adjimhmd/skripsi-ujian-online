@@ -53,13 +53,27 @@
             @endforeach
 
             
+  <hr>
+  @foreach($data_siswas as $data_siswa)
+    @if($loop->first)
+      <p style="line-height:10px;"><b>Nama: </b>{{$data_siswa->name}}</p>
+      <p style="line-height:10px;"><b>NISN: </b>{{$data_siswa->nisn}}</p>
+      <p style="line-height:10px;"><b>Wali Siswa: </b>{{$data_siswa->nama_wali}}</p>
+      <!-- <div style="clear: both;">
+        <p style="float:left;"><b>Wali Siswa: </b>{{$data_siswa->nama_wali}}</p>
+        <img style="float:right; margin-top:-50px" src="{{$data_siswa->foto}}">
+      </div> -->
+    @endif
+  @endforeach<br>
+
             <table id="example" class="table table-bordered table-hover mb-4" style="table-layout: fixed">
               <thead>
                 <tr>
                   <th style="width: 5%; text-align: center;">No</th>
-                  <th style="width: 40%;">{{$tipe}}</th>
-                  <th style="width: 40%;">Detail Ujian</th>
-                  <th style="width: 15%; text-align: center;">Nilai</th>
+                  <th style="width: 20%;">{{$tipe}}</th>
+                  <th style="width: 30%;">Detail Ujian</th>
+                  <th style="width: 10%; text-align: center;">Nilai</th>
+                  <th style="width: 35%;">Komentar</th>
                 </tr>
               </thead>
               <tbody>
@@ -87,6 +101,26 @@
                     </td>
                     <td style="text-align: center;">
                       {{$data_siswa->total_nilai}}
+                    </td>
+                    <td>
+                      @foreach($komentar_ujian as $ku)
+                        @if($data_siswa->id_master_ruang_ujian==$ku->master_ruang_ujian_id)
+                        <div class="row">
+                          <div class="col-1 mr-3"> 
+                            @if($ku->foto==null)
+                              <img src="{{asset('AdminLTE/dist/img/default-150x150.png')}}" class="img-circle" alt="User Image" style="max-width:40px"> 
+                            @else
+                              <img src="{{'/'.$ku->foto}}" class="img-circle" alt="User Image" style="max-width:40px"> 
+                            @endif
+                          </div> 
+                          <div class="col-10"> 
+                            <p style="line-height:15px;margin-bottom:2px;"><b>{{$ku->name}}</b><br></p>
+                            {{$ku->komentar}}
+                          </div> 
+                        </div>
+                        <br>
+                        @endif
+                      @endforeach
                     </td>
                   </tr>
                   @endif

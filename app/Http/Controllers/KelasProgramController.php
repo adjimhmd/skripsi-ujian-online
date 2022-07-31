@@ -313,6 +313,11 @@ class KelasProgramController extends Controller
             $array_user_guru_id[]=$gi->user_guru_id;
         }
 
+        $mapel_kelas_programs = MapelKelasProgram::select('master_mapel_id')->where('kelas_program_id',$id)->get();
+        foreach($mapel_kelas_programs as $mkp){
+            $array_mapel_kelas_program[]=$mkp->master_mapel_id;
+        }
+
         $status_bayar='';
         if ($roles=='siswa'){
 
@@ -332,6 +337,7 @@ class KelasProgramController extends Controller
                 ->where('master_materis.master_kelas_id',$data_kelas->id_master_kelas)
                 ->whereNotIn('master_materis.id',$array_master_materi)
                 ->whereIn('master_materis.user_guru_id',$array_user_guru_id)
+                ->whereIn('master_materis.master_mapel_id',$array_mapel_kelas_program)
                 ->get();
         }
         else{
@@ -342,6 +348,7 @@ class KelasProgramController extends Controller
                 ->join('users', 'user_gurus.user_id', '=', 'users.id')
                 ->where('master_materis.master_kelas_id',$data_kelas->id_master_kelas)
                 ->whereIn('master_materis.user_guru_id',$array_user_guru_id)
+                ->whereIn('master_materis.master_mapel_id',$array_mapel_kelas_program)
                 ->get();
         }
 

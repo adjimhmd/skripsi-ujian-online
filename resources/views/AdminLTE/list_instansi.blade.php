@@ -97,10 +97,10 @@
                   <table id="example1" class="table table-hover table-valign-middle"style="table-layout: fixed">
                       <thead>
                         <tr>
-                          <th style="width: 5%; text-align: center;">No</th>
+                          <th style="width: 3%; text-align: center;">No</th>
                           <th style="width: 30%;">Nama</th>
                           <th style="width: 55%;">Alamat</th>
-                          <th style="width: 10%; text-align: center;">Aksi</th>
+                          <th style="width: 12%; text-align: center;">Aksi</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -124,7 +124,6 @@
                                 <input type="hidden" name="id_instansi" value="{{$select_sekolah->id}}">
                                 <input type="hidden" name="id_master_kelas" value="{{$siswa->master_kelas_id}}">
                                 <button type="submit" class="btn btn-sm bg-purple"><i class="fas fa-info-circle"></i> Detail</button>
-                              </form>
 
                               <!-- <button type="button" class="btn btn-sm bg-purple btn_pilih" data-toggle="modal" data-target="#pilih_guru" 
                                 data-id-instansi="{{$select_sekolah->id}} " 
@@ -140,8 +139,10 @@
                                 @csrf
                                 <input type="hidden" name="id_instansi" value="{{$select_sekolah->id}}">
                                 <button type="submit" class="btn btn-sm btn-secondary" disabled> Daftar</button>
-                              </form>
                             @endif
+                            
+                                <a href="{{route('rating.instansi',$select_sekolah->id)}}" type="button" class="btn btn-warning btn-sm shadow-sm">Lihat</a>
+                              </form>
                           </center></td>
                         </tr>
                         @endforeach
@@ -164,6 +165,7 @@
                                 @csrf
                                 <input type="hidden" name="id_instansi" value="{{$select_sekolah->id}}">
                                 <button type="submit" class="btn btn-sm bg-purple"> Daftar</button>
+                                <a href="{{route('rating.instansi',$select_sekolah->id)}}" type="button" class="btn btn-warning btn-sm shadow-sm">Lihat</a>
                               </form>
                           </center></td>
                         </tr>
@@ -190,10 +192,10 @@
                   <table id="example2" class="table table-hover table-valign-middle"style="table-layout: fixed">
                       <thead>
                         <tr>
-                          <th style="width: 5%; text-align: center;">No</th>
+                          <th style="width: 3%; text-align: center;">No</th>
                           <th style="width: 30%;">Nama</th>
                           <th style="width: 55%;">Alamat</th>
-                          <th style="width: 10%; text-align: center;">Aksi</th>
+                          <th style="width: 12%; text-align: center;">Aksi</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -217,7 +219,6 @@
                                 <input type="hidden" name="id_instansi" value="{{$select_kursus->id}}">
                                 <input type="hidden" name="id_master_kelas" value="{{$siswa->master_kelas_id}}">
                                 <button type="submit" class="btn btn-sm bg-purple"><i class="fas fa-info-circle"></i> Detail</button>
-                              </form>
                               <!-- <button type="button" class="btn btn-sm bg-purple btn_pilih" data-toggle="modal" data-target="#pilih_guru" 
                                 data-id-instansi="{{$select_kursus->id}} " 
                                 data-nama-instansi="{{$select_kursus->instansi}}" 
@@ -232,8 +233,10 @@
                                 @csrf
                                 <input type="hidden" name="id_instansi" value="{{$select_kursus->id}}">
                                 <button type="submit" class="btn btn-sm btn-secondary" disabled> Daftar</button>
-                              </form>
                             @endif
+                            
+                                <a href="{{route('rating.instansi',$select_kursus->id)}}" type="button" class="btn btn-warning btn-sm shadow-sm">Lihat</a>
+                              </form>
                           </center></td>
                         </tr>
                         @endforeach
@@ -256,6 +259,7 @@
                               @csrf
                               <input type="hidden" name="id_instansi" value="{{$select_kursus->id}}">
                               <button type="submit" class="btn btn-sm bg-purple"> Daftar</button>
+                              <a href="{{route('rating.instansi',$select_kursus->id)}}" type="button" class="btn btn-warning btn-sm shadow-sm">Lihat</a>
                             </form>
                           </center></td>
                         </tr>

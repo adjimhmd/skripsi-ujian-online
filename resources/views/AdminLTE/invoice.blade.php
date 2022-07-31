@@ -1,5 +1,7 @@
 @if ($update_order->status == NULL)
     <button class="btn btn-primary" id="pay-button">Bayar Sekarang</button>
+@elseif ($update_order->status == '2')
+    <button class="btn btn-primary" id="pay-button">Bayar Sekarang</button>
 @else
     Pembayaran berhasil
 @endif

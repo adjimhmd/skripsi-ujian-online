@@ -29,7 +29,7 @@
                   @if (Auth::user()->hasRole('guru'))
                     {{'Total Kelas: '.$total_kelas.', Total Program Kursus: '.$total_program}}
                   @else
-                    {{$jumlah_terdaftar.' terdaftar, '.$jumlah_menunggu.' menunggu pembayaran'}}
+                    {{$jumlah_terdaftar.' terdaftar, '.$jumlah_menunggu.' menunggu verifikasi'}}
                   @endif
 
                 @else
@@ -40,7 +40,7 @@
                     @if (Auth::user()->hasRole('guru'))
                       {{'Total Kelas: '.$total_kelas.', Total Program Kursus: '.$total_program}}
                     @else
-                      {{$jumlah_terdaftar.' terdaftar, '.$jumlah_menunggu.' menunggu pembayaran'}}
+                      {{$jumlah_terdaftar.' terdaftar, '.$jumlah_menunggu.' menunggu verifikasi'}}
                     @endif
 
                     @endif
@@ -149,6 +149,8 @@
                           <small class="badge badge-warning mb-2"><i class="fas fa-exclamation"></i>{{' Menungguu'}}</small><br>
                         @elseif($list_kelas->status=='1')
                           <small class="badge badge-success mb-2"><i class="fas fa-check"></i>{{' Terdaftar'}}</small><br>
+                        @elseif($list_kelas->status=='2')
+                          <small class="badge bg-maroon mb-2"><i class="fas fa-times"></i>{{' Masa Aktif Habis'}}</small><br>
                         @endif
                       </td>
                       <td style="text-align: center;">
@@ -165,6 +167,31 @@
                               <input type='hidden' name='id_harga' value='{{$list_kelas->id_harga}}'>
                               <button type="submit" class="btn btn-sm bg-maroon">Bayar</button>
                             </form>
+                          @elseif($list_kelas->status=='2')
+
+                            @if($list_kelas->harga==='0')
+                              <form method='POST' action='{{ route("daftar.siswa") }}' enctype='multipart/form-data' style="display:inline">
+                                @csrf
+                                <input type='hidden' name='id_kelas_program' value='{{$list_kelas->id_kelas_program}}'>
+                                <button type="submit" class="btn btn-sm bg-maroon">Perpanjang</button>
+                              </form>
+                            @else
+                              <form method='POST' action='{{ route("orders.store") }}' enctype='multipart/form-data' style="display:inline">
+                                @csrf
+                                <input type='hidden' name='id_kelas_program' value='{{$list_kelas->id_kelas_program}}'>
+                                <input type='hidden' name='id_harga' value='{{$list_kelas->id_harga}}'>
+                                <button type="submit" class="btn btn-sm bg-maroon">Perpanjang</button>
+                              </form>
+                            @endif
+
+
+                            <!-- <form method="POST" action="{{ route('orders.store') }}" enctype="multipart/form-data">
+                              @csrf
+                              <input type="hidden" name="id_kelas_program" value="{{$list_kelas->id_kelas_program}}">
+                              <input type="hidden" name="id_rombongan_belajar" value="{{$list_kelas->id_rombongan_belajar}}">
+                              <input type='hidden' name='id_harga' value='{{$list_kelas->id_harga}}'>
+                              <button type="submit" class="btn btn-sm bg-maroon">Perpanjang</button>
+                            </form> -->
                           @else
                             <a href="{{route('kelas-program.show',$list_kelas->id_kelas_program)}}" class="btn bg-purple btn-sm" >Detail</a>
                           @endif
@@ -260,6 +287,8 @@
                           <small class="badge badge-warning mb-2"><i class="fas fa-exclamation"></i>{{' Menunggu'}}</small><br>
                         @elseif($list_kelas->status=='1')
                           <small class="badge badge-success mb-2"><i class="fas fa-check"></i>{{' Terdaftar'}}</small><br>
+                        @elseif($list_kelas->status=='2')
+                          <small class="badge bg-maroon mb-2"><i class="fas fa-times"></i>{{' Masa Aktif Habis'}}</small><br>
                         @endif
                       </td>
                       <td style="text-align: center;">
@@ -276,6 +305,23 @@
                               <input type='hidden' name='id_harga' value='{{$list_kelas->id_harga}}'>
                               <button type="submit" class="btn btn-sm bg-maroon">Bayar</button>
                             </form>
+                          @elseif($list_kelas->status=='2')
+                            
+                            @if($list_kelas->harga==='0')
+                              <form method='POST' action='{{ route("daftar.siswa") }}' enctype='multipart/form-data' style="display:inline">
+                                @csrf
+                                <input type='hidden' name='id_kelas_program' value='{{$list_kelas->id_kelas_program}}'>
+                                <button type="submit" class="btn btn-sm bg-maroon">Perpanjang</button>
+                              </form>
+                            @else
+                              <form method='POST' action='{{ route("orders.store") }}' enctype='multipart/form-data' style="display:inline">
+                                @csrf
+                                <input type='hidden' name='id_kelas_program' value='{{$list_kelas->id_kelas_program}}'>
+                                <input type='hidden' name='id_harga' value='{{$list_kelas->id_harga}}'>
+                                <button type="submit" class="btn btn-sm bg-maroon">Perpanjang</button>
+                              </form>
+                            @endif
+
                           @else
                             <a href="{{route('kelas-program.show',$list_kelas->id_kelas_program)}}" class="btn bg-purple btn-sm" >Detail</a>
                           @endif

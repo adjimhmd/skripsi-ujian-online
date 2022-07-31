@@ -169,6 +169,26 @@ class InstansiSiswaController extends Controller
             ->where('users.id', '=', $id)
             ->get();
 
+        $data_kelass = RombonganBelajar::select(
+            'harga_kelas_programs.id as id_harga','harga_kelas_programs.*',
+            'rombongan_belajars.id as id_rombongan_belajar','rombongan_belajars.updated_at as register_rombel')
+            ->join('kelas_programs', 'rombongan_belajars.kelas_program_id', '=', 'kelas_programs.id')
+            ->join('harga_kelas_programs', 'rombongan_belajars.harga_kelas_program_id', '=', 'harga_kelas_programs.id')
+            ->where('rombongan_belajars.user_siswa_id',$id_siswa->id)
+            ->get();
+
+        // return$data_kelass;
+
+        foreach($data_kelass as $lk){
+            // if tgl sekarang melewati dari tgl langganan, status diubah jadi 2
+            if(Carbon::now() > Carbon::parse($lk->register_rombel)->addMonths($lk->jumlah_bulan)){
+                $update_status_rombel = RombonganBelajar::find($lk->id_rombongan_belajar);
+                $update_status_rombel->update([
+                    'status' => '2',
+                ]);
+            }
+        }
+
         $list_kelass = RombonganBelajar::select(
             'instansi_pendidikans.id as id_instansi_pendidikan','instansi_pendidikans.nama as nama_instansi','instansi_pendidikans.*',
             'harga_kelas_programs.id as id_harga','harga_kelas_programs.*',
@@ -176,7 +196,7 @@ class InstansiSiswaController extends Controller
             'user_siswas.id as id_user_siswa','user_siswas.*',
             'users.id as id_user','users.*',
             'kelas_programs.id as id_kelas_program','kelas_programs.*','kelas_programs.deskripsi as kls_program',
-            'rombongan_belajars.id as id_rombongan_belajar','rombongan_belajars.*')
+            'rombongan_belajars.id as id_rombongan_belajar','rombongan_belajars.*','rombongan_belajars.updated_at as register_rombel')
             ->join('kelas_programs', 'rombongan_belajars.kelas_program_id', '=', 'kelas_programs.id')
             ->join('harga_kelas_programs', 'rombongan_belajars.harga_kelas_program_id', '=', 'harga_kelas_programs.id')
             ->join('instansi_pendidikans', 'kelas_programs.instansi_pendidikan_id', '=', 'instansi_pendidikans.id')
@@ -185,8 +205,7 @@ class InstansiSiswaController extends Controller
             ->join('users', 'user_siswas.user_id', '=', 'users.id')
             ->where('rombongan_belajars.user_siswa_id',$id_siswa->id)
             ->get();
-
-        // return$list_kelass;
+        
             
         $mapel_rombels = RombonganBelajar::select('rombongan_belajars.id as id_rombongan_belajar','master_mapels.*')
             ->join('kelas_programs', 'rombongan_belajars.kelas_program_id', '=', 'kelas_programs.id')
@@ -374,8 +393,10 @@ class InstansiSiswaController extends Controller
         $nama_instansis = InstansiPendidikan::select('instansi_pendidikans.nama')->where('id', '=', $request->id_instansi)->get();
 
         $id_siswa = UserSiswa::select('id')->where('user_id',$id)->first();
-        $rombongans=RombonganBelajar::where('user_siswa_id',$id_siswa->id)->get();
+        $rombongans=RombonganBelajar::where('user_siswa_id',$id_siswa->id)->where('status','!=','2')->orWhereNull('status')->get();
         $kelas_program_id = $rombongans->pluck('kelas_program_id')->toArray();
+
+        // return $kelas_program_id;
 
         $kelas_programs = KelasProgram::select('kelas_programs.id as id_kelas_program','kelas_programs.*','master_kelas.tingkat','master_kelas.kelas')
             ->join('master_kelas', 'kelas_programs.master_kelas_id', '=', 'master_kelas.id')
@@ -468,7 +489,7 @@ class InstansiSiswaController extends Controller
             ->first();
         $profil=User::select('foto')->where('id',$id_user)->first();
 
-        $harga_kelas=HargaKelasProgram::select('harga')->where('kelas_program_id',$request->id_kelas_program)->first();
+        $harga_kelas=HargaKelasProgram::select('id','harga')->where('kelas_program_id',$request->id_kelas_program)->first();
         // return$harga_kelas;
         
         if($profil->foto==null){
@@ -476,24 +497,53 @@ class InstansiSiswaController extends Controller
             ->with('warning', 'Silahkan lengkapi profile untuk melanjutkan pendaftaran kelas/program kursus!');
         }
         else if($harga_kelas->harga=='0'){
-            $rombongan=RombonganBelajar::create([
-                'kelas_program_id' => $request->input('id_kelas_program'),
-                'user_siswa_id' => $id_siswa->id,
-                'status' => '0',
-            ]); 
 
+            $cek_rombel=RombonganBelajar::where('kelas_program_id',$request->input('id_kelas_program'))
+                ->where('user_siswa_id',$id_siswa->id)
+                ->first();
+
+            if($cek_rombel){
+                $cek_rombel->update([
+                    'kelas_program_id' => $request->input('id_kelas_program'),
+                    'user_siswa_id' => $id_siswa->id,
+                    'harga_kelas_program_id' => $harga_kelas->id,
+                    'status' => '0',
+                ]); 
+            }
+            else{
+                $rombongan=RombonganBelajar::create([
+                    'kelas_program_id' => $request->input('id_kelas_program'),
+                    'user_siswa_id' => $id_siswa->id,
+                    'harga_kelas_program_id' => $harga_kelas->id,
+                    'status' => '0',
+                ]); 
+            }
+    
             return redirect()->route('list.kelas.program');
             
         }
         else{
             // return $request;
-            $rombongan=RombonganBelajar::create([
-                'kelas_program_id' => $request->input('id_kelas_program'),
-                'user_siswa_id' => $id_siswa->id,
-                'harga_kelas_program_id' => $request->id_harga,
-            ]); 
+            $cek_rombel=RombonganBelajar::where('kelas_program_id',$request->input('id_kelas_program'))
+                ->where('user_siswa_id',$id_siswa->id)
+                ->first();
 
-            $id_rombongan_belajar=$rombongan->id;
+            if($cek_rombel){
+                $cek_rombel->update([
+                    'kelas_program_id' => $request->input('id_kelas_program'),
+                    'user_siswa_id' => $id_siswa->id,
+                    'harga_kelas_program_id' => $request->id_harga,
+                ]); 
+            }
+            else{
+                $cek_rombel=RombonganBelajar::create([
+                    'kelas_program_id' => $request->input('id_kelas_program'),
+                    'user_siswa_id' => $id_siswa->id,
+                    'harga_kelas_program_id' => $request->id_harga,
+                ]); 
+            }
+
+            $id_rombongan_belajar=$cek_rombel->id;
             $data = RombonganBelajar::select(
                 'instansi_pendidikans.nama as nama_instansi','instansi_pendidikans.*',
                 'harga_kelas_programs.*',

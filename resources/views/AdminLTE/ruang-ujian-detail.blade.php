@@ -36,7 +36,11 @@
     @if(Route::currentRouteNamed('hasil.ujian'))
       <div class="row mb-2">
       
+        @if(empty($komentar_ujian))
+        <div class="col-md-8">
+        @else
         <div class="col-md-12">
+        @endif
 
           <div class="card">
             <div class="card-header">
@@ -89,6 +93,7 @@
                           </a>
                         </h4>
                       </div>
+                      
                       <div id="collapseOne" class="collapse" data-parent="#accordion">
                         <div class="card-body">
                           @php($opsi=['A. ','B. ','C. ','D. ','E. '])
@@ -129,6 +134,16 @@
                                 <button type="button" class="btn bg-purple btn-sm lihat_pembahasan shadow-sm" data-toggle="modal" data-target="#lihat-pembahasan" data-pembahasan="{{ $bank_soal->pembahasan }}" data-kunci-jawaban="{{ $kunci_jawaban }}">Lihat Kunci Jawaban & Pembahasan</button>
                               </div>
                             </div>
+
+                            
+                            <b class="ml-1">Pemilik Soal </b>
+                            @if($bank_soal->foto==null)
+                              <img src="{{asset('AdminLTE/dist/img/default-150x150.png')}}" class='img-circle mx-2 elevation-1 my-1' alt='User Image' style='max-width:35px'>
+                            @else
+                              <img src="{{'/'.$bank_soal->foto}}" class='img-circle mx-2 elevation-1 my-1' alt='User Image' style='max-width:35px'>
+                            @endif
+                            {{$bank_soal->name}}
+                            
                             <hr><br>
 
                           @endif
@@ -175,7 +190,15 @@
                                 <button type="button" class="btn bg-purple btn-sm lihat_pembahasan shadow-sm" data-toggle="modal" data-target="#lihat-pembahasan" data-pembahasan="{{ $bank_soal->pembahasan }}" data-kunci-jawaban="{{ $bank_soal->jawaban }}">Lihat Kunci Jawaban & Pembahasan</button>
                               </div><br>
                             </div>
-                            <small style="color: red;"><b><i class="far fa-question-circle mr-2"></i>Note: </b>Rentang nilai adalah 0 s/d 1</small>
+                            <small style="color: red;"><b><i class="far fa-question-circle mr-2"></i>Note: </b>Rentang nilai adalah 0 s/d 1</small><br>
+                            
+                            <b class="ml-1">Pemilik Soal </b>
+                            @if($bank_soal->foto==null)
+                              <img src="{{asset('AdminLTE/dist/img/default-150x150.png')}}" class='img-circle mx-2 elevation-1 my-1' alt='User Image' style='max-width:35px'>
+                            @else
+                              <img src="{{'/'.$bank_soal->foto}}" class='img-circle mx-2 elevation-1 my-1' alt='User Image' style='max-width:35px'>
+                            @endif
+                            {{$bank_soal->name}}
                             <hr><br>
 
                             <!-- <textarea id="{{'pilihan_siswa_'.$no_subjektif++}}" class="form-control pilihan_siswa pilihan" disabled>{!!$bank_soal->jawaban!!}</textarea> -->
@@ -228,6 +251,14 @@
                                         <button type="button" class="btn bg-purple btn-sm lihat_pembahasan shadow-sm" data-toggle="modal" data-target="#lihat-pembahasan" data-pembahasan="{{ $bank_soal->pembahasan }}" data-kunci-jawaban="{{ $bank_soal->jawaban }}">Lihat Kunci Jawaban & Pembahasan</button>
                                       </div>
                                     </div>
+            
+                                    <b class="ml-1">Pemilik Soal </b>
+                                    @if($bank_soal->foto==null)
+                                      <img src="{{asset('AdminLTE/dist/img/default-150x150.png')}}" class='img-circle mx-2 elevation-1 my-1' alt='User Image' style='max-width:35px'>
+                                    @else
+                                      <img src="{{'/'.$bank_soal->foto}}" class='img-circle mx-2 elevation-1 my-1' alt='User Image' style='max-width:35px'>
+                                    @endif
+                                    {{$bank_soal->name}}
                                     <hr><br>
                                   @endif
                                 @endif
@@ -299,8 +330,15 @@
                               <div class="col-auto my-auto">
                                 <button type="button" class="btn bg-purple btn-sm lihat_pembahasan shadow-sm" data-toggle="modal" data-target="#lihat-pembahasan" data-pembahasan="{{ $bank_soal->pembahasan }}" data-kunci-jawaban="{{ $jawaban_truefalse }}">Lihat Kunci Jawaban & Pembahasan</button>
                               </div>
-                            </div>
-                            
+                            </div>                          
+                          
+                            <b class="ml-1">Pemilik Soal </b>
+                            @if($bank_soal->foto==null)
+                              <img src="{{asset('AdminLTE/dist/img/default-150x150.png')}}" class='img-circle mx-2 elevation-1 my-1' alt='User Image' style='max-width:35px'>
+                            @else
+                              <img src="{{'/'.$bank_soal->foto}}" class='img-circle mx-2 elevation-1 my-1' alt='User Image' style='max-width:35px'>
+                            @endif
+                            {{$bank_soal->name}}
                             <hr><br>
 
                           @endif
@@ -312,7 +350,8 @@
                     @endif
 
                   </div>
-                
+
+                  
                   <!-- <button onclick="myFunction()" id="submit" type="submit" class="btn bg-purple btn-block shadow-sm">Simpan Data</button> -->
 
               </div>
@@ -349,6 +388,49 @@
           <!-- /.card -->
           
         </div>
+
+        @if(empty($komentar_ujian))
+        <div class="col-md-4">
+
+          <div class="card">
+
+            <div class="card-header">
+              <h3 class="card-title"><b>Komentar Ujian</b></h3>
+
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="maximize">
+                  <i class="fas fa-expand"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+              </div>
+              <!-- /.card-tools -->
+            
+            </div>
+
+            <div class="card-body">
+
+              <form method="POST" action="{{ route('update.komentar') }}" enctype="multipart/form-data" autocomplete="off">
+                @csrf
+                  <label>Komentar Untuk Siswa</label>
+
+                  <input type="hidden" name="id_master_ruang_ujian" value="{{$master_ruang_ujian_id}}">
+                  <input type="hidden" name="id_user_siswa" value="{{$nama_siswa->id}}">
+                  <textarea class="form-control" id="komentar_untuk_siswa" rows="4" placeholder="Berikan komentar untuk siswa..." name="komentar"></textarea>
+
+                  <br><button id="submit" type="submit" class="btn bg-purple btn_komentar_untuk_siswa">Simpan Komentar</button><br>
+
+              </form>
+
+            </div>
+            <!-- /.card-body -->
+
+          </div>
+          <!-- /.card -->
+
+        </div>
+        @endif
 
 
       </div>
@@ -436,7 +518,7 @@
                       @endif
 
                       
-                      @if($rating_ruang_ujian->isEmpty())
+                      @if($rating_ruang_ujian->isEmpty() && Auth::user()->hasRole('siswa'))
                         <button type="button" class="btn btn-warning mt-4" data-toggle="modal" data-target="#modal-default"><i class="fa fa-star"></i> Penilaian</button>
                       @endif
 
@@ -461,6 +543,7 @@
       </div>
       <!-- /.row -->
 
+      <!-- modal rating -->
       <div class="modal fade" id="modal-default">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -491,7 +574,8 @@
                     <button type="button" class="btn bg-transparent rating-lembaga" id="{{'btn_'.$master_ruang_ujian->id_instansi_pendidikan.'_5'}}"><img id="{{'img_'.$master_ruang_ujian->id_instansi_pendidikan.'_5'}}" src="{{asset('/img/star-unselect.png')}}" style='width:25px'></button>
                   </div>
                   <div class="col-12 d-flex justify-content-center">
-                    <textarea class="form-control" rows="3" placeholder="Berikan komentarmu" style="width: 99%"></textarea>
+                    <textarea class="form-control komentar-lembaga" id="{{'komentar_'.$master_ruang_ujian->id_instansi_pendidikan}}" rows="3" placeholder="Berikan komentarmu" style="width: 99%"></textarea>
+                    <input type="hidden" id="{{'komentar_hide_'.$master_ruang_ujian->id_instansi_pendidikan}}" name="komentar_lembaga" >
                   </div>
                 </div>
 
@@ -521,7 +605,8 @@
                     <br><br>
                   </div>
                   <div class="col-12 d-flex justify-content-center">
-                    <textarea class="form-control" rows="3" placeholder="Berikan komentarmu" style="width: 99%"></textarea>
+                    <textarea class="form-control komentar-guru" id="{{'komentar_'.$dg->id}}" rows="3" placeholder="Berikan komentarmu" style="width: 99%"></textarea>
+                    <input type="hidden" id="{{'komentar_hide_'.$dg->id}}" name="komentar_guru[]" >
                   </div>
                 </div>
                 @endforeach
@@ -612,7 +697,17 @@
                               @endif
                               @endforeach
                             </div>
+                            
+                            <b class="ml-1">Pemilik Soal </b>
+                            
+                            @if($bank_soal->foto==null)
+                              <img src="{{asset('AdminLTE/dist/img/default-150x150.png')}}" class='img-circle mx-2 elevation-1 my-1' alt='User Image' style='max-width:35px'>
+                            @else
+                              <img src="{{'/'.$bank_soal->foto}}" class='img-circle mx-2 elevation-1 my-1' alt='User Image' style='max-width:35px'>
+                            @endif
+                            {{$bank_soal->name}}
                             <hr>
+
                           @endif
                           @endforeach
                         </div>
@@ -643,7 +738,16 @@
                             <input type="hidden" id="{{'subjektif_'.$bank_soal->id}}" value="{{$no_subjektif++}}">
 
                             <textarea id="jawaban_subjektif_{{$bank_soal->id}}" class="form-control @error('jawaban_subjektif_{{$bank_soal->id}}') is-invalid @enderror pilihan class_subjektif" name="{{'jawaban_subjektif_'.$bank_soal->id}}" placeholder="Masukkan jawaban kamu disini..." required>{{ old('jawaban_subjektif.'.$bank_soal->id) }}</textarea>
-
+                           
+                            <b class="ml-1">Pemilik Soal </b>
+                            
+                            @if($bank_soal->foto==null)
+                              <img src="{{asset('AdminLTE/dist/img/default-150x150.png')}}" class='img-circle mx-2 elevation-1 my-1' alt='User Image' style='max-width:35px'>
+                            @else
+                              <img src="{{'/'.$bank_soal->foto}}" class='img-circle mx-2 elevation-1 my-1' alt='User Image' style='max-width:35px'>
+                            @endif
+                            {{$bank_soal->name}}
+                            <hr>
 
                           @endif
                           @endforeach
@@ -704,6 +808,17 @@
                                           <input onkeypress="return /[a-z]/i.test(event.key)" type="text" class="form-control form-control-sm class_penjodohan" name="{{'jawaban_penjodohan_'.$banksoal->id}}" placeholder="(Input: a/b/c/dst)" id="jawaban_penjodohan_{{$banksoal->id}}" required maxlength="1">
                                         </div>
                                       </div>
+                           
+                                      <b class="ml-1">Pemilik Soal </b>
+                                        
+                                      @if($banksoal->foto==null)
+                                        <img src="{{asset('AdminLTE/dist/img/default-150x150.png')}}" class='img-circle mx-2 elevation-1 my-1' alt='User Image' style='max-width:35px'>
+                                      @else
+                                        <img src="{{'/'.$banksoal->foto}}" class='img-circle mx-2 elevation-1 my-1' alt='User Image' style='max-width:35px'>
+                                      @endif
+                                      {{$banksoal->name}}
+                                      <hr>
+
                                     @endif
                                     @endforeach
                                   </td>
@@ -749,7 +864,7 @@
                             <h6><strong>Soal No <span class="badge bg-purple">{{$no_truefalse}}</span></strong></h6>
 
                             <div class="media_tabel">{!!$bank_soal->soal!!}</div><br>
-                            <!-- {{$bank_soal->id}} -->
+                            <!-- {{$bank_soal->id.' - '.$bank_soal->user_id}} -->
 
                             <h6><b>Opsi Jawaban: </b></h6>
                             <input type="hidden" name="id_soal_truefalse[]" value="{{$bank_soal->id}}">
@@ -767,6 +882,14 @@
                               </div>
                             </div>
 
+                            
+                            <b class="ml-1">Pemilik Soal </b>
+                            @if($bank_soal->foto==null)
+                              <img src="{{asset('AdminLTE/dist/img/default-150x150.png')}}" class='img-circle mx-2 elevation-1 my-1' alt='User Image' style='max-width:35px'>
+                            @else
+                              <img src="{{'/'.$bank_soal->foto}}" class='img-circle mx-2 elevation-1 my-1' alt='User Image' style='max-width:35px'>
+                            @endif
+                            {{$bank_soal->name}}
                             <hr>
 
                           @endif
@@ -822,8 +945,12 @@
                 <thead>
                   <tr>
                     <th style="width: 10%; text-align: center;">No</th>
-                    <th style="width: 60%;">Data Siswa</th>
-                    <th style="width: 30%; text-align: center;">Keterangan Ujian</th>
+                    <th style="width: 50%;">Data Siswa</th>
+                    <th style="width: 25; text-align: center;">Ujian Ke</th>
+                    <th style="width: 10%; text-align: center;">Nilai</th>
+                    @if(Auth::user()->hasRole('guru'))
+                    <th style="width: 15%; text-align: center;">Aksi</th>
+                    @endif
                   </tr>
                 </thead>
                 <tbody>
@@ -854,11 +981,13 @@
                     @php($data_siswaaa=$rombongan_belajar->name)
                     </td>
                     <td style="text-align: center;">
-                          {{'Ujian ke-'.$n->ujian_ke.' | Nilai: '.$n->total_nilai}}
-                          @if(Auth::user()->hasRole('guru'))
-                          <a href="{{route('hasil.ujian',$master_ruang_ujian->id_master_ruang_ujian.'-'.$rombongan_belajar->id_user.'-'.$n->id)}}" class="btn btn-xs bg-purple shadow-sm ml-2" ><i class="fas fa-eye"></i> Jawaban</a>
-                          @endif
-                          <br>
+                          {{'Ujian ke-'.$n->ujian_ke}}
+                    </td>
+                    <td style="text-align: center;">{{$n->total_nilai}}</td>
+                    <td style="text-align: center;">
+                      @if(Auth::user()->hasRole('guru'))
+                        <a href="{{route('hasil.ujian',$master_ruang_ujian->id_master_ruang_ujian.'-'.$rombongan_belajar->id_user.'-'.$n->id)}}" class="btn btn-sm bg-purple shadow-sm ml-2" ><i class="fas fa-eye"></i> Detail</a>
+                      @endif
                     </td>
                   </tr>
                         @endif
@@ -1241,6 +1370,18 @@
       }
     });
 
+    $('.komentar-lembaga').on('change', function(){
+        var id_komentar   = $(this).attr('id').split("_");
+        var val_komentar  = $(this).val();
+
+        if(val_komentar.trim() == ""){
+          $("#komentar_hide_"+id_komentar[1]).val('');
+        }
+        else{
+          $("#komentar_hide_"+id_komentar[1]).val(id_komentar[1]+'-'+val_komentar);
+        }
+    });
+
     $('.rating-guru').click(function () {
       var id_btn  = $(this).attr('id').split("_");
       var id_img  = '#img_'+id_btn[1]+'_'+id_btn[2];
@@ -1290,6 +1431,18 @@
         $("#guru_"+id_btn[1]).val(id_btn[1]+'-0');
       }
     });
+
+    $('.komentar-guru').on('change', function(){
+        var id_komentar   = $(this).attr('id').split("_");
+        var val_komentar  = $(this).val();
+
+        if(val_komentar.trim() == ""){
+          $("#komentar_hide_"+id_komentar[1]).val('');
+        }
+        else{
+          $("#komentar_hide_"+id_komentar[1]).val(id_komentar[1]+'-'+val_komentar);
+        }
+    });
     // $('#rating1').click(function () {
     //   var img = $('#img1').attr('src').match(/img\/.*$/i)[0];
       
@@ -1329,6 +1482,17 @@
     // });
 
     // $("#div_soal_objektif_0").prop("hidden",false);
+
+    $('.btn_komentar_untuk_siswa').click(function() {
+
+        var val_komentar  = $('#komentar_untuk_siswa').val();
+
+        if(val_komentar.trim() == ""){
+          toastr.error('Komentar untuk siswa masih kosong!')
+          return false;
+        }
+    });
+
     $("#div_soal_0").prop("hidden",false);
     
     $("#row_info").prop("hidden",false);

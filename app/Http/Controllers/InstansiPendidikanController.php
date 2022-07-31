@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\InstansiPendidikan;
+use App\Models\Rating;
 use App\Models\UserAdminInstansi;
 use Auth;
 use Laravolt\Indonesia\Models\Province;
@@ -45,7 +46,10 @@ class InstansiPendidikanController extends Controller
             ->where('users.id', '=', $id)
             ->get();
 
+        $id_instansi = '';
         foreach ($user_admin_instansis as $user_admin_instansi){
+            $id_instansi = $user_admin_instansi->id_instansi;
+
             $detail_alamats = Village::select(
                 'indonesia_provinces.id as id_province',
                 'indonesia_provinces.name as province',
@@ -88,8 +92,28 @@ class InstansiPendidikanController extends Controller
             ->where('indonesia_districts.id', '=', $id_district)
             ->get();
 
+        $ratings = Rating::select('ratings.*','users.name','users.foto')
+            ->where('instansi_pendidikan_id',$id_instansi)
+            ->join('user_siswas','ratings.user_siswa_id','user_siswas.id')
+            ->join('users','user_siswas.user_id','users.id')
+            ->get();
+
+        $rating_notNull = Rating::whereNotNull('angka')
+            ->where('instansi_pendidikan_id',$id_instansi)
+            ->join('user_siswas','ratings.user_siswa_id','user_siswas.id')
+            ->join('users','user_siswas.user_id','users.id')
+            ->count();
+
+        $poin=0;
+        foreach($ratings as $r){
+            $poin=$poin+$r->angka;
+        }
+        if($ratings->count()>0){
+            $poin=$poin/$rating_notNull;
+        }
+
             // return$user_admin_instansis;
-        return view('AdminLTE/profile_instansi',['provinces' => $provinces],compact('foto_profil','id','user_admin_instansis','detail_alamats','cities','districts','villages'));
+        return view('AdminLTE/profile_instansi',['provinces' => $provinces],compact('foto_profil','id','user_admin_instansis','detail_alamats','cities','districts','villages','ratings','poin'));
     }
     
     public function show_kota(Request $request)

@@ -186,12 +186,12 @@
                       @if (\Carbon\Carbon::now()->lt($ruang_ujian->waktu_mulai))
                         <a href="" class="btn btn-block btn-warning btn-sm shadow-sm" id="edit_ruang_ujian" data-toggle="modal" data-id="{{ $ruang_ujian->id_master_ruang_ujian }}">Edit</a>
                       @endif
-                      <a href="{{route('ruang-ujian.show',$ruang_ujian->id_master_ruang_ujian)}}" class="btn btn-block bg-purple btn-sm shadow-sm mt-1" >Detail</a>
+                      <a href="{{route('ruang-ujian.show',$ruang_ujian->id_master_ruang_ujian)}}" class="btn btn-block bg-purple btn-sm shadow-sm mt-1" >Masuk</a>
                     @elseif (Auth::user()->hasRole('siswa'))
                       @if (\Carbon\Carbon::now()->lt($ruang_ujian->waktu_mulai) or \Carbon\Carbon::now()->gt($ruang_ujian->waktu_selesai))
-                        <a href="javascript:void(0)" style="cursor: default;" class="btn btn-block btn-light btn-sm shadow-sm mt-1">Detail</a>
+                        <a href="javascript:void(0)" style="cursor: default;" class="btn btn-block btn-light btn-sm shadow-sm mt-1">Masuk</a>
                       @else
-                        <a href="{{route('ruang-ujian.show',$ruang_ujian->id_master_ruang_ujian)}}" class="btn btn-block bg-purple btn-sm shadow-sm mt-1">Detail</a>
+                        <a href="{{route('ruang-ujian.show',$ruang_ujian->id_master_ruang_ujian)}}" class="btn btn-block bg-purple btn-sm shadow-sm mt-1">Masuk</a>
                       @endif
                     @endif
                   </td>

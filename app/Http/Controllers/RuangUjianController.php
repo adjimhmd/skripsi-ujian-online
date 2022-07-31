@@ -7,6 +7,7 @@ use App\Models\DetailUjian;
 use App\Models\InstansiPendidikan;
 use App\Models\Jawaban;
 use App\Models\KelasProgram;
+use App\Models\KomentarUjian;
 use App\Models\MapelKelasProgram;
 use App\Models\MasterKelas;
 use App\Models\MasterPaketSoal;
@@ -25,6 +26,7 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
 
 class RuangUjianController extends Controller
 {
@@ -112,11 +114,12 @@ class RuangUjianController extends Controller
             
             $ruang_ujians=MasterRuangUjian::select('master_ruang_ujians.id as id_master_ruang_ujian','master_ruang_ujians.deskripsi as ruang_ujian','master_ruang_ujians.*','master_paket_soals.deskripsi as paket_soal','master_paket_soals.id as id_master_paket_soal','master_paket_soals.*','kelas_programs.id as id_kelas_program','kelas_programs.*','master_kelas.*','instansi_pendidikans.id as id_instansi_pendidikan','instansi_pendidikans.*','master_tahun_ajarans.tahun_awal','master_tahun_ajarans.tahun_akhir','master_tahun_ajarans.semester')
                 ->join('master_paket_soals', 'master_ruang_ujians.master_paket_soal_id', '=', 'master_paket_soals.id')
+                ->join('guru_paket_soals', 'master_paket_soals.id', '=', 'guru_paket_soals.master_paket_soal_id')
                 ->join('kelas_programs', 'master_ruang_ujians.kelas_program_id', '=', 'kelas_programs.id')
                 ->join('instansi_pendidikans', 'kelas_programs.instansi_pendidikan_id', '=', 'instansi_pendidikans.id')
                 ->join('master_kelas', 'kelas_programs.master_kelas_id', '=', 'master_kelas.id')
                 ->join('master_tahun_ajarans', 'master_ruang_ujians.master_tahun_ajaran_id', '=', 'master_tahun_ajarans.id')
-                ->where('master_paket_soals.user_guru_id',$id_guru->id)
+                ->where('guru_paket_soals.user_guru_id',$id_guru->id)
                 ->get();
 
             $mapel_kelas_programs=MapelKelasProgram::select('mapel_kelas_programs.*','master_mapels.nama')
@@ -202,22 +205,20 @@ class RuangUjianController extends Controller
      */
     public function show($id)
     {
-        //
+        // return $id;
         $id_user = Auth::user()->id;
 
-        $id_user_siswa = UserSiswa::select('id')->where('user_id',$id_user)->first();
 
-        $rating_ruang_ujian = Rating::where('master_ruang_ujian_id',$id)
-            ->where('user_siswa_id',$id_user_siswa->id)
-            ->get();
+        $id_user_siswa='';
+        $rating_ruang_ujian='';
+        if (Auth::user()->hasRole('siswa')){
+            $id_user_siswa = UserSiswa::select('id')->where('user_id',$id_user)->first();
+
+            $rating_ruang_ujian = Rating::where('master_ruang_ujian_id',$id)
+                ->where('user_siswa_id',$id_user_siswa->id)
+                ->get();
+        }
         
-        // if(!$rating_ruang_ujian->isEmpty()){
-        //     return'ya';
-        // }
-        // else{
-        //     return 'no';
-        // }
-
         $last_update_ruang = MasterRuangUjian::select('master_ruang_ujians.updated_at')
             ->orderBy('master_ruang_ujians.updated_at', 'desc')
             ->get();
@@ -303,7 +304,11 @@ class RuangUjianController extends Controller
 
         $ujian_ke = NilaiUjian::where('master_ruang_ujian_id',$master_ruang_ujian->id_master_ruang_ujian)->where('user_siswa_id',$id_user)->max('ujian_ke');
 
-        $bank_soals=BankSoal::whereIn('id',$id_bank_soal)->get();
+        $bank_soals=BankSoal::select('bank_soals.*','users.foto','users.name')
+            ->join('users', 'bank_soals.user_id', '=', 'users.id')
+            ->whereIn('bank_soals.id',$id_bank_soal)
+            ->get();
+        // return$bank_soals;
 
         $id_guru=BankSoal::whereIn('id',$id_bank_soal)
             ->groupBy('user_id')
@@ -316,7 +321,6 @@ class RuangUjianController extends Controller
 
         $jawabans=Jawaban::whereIn('banksoal_id',$id_bank_soal)->get();
         
-
         return view('AdminLTE/ruang-ujian-detail', compact('nama_instansis','foto_profil','user_admin_instansis','last_update_ruang','jumlah_ruang','master_ruang_ujian','rombongan_belajars','bank_soals','jawabans','bank_soal_penjodohans','detail_ujians','nilai','mapel_kelas_programs','ujian_ke','data_guru_banksoal','rating_ruang_ujian'));
 
     }
@@ -538,7 +542,6 @@ class RuangUjianController extends Controller
                 $total_nilai=$total_nilai+$nilai;
             }
         }
-        
         $total_nilai=$total_nilai/$request->jumlah_soal*100;
 
         $nilai_ujian->update([
@@ -557,10 +560,10 @@ class RuangUjianController extends Controller
         $master_ruang_ujian_id=$request[0];
         $user_siswa_id=$request[1];
         $id_created_at_nilai=$request[2];
-
-        $created_at_nilai=NilaiUjian::where('id',$id_created_at_nilai)->first();
         
         $id_user = Auth::user()->id;
+
+        $created_at_nilai=NilaiUjian::where('id',$id_created_at_nilai)->first();
 
         $last_update_ruang = MasterRuangUjian::select('master_ruang_ujians.updated_at')
             ->orderBy('master_ruang_ujians.updated_at', 'desc')
@@ -584,8 +587,9 @@ class RuangUjianController extends Controller
             ->where('users.id', '=', $id_user)
             ->get();
 
-        $bank_soals=DetailUjian::select('bank_soals.*')
+        $bank_soals=DetailUjian::select('bank_soals.*','users.name','users.foto')
             ->join('bank_soals','detail_ujians.bank_soal_id','=','bank_soals.id')
+            ->join('users','bank_soals.user_id','=','users.id')
             ->where('master_ruang_ujian_id',$master_ruang_ujian_id)
             ->where('detail_ujians.created_at',$created_at_nilai->created_at)
             ->where('user_siswa_id',$user_siswa_id)
@@ -607,9 +611,22 @@ class RuangUjianController extends Controller
             ->get();
 
         $nama_siswa=UserSiswa::join('users','user_siswas.user_id','=','users.id')->where('users.id',$user_siswa_id)->first();
-        // return $created_at_nilai->created_at;
 
-        return view('AdminLTE/ruang-ujian-detail', compact('nama_instansis','foto_profil','user_admin_instansis','bank_soals','jawabans','detail_ujians','nama_siswa'));
+        $id_user_guru='';
+        $komentar_ujian='';
+
+        if (Auth::user()->hasRole('guru')){
+            $id_user_guru = UserGuru::select('id')->where('user_id',$id_user)->first();
+            $id_user_siswa = UserSiswa::select('id')->where('user_id',$user_siswa_id)->first();
+
+            $komentar_ujian = KomentarUjian::where('master_ruang_ujian_id',$master_ruang_ujian_id)
+                ->where('user_guru_id',$id_user_guru->id)
+                ->where('user_siswa_id',$id_user_siswa->id)
+                ->first();
+        }
+
+        
+        return view('AdminLTE/ruang-ujian-detail', compact('nama_instansis','foto_profil','user_admin_instansis','bank_soals','jawabans','detail_ujians','nama_siswa','master_ruang_ujian_id','komentar_ujian'));
 
     }
 
@@ -653,6 +670,21 @@ class RuangUjianController extends Controller
         return json_encode(array('data'=>$nilai));
 
     }
+    
+    public function update_komentar(Request $request){
+        $id_siswa   =UserSiswa::where('user_id',$request->id_user_siswa)->first();
+        $id_guru    =UserGuru::where('user_id',Auth::user()->id)->first();
+
+        KomentarUjian::create([
+            'master_ruang_ujian_id' => $request->input('id_master_ruang_ujian'),
+            'user_guru_id' => $id_guru->id,
+            'user_siswa_id' => $id_siswa->id,
+            'komentar' => $request->input('komentar'),
+        ]); 
+
+        $request->session()->flash('success', 'Komentar berhasil disimpan!');
+        return redirect()->back();
+    }
 
     public function rating(Request $request){
         // return $request;
@@ -661,39 +693,77 @@ class RuangUjianController extends Controller
         $jml_guru       = count($request->guru);
         $pesan          = null;
         
+        $rating_lembaga = null;
+        $komentar_lembaga = null;
+        $rating_guru = null;
+        $komentar_guru = null;
+        $id_user_guru = null;
+        $id_instansi = null;
+
         if($request->lembaga!=null){
-            $request->lembaga = explode("-", $request->lembaga);
+            $rating_lembaga = explode("-", $request->lembaga);
+            $id_instansi    = $rating_lembaga[0];
+            $rating_lembaga = $rating_lembaga[1];
+            // $pesan = 'instansi pendidikan';
+        }
+
+        if($request->komentar_lembaga!=null){
+            $komentar_lembaga = explode("-", $request->komentar_lembaga);
+            $id_instansi      = $komentar_lembaga[0];
+            $komentar_lembaga = $komentar_lembaga[1];
+            // $pesan = 'instansi pendidikan';
+        }
+
+
+        if($request->lembaga!=null || $request->komentar_lembaga!=null){
             Rating::create([
                 'master_ruang_ujian_id' => $request->input('id_master_ruang_ujian'),
                 'user_siswa_id' => $id_user_siswa->id,
-                'instansi_pendidikan_id' => $request->lembaga[0],
-                'angka' => $request->lembaga[1],
+                'instansi_pendidikan_id' => $id_instansi,
+                'angka' => $rating_lembaga,
+                'komentar' => $komentar_lembaga,
             ]); 
-            $pesan = 'instansi pendidikan';
         }
 
         for($i=0; $i<$jml_guru; $i++){
             if($request->guru[$i]!=null){
                 $rating_guru = explode("-", $request->guru[$i]);
                 $id_user_guru  = UserGuru::select('id')->where('user_id',$rating_guru[0])->first();
+                $id_user_guru  = $id_user_guru->id;
+                $rating_guru = $rating_guru[1];
+            }
+            if($request->komentar_guru[$i]!=null){
+                $komentar_guru = explode("-", $request->komentar_guru[$i]);
+                $id_user_guru  = UserGuru::select('id')->where('user_id',$komentar_guru[0])->first();
+                $id_user_guru  = $id_user_guru->id;
+                $komentar_guru = $komentar_guru[1];
+            }
+
+            if($id_user_guru!=null){
                 Rating::create([
                     'master_ruang_ujian_id' => $request->input('id_master_ruang_ujian'),
                     'user_siswa_id' => $id_user_siswa->id,
-                    'user_guru_id' => $id_user_guru->id,
-                    'angka' => $rating_guru[1],
+                    'user_guru_id' => $id_user_guru,
+                    'angka' => $rating_guru,
+                    'komentar' => $komentar_guru,
                 ]);
-                if($pesan==null){
-                    $pesan = 'guru';
-                }
-                else if($pesan=='instansi pendidikan'){
-                    $pesan = $pesan.' dan guru';
-                }
             }
+
+                // if($pesan==null){
+                //     $pesan = 'guru';
+                // }
+                // else if($pesan=='instansi pendidikan'){
+                //     $pesan = $pesan.' dan guru';
+                // }
+                
+            $rating_guru = null;
+            $komentar_guru = null;
+            $id_user_guru = null;
         }
 
-        if($pesan!=null){
-            $request->session()->flash('success', 'Rating '.$pesan.' berhasil disimpan!');
-        }
+        // if($pesan!=null){
+            $request->session()->flash('success', 'Rating berhasil disimpan!');
+        // }
 
         return redirect()->back();
 

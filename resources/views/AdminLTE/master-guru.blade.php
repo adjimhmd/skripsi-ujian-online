@@ -120,7 +120,10 @@
                       @endif
                     </div> 
                     <div class="col-xs-9"> 
-                      <h6 style="margin-bottom:0;"><b>{{$list_guru->name}}</b></h6>
+                      <h6 style="margin-bottom:0;">
+                        <b>{{$list_guru->name}}</b>
+                        <a href="{{route('rating.guru',$list_guru->id_user)}}" class="ml-1 btn btn-xs bg-secondary shadow-sm" >Lihat Guru</a>
+                      </h6>
                       @php ($parts = explode(",", $list_guru->nama_mapel)) 
                       @php ($result = implode(", ", $parts)) 
                       <p style="margin-bottom:0;">{{ucwords($result)}}</p> 

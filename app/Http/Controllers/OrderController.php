@@ -42,11 +42,13 @@ class OrderController extends Controller
      */
     public function store(Request $order)
     {
+        // return $order;
+
         $id_user = Auth::user()->id;
         $id_siswa = UserSiswa::select('id')->where('user_id',$id_user)->first();
         $profil=User::select('foto')->where('id',$id_user)->first();
         $harga_kelas=HargaKelasProgram::where('id',$order->id_harga)->first();
-        // return $order;
+
 
         // harus melengkapi profil
         if($profil->foto==null){
@@ -56,11 +58,26 @@ class OrderController extends Controller
         
         // kalau kelas/program kursus gratis, skip pembayaran
         else if($harga_kelas->harga=='0'){
-            $rombongan=RombonganBelajar::create([
-                'kelas_program_id' => $order->input('id_kelas_program'),
-                'user_siswa_id' => $id_siswa->id,
-                'status' => '0',
-            ]); 
+            
+            $cek_rombel=RombonganBelajar::where('kelas_program_id',$order->input('id_kelas_program'))
+                ->where('user_siswa_id',$id_siswa->id)
+                ->first();
+
+            if($cek_rombel){
+                $cek_rombel->update([
+                    'kelas_program_id' => $order->input('id_kelas_program'),
+                    'user_siswa_id' => $id_siswa->id,
+                    'status' => '0',
+                    'bukti_bayar' => NULL,
+                ]); 
+            }
+            else{
+                $rombongan=RombonganBelajar::create([
+                    'kelas_program_id' => $order->input('id_kelas_program'),
+                    'user_siswa_id' => $id_siswa->id,
+                    'status' => '0',
+                ]); 
+            }
 
             return redirect()->route('list.kelas.program');            
         }
@@ -73,11 +90,25 @@ class OrderController extends Controller
 
                 if(empty($snapToken)) {
 
-                    $rombel=RombonganBelajar::create([
-                        'kelas_program_id' => $order->id_kelas_program,
-                        'user_siswa_id' => $id_siswa->id,
-                        'harga_kelas_program_id' => $order->id_harga,
-                    ]);
+                    $cek_rombel=RombonganBelajar::where('kelas_program_id',$order->id_kelas_program)
+                        ->where('user_siswa_id',$id_siswa->id)
+                        ->first();
+
+                    if($cek_rombel){
+                        $cek_rombel->update([
+                            'kelas_program_id' => $order->id_kelas_program,
+                            'user_siswa_id' => $id_siswa->id,
+                            'harga_kelas_program_id' => $order->id_harga,
+                            'bukti_bayar' => NULL,
+                        ]); 
+                    }
+                    else{
+                        $cek_rombel=RombonganBelajar::create([
+                            'kelas_program_id' => $order->id_kelas_program,
+                            'user_siswa_id' => $id_siswa->id,
+                            'harga_kelas_program_id' => $order->id_harga,
+                        ]);
+                    }
 
                     $new_order=RombonganBelajar::select('rombongan_belajars.*','rombongan_belajars.id as id_rombel',
                         'kelas_programs.*',
@@ -85,17 +116,17 @@ class OrderController extends Controller
                         'user_siswas.*',
                         'users.*')
                         ->join('kelas_programs', 'rombongan_belajars.kelas_program_id', '=', 'kelas_programs.id')
-                        ->join('harga_kelas_programs', 'kelas_programs.id', '=', 'harga_kelas_programs.kelas_program_id')
+                        ->join('harga_kelas_programs', 'rombongan_belajars.harga_kelas_program_id', '=', 'harga_kelas_programs.id')
                         ->join('user_siswas', 'rombongan_belajars.user_siswa_id', '=', 'user_siswas.id')
                         ->join('users', 'user_siswas.user_id', '=', 'users.id')
-                        ->where('rombongan_belajars.id',$rombel->id)
+                        ->where('rombongan_belajars.id',$cek_rombel->id)
                         ->first();
 
                     // Jika snap token masih NULL, buat token snap dan simpan ke database
                     $midtrans = new CreateSnapTokenService($new_order);
                     $snapToken = $midtrans->getSnapToken();
                     
-                    $update_order = RombonganBelajar::find($rombel->id);
+                    $update_order = RombonganBelajar::find($cek_rombel->id);
                     $update_order->update([
                         'bukti_bayar' => $snapToken,
                     ]); 
@@ -110,7 +141,7 @@ class OrderController extends Controller
                     'user_siswas.*',
                     'users.*')
                     ->join('kelas_programs', 'rombongan_belajars.kelas_program_id', '=', 'kelas_programs.id')
-                    ->join('harga_kelas_programs', 'kelas_programs.id', '=', 'harga_kelas_programs.kelas_program_id')
+                    ->join('harga_kelas_programs', 'rombongan_belajars.harga_kelas_program_id', '=', 'harga_kelas_programs.id')
                     ->join('user_siswas', 'rombongan_belajars.user_siswa_id', '=', 'user_siswas.id')
                     ->join('users', 'user_siswas.user_id', '=', 'users.id')
                     ->where('rombongan_belajars.id',$order->id_rombongan_belajar)

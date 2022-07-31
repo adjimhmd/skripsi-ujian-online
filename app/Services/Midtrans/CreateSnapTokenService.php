@@ -3,7 +3,7 @@
 namespace App\Services\Midtrans;
  
 use Midtrans\Snap;
- 
+use Carbon\Carbon;
 class CreateSnapTokenService extends Midtrans
 {
     protected $order;
@@ -21,7 +21,7 @@ class CreateSnapTokenService extends Midtrans
             'transaction_details' => [
                 // 'order_id' => '2',
                 // 'gross_amount' => '20000',
-                'order_id' => 'midtrans_'.$this->order->id_rombel,
+                'order_id' => 'midtrans_'.$this->order->id_rombel.Carbon::now(),
                 'gross_amount' => $this->order->harga,
             ],
             'item_details' => [

@@ -69,7 +69,8 @@ Route::get('detail-nilai-ujian/{nilai}', [App\Http\Controllers\NilaiUjianControl
 Route::post('show_paket', [App\Http\Controllers\RuangUjianController::class, 'show_paket'])->name('show.paket')->middleware('role:adm_instansi');
 Route::post('ujian-siswa', [App\Http\Controllers\RuangUjianController::class, 'ujian_siswa'])->name('ujian.siswa')->middleware('role:siswa');
 Route::get('hasil-ujian/{hasil_ujian}', [App\Http\Controllers\RuangUjianController::class, 'hasil_ujian'])->name('hasil.ujian')->middleware('role:adm_instansi|guru');
-Route::post('update-nilai', [App\Http\Controllers\RuangUjianController::class, 'update_nilai'])->name('update.nilai')->middleware('role:adm_instansi|guru');
+Route::post('update-nilai', [App\Http\Controllers\RuangUjianController::class, 'update_nilai'])->name('update.nilai')->middleware('role:guru');
+Route::post('update-komentar', [App\Http\Controllers\RuangUjianController::class, 'update_komentar'])->name('update.komentar')->middleware('role:guru');
 
 Route::resource('bank_soals', App\Http\Controllers\BankSoalController::class)->middleware('role:guru');
 Route::resource('materi-pembelajaran', App\Http\Controllers\MateriPembelajaranController::class)->middleware('role:guru');
@@ -81,7 +82,7 @@ Route::post('pilih_soal', [App\Http\Controllers\PaketSoalController::class, 'pil
 Route::post('hapus_soal', [App\Http\Controllers\PaketSoalController::class, 'hapus_soal'])->name('hapus.soal')->middleware('role:guru|adm_instansi');
 
 Route::resource('profile', App\Http\Controllers\ProfileController::class)->middleware('role:siswa|guru|adm_instansi|adm_sistem');
-Route::get('rating-guru/{rating_guru}', [App\Http\Controllers\ProfileController::class, 'show'])->name('rating.guru')->middleware('role:siswa|guru');
+Route::get('rating-guru/{rating_guru}', [App\Http\Controllers\ProfileController::class, 'show'])->name('rating.guru')->middleware('role:siswa|adm_instansi');
 Route::get('rating-instansi/{rating_instansi}', [App\Http\Controllers\ProfileController::class, 'show'])->name('rating.instansi')->middleware('role:siswa|guru');
 
 Route::post('show_kota', [App\Http\Controllers\InstansiPendidikanController::class, 'show_kota'])->name('show.kota')->middleware('role:adm_instansi');

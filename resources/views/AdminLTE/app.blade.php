@@ -76,6 +76,8 @@
           <div class="container-fluid">
             <div class="row mb-2">
 
+
+            @if (Auth::user()->hasRole('adm_instansi'))
               @foreach($user_admin_instansis as $user_admin_instansi)
                 @if($user_admin_instansi->tipe=='sekolah')
                   @php($tipe='Sekolah')
@@ -85,7 +87,8 @@
                   @php($text='Program Kursus')
                 @endif
               @endforeach
-              
+            @endif
+            
               @if(Route::currentRouteNamed('kelas-program.show'))
                 @if($user_admin_instansis->isEmpty())
                   @if($tipe_siswa)
@@ -110,6 +113,10 @@
                   <h1 class="m-0">Bank Soal</h1>
                 @elseif (Route::currentRouteNamed('profile.index'))
                   <h1 class="m-0">Profile</h1>
+                @elseif (Route::currentRouteNamed('rating.guru'))
+                  <h1 class="m-0">Penilaian Guru</h1>
+                @elseif (Route::currentRouteNamed('rating.instansi'))
+                  <h1 class="m-0">Penilaian Lembaga Pendidikan</h1>
                 @elseif (Route::currentRouteNamed('list-instansi.index'))
                   <h1 class="m-0">Lembaga Pendidikan</h1>
                 @elseif (Route::currentRouteNamed('instansi-pendidikan.index'))
@@ -168,7 +175,13 @@
                     <li class="breadcrumb-item active">Bank Soal</li>
                   @elseif (Route::currentRouteNamed('profile.index'))
                     <li class="breadcrumb-item"><a href="/">Beranda</a></li>
-                    <li class="breadcrumb-item active">Profile</li>
+                    <li class="breadcrumb-item active">Profile</li>                    
+                  @elseif (Route::currentRouteNamed('rating.guru'))
+                      <li class="breadcrumb-item"><a href="/">Beranda</a></li>
+                      <li class="breadcrumb-item active">Penilaian Guru</li>
+                  @elseif (Route::currentRouteNamed('rating.instansi'))
+                      <li class="breadcrumb-item"><a href="/">Beranda</a></li>
+                      <li class="breadcrumb-item active">Penilaian Lembaga Pendidikan</li>
                   @elseif (Route::currentRouteNamed('list-instansi.index'))
                     <li class="breadcrumb-item"><a href="/">Beranda</a></li>
                     <li class="breadcrumb-item active">Lembaga Pendidikan</li>

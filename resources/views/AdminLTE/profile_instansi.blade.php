@@ -49,7 +49,7 @@
   @endforeach
 
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-7">
       @foreach($user_admin_instansis as $user_admin_instansi)
 
         <form class="form-horizontal" method="POST" action="{{ route('instansi-pendidikan.update',$user_admin_instansi->id_instansi) }}" enctype="multipart/form-data">
@@ -261,6 +261,80 @@
       </div>
       <!-- /.col -->
 
+      <div class="col-5">
+        
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title"><b>{{'Penilaian'}}</b></h3>
+
+            <div class="card-tools">
+              <button type="button" class="btn btn-tool" data-card-widget="maximize">
+                <i class="fas fa-expand"></i>
+              </button>
+              <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+              </button>
+            </div>
+            <!-- /.card-tools -->
+          
+          </div>
+          <!-- /.card-header -->
+
+          <div class="card-body">
+            <div class="text-center">
+              <img style="width:40px;" src="{{asset('img/star-select.png')}}">
+              <h5 class="mt-2"><b>Poin {{$poin}}/5</b></h5>
+            </div>
+
+            <table id="example1" class="table table-hover table-valign-middle" style="table-layout: fixed">
+              <thead style="display: none;">
+                <tr>
+                  <th>Foto</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach($ratings as $rating)
+                <tr>
+                  <td>
+                    <div class="row">
+                      <div class="col-1 mr-3"> 
+                        @if($rating->foto==null)
+                          <img src="{{asset('AdminLTE/dist/img/default-150x150.png')}}" class="img-circle" alt="User Image" style="max-width:40px"> 
+                        @else
+                          <img src="{{'/'.$rating->foto}}" class="img-circle" alt="User Image" style="max-width:40px"> 
+                        @endif
+                      </div> 
+                      <div class="col-10"> 
+                        <p style="line-height:15px;margin-bottom:2px;"><b>{{$rating->name}}</b>
+                        @if($rating->angka==null)
+                          <small>(Tidak ada penilaian.)</small>
+                        @else
+                          @for($i=0; $i<$rating->angka; $i++)
+                            @if($i==0)<img class="ml-2" style="width:10px;" src="{{asset('img/star-select.png')}}">@endif
+                            <img style="width:10px;" src="{{asset('img/star-select.png')}}">
+                          @endfor
+                        @endif<br></p>
+
+                        @if($rating->komentar==null)
+                          <small>(Tidak ada komentar.)</small>
+                        @else
+                          {{$rating->komentar}}
+                        @endif
+                      </div> 
+                    </div>
+                  </td>
+                </tr>
+                @endforeach
+                
+              </tbody>
+            </table>
+          </div>
+          <!-- /.card-body -->
+        </div>
+
+      </div>
+      <!-- /.col -->
+
     </div>
     <!-- /.row -->
 
@@ -410,6 +484,19 @@
       
 
     });
+    
+
+  $("#example1").DataTable({
+    "dom": 'lrtip',
+    "bLengthChange" : false,
+    "bInfo":false, 
+    "pagingType": 'simple',
+    "paging": true,
+    "responsive": true, 
+    "autoWidth": false,
+    "pageLength": 5,
+    "scrollCollapse": true
+  }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     
 </script>
 

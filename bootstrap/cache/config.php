@@ -383,7 +383,7 @@
         'driver' => 'google',
         'clientId' => '263159019971-r5kei4he0p23r1tqo2u9vpsicsajqivn.apps.googleusercontent.com',
         'clientSecret' => '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',
-        'refreshToken' => '1//0485kK-JjHoWJCgYIARAAGAQSNwF-L9Irf0FFwdvHtPZ5jynIaC4lRAvtJkSTvx-vZrwyMlPzAssDesCTeU4lq4gqI3wEWtI4sNU',
+        'refreshToken' => '1//04KoCep4-cTJRCgYIARAAGAQSNwF-L9IrGAgsZBRyf6SrNyYLH2j4HLxR4mIe0wErY2QEWl4SokKvSetnzwTBdn_HLwWlJDfwEIw',
         'folderId' => '1J6QWm3abeVR8wEwcupvRFIWqt9f2p6If',
       ),
     ),

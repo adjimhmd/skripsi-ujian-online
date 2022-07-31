@@ -38,8 +38,6 @@ class ListGuruController extends Controller
 
         $jumlah_guru = GuruInstansi::where('status','1')->count();
 
-        $jumlah_guru_mendaftar = GuruInstansi::where('status','0-guru')->count();
-
         $foto_profil = User::select('foto')
             ->where('id', '=', $id)
             ->get();
@@ -59,6 +57,10 @@ class ListGuruController extends Controller
         foreach($user_admin_instansis as $user_admin_instansi){
             $id_instansi=$user_admin_instansi->id_instansi;
         }
+
+        $jumlah_guru_mendaftar = GuruInstansi::where('status','0-guru')
+            ->where('instansi_pendidikan_id', '=', $id_instansi)
+            ->count();
         
         $list_gurus=GuruInstansi::select('guru_instansis.id as id_guru_instansi','guru_instansis.*',
             'user_gurus.id as id_user_guru','user_gurus.*',

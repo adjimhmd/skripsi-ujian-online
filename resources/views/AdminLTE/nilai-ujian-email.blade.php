@@ -51,10 +51,11 @@
   <table style="width:100%">
     <thead>
       <tr>
-        <th style="width: 5%;">No.</th>
-        <th style="width: 40%;">{{$tipe}}</th>
-        <th style="width: 45%;">Detail Ujian</th>
-        <th style="width: 10%;">Nilai</th>
+        <th style="width: 5%; text-align: center;">No</th>
+        <th style="width: 20%;">{{$tipe}}</th>
+        <th style="width: 30%;">Detail Ujian</th>
+        <th style="width: 10%; text-align: center;">Nilai</th>
+        <th style="width: 35%;">Komentar</th>
       </tr>
     </thead>
     <tbody>
@@ -79,6 +80,15 @@
             {{$data_siswa->deskripsi}}
           </td>
           <td><center>{{$data_siswa->total_nilai}}</center></td>
+                    <td>
+                      @foreach($komentar_ujian as $ku)
+                        @if($data_siswa->id_master_ruang_ujian==$ku->master_ruang_ujian_id)
+                        
+                        <p style="line-height:15px;margin-bottom:2px;text-align:justify"><b>{{$ku->name}}</b><br>{{$ku->komentar}}</p>
+                        <br>
+                        @endif
+                      @endforeach
+                    </td>
         </tr>
       @endforeach
     </tbody>
