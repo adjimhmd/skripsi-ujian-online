@@ -79,16 +79,16 @@
           <td>
             {{$data_siswa->deskripsi}}
           </td>
-          <td><center>{{$data_siswa->total_nilai}}</center></td>
-                    <td>
-                      @foreach($komentar_ujian as $ku)
-                        @if($data_siswa->id_master_ruang_ujian==$ku->master_ruang_ujian_id)
-                        
-                        <p style="line-height:15px;margin-bottom:2px;text-align:justify"><b>{{$ku->name}}</b><br>{{$ku->komentar}}</p>
-                        <br>
-                        @endif
-                      @endforeach
-                    </td>
+          <td><center>{{$data_siswa->total_nilaii}}</center></td>
+          <td>
+            @foreach($komentar_ujian as $ku)
+              @if($data_siswa->id_master_ruang_ujian==$ku->master_ruang_ujian_id)
+              
+              <p style="line-height:15px;margin-bottom:2px;text-align:justify"><b>{{$ku->name}}</b><br>{{$ku->komentar}}</p>
+              <br>
+              @endif
+            @endforeach
+          </td>
         </tr>
       @endforeach
     </tbody>

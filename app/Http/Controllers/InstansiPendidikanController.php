@@ -274,4 +274,23 @@ class InstansiPendidikanController extends Controller
     {
         //
     }
+
+    public function nonaktif_lembaga(Request $request)
+    {
+        //
+        $isntansi_pendidikan = InstansiPendidikan::find($request->id_instansi);
+
+        if($request->status=='1')
+            $isntansi_pendidikan->update([
+                'status' => '0',
+            ]);
+        else{
+            $isntansi_pendidikan->update([
+                'status' => '1',
+            ]);
+        } 
+
+        return redirect()->route('list-instansi.index');
+
+    }
 }

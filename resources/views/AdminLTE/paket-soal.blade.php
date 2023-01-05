@@ -109,10 +109,10 @@
                     <h4 class="card-title w-100">
                       <a class="d-block w-100" data-toggle="collapse" href="#collapseOne">
                         <b>Pilihan Ganda</b>
-                        @foreach($jumlah_soals as $jumlah_soal)
+                        <!-- @foreach($jumlah_soals as $jumlah_soal)
                         @if($jumlah_soal->tipe_soal=='objektif')<span class="badge bg-purple ml-1">{{$jumlah_soal->jumlah}}</span>
                         @endif
-                        @endforeach
+                        @endforeach -->
                       </a>
                     </h4>
                   </div>
@@ -184,10 +184,10 @@
                     <h4 class="card-title w-100">
                       <a class="d-block w-100" data-toggle="collapse" href="#collapseTwo">
                         <b>Essay</b>
-                        @foreach($jumlah_soals as $jumlah_soal)
+                        <!-- @foreach($jumlah_soals as $jumlah_soal)
                         @if($jumlah_soal->tipe_soal=='subjektif')<span class="badge bg-purple ml-1">{{$jumlah_soal->jumlah}}</span>
                         @endif
-                        @endforeach
+                        @endforeach -->
                       </a>
                     </h4>
                   </div>
@@ -239,10 +239,10 @@
                     <h4 class="card-title w-100">
                       <a class="d-block w-100" data-toggle="collapse" href="#collapseThree">
                         <b>Penjodohan</b>
-                        @foreach($jumlah_soals as $jumlah_soal)
+                        <!-- @foreach($jumlah_soals as $jumlah_soal)
                         @if($jumlah_soal->tipe_soal=='penjodohan')<span class="badge bg-purple ml-1">{{$jumlah_soal->jumlah}}</span>
                         @endif
-                        @endforeach
+                        @endforeach -->
                       </a>
                     </h4>
                   </div>
@@ -294,10 +294,10 @@
                     <h4 class="card-title w-100">
                       <a class="d-block w-100" data-toggle="collapse" href="#collapseFour">
                         <b>True-false/Benar-salah</b>
-                        @foreach($jumlah_soals as $jumlah_soal)
+                        <!-- @foreach($jumlah_soals as $jumlah_soal)
                         @if($jumlah_soal->tipe_soal=='true-false')<span class="badge bg-purple ml-1">{{$jumlah_soal->jumlah}}</span>
                         @endif
-                        @endforeach
+                        @endforeach -->
                       </a>
                     </h4>
                   </div>

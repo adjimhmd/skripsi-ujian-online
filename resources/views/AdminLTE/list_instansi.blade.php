@@ -100,7 +100,10 @@
                           <th style="width: 3%; text-align: center;">No</th>
                           <th style="width: 30%;">Nama</th>
                           <th style="width: 55%;">Alamat</th>
-                          <th style="width: 12%; text-align: center;">Aksi</th>
+                          @if (Auth::user()->hasRole('adm_sistem'))
+                          <th style="width: 10%; text-align: center;">Status</th>
+                          @endif
+                          <th style="width: 15%; text-align: center;">Aksi</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -117,6 +120,15 @@
                             <strong>{{ ucwords($select_sekolah->alamat) }}</strong><br>
                             {{ ucwords(strtolower($select_sekolah->desa)).' - '.ucwords(strtolower($select_sekolah->kecamatan)).' - '.ucwords(strtolower($select_sekolah->kota)).' - '.ucwords(strtolower($select_sekolah->provinsi)) }}
                           </td>
+                          @if (Auth::user()->hasRole('adm_sistem'))
+                          <td><center>
+                            @if($select_sekolah->status=='0')
+                              <small class="badge badge-secondary"> Tidak aktif</small>
+                            @else
+                              <small class="badge badge-primary"> Aktif</small>
+                            @endif
+                          </center></td>
+                          @endif
                           <td><center>
                             @if (Auth::user()->hasRole('siswa'))
                               <form method='POST' action="{{ route('show.kelas_program') }}" enctype='multipart/form-data'>
@@ -139,6 +151,19 @@
                                 @csrf
                                 <input type="hidden" name="id_instansi" value="{{$select_sekolah->id}}">
                                 <button type="submit" class="btn btn-sm btn-secondary" disabled> Daftar</button>
+
+                            <!-- tombol nonaktif lembaga -->
+                            @elseif (Auth::user()->hasRole('adm_sistem'))
+                              <form method='POST' action="{{ route('nonaktif.lembaga') }}" enctype='multipart/form-data'>
+                                @csrf
+                                <input type="hidden" name="id_instansi" value="{{$select_sekolah->id}}">
+                                <input type="hidden" name="status" value="{{$select_sekolah->status}}">
+                                @if($select_sekolah->status=='1')
+                                <button type="submit" class="btn btn-danger btn-sm shadow-sm">Nonaktif</button>
+                                @else
+                                <button type="submit" class="btn btn-success btn-sm shadow-sm">Aktifkan</button>
+                                @endif
+
                             @endif
                             
                                 <a href="{{route('rating.instansi',$select_sekolah->id)}}" type="button" class="btn btn-warning btn-sm shadow-sm">Lihat</a>
@@ -195,7 +220,10 @@
                           <th style="width: 3%; text-align: center;">No</th>
                           <th style="width: 30%;">Nama</th>
                           <th style="width: 55%;">Alamat</th>
-                          <th style="width: 12%; text-align: center;">Aksi</th>
+                          @if (Auth::user()->hasRole('adm_sistem'))
+                          <th style="width: 10%; text-align: center;">Status</th>
+                          @endif
+                          <th style="width: 15%; text-align: center;">Aksi</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -212,6 +240,15 @@
                             <strong>{{ ucwords($select_kursus->alamat) }}</strong><br>
                             {{ ucwords(strtolower($select_kursus->desa)).' - '.ucwords(strtolower($select_kursus->kecamatan)).' - '.ucwords(strtolower($select_kursus->kota)).' - '.ucwords(strtolower($select_kursus->provinsi)) }}
                           </td>
+                          @if (Auth::user()->hasRole('adm_sistem'))
+                          <td><center>
+                            @if($select_kursus->status=='0')
+                              <small class="badge badge-secondary"> Tidak aktif</small>
+                            @else
+                              <small class="badge badge-primary"> Aktif</small>
+                            @endif
+                          </center></td>
+                          @endif
                           <td><center>
                             @if (Auth::user()->hasRole('siswa'))
                               <form method='POST' action="{{ route('show.kelas_program') }}" enctype='multipart/form-data'>
@@ -233,6 +270,19 @@
                                 @csrf
                                 <input type="hidden" name="id_instansi" value="{{$select_kursus->id}}">
                                 <button type="submit" class="btn btn-sm btn-secondary" disabled> Daftar</button>
+
+                            <!-- tombol nonaktif lembaga -->
+                            @elseif (Auth::user()->hasRole('adm_sistem'))
+                              <form method='POST' action="{{ route('nonaktif.lembaga') }}" enctype='multipart/form-data'>
+                                @csrf
+                                <input type="hidden" name="id_instansi" value="{{$select_kursus->id}}">
+                                <input type="hidden" name="status" value="{{$select_kursus->status}}">
+                                @if($select_kursus->status=='1')
+                                <button type="submit" class="btn btn-danger btn-sm shadow-sm">Nonaktif</button>
+                                @else
+                                <button type="submit" class="btn btn-success btn-sm shadow-sm">Aktifkan</button>
+                                @endif
+
                             @endif
                             
                                 <a href="{{route('rating.instansi',$select_kursus->id)}}" type="button" class="btn btn-warning btn-sm shadow-sm">Lihat</a>

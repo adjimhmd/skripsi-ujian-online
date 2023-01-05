@@ -40,8 +40,10 @@ Route::get('home', [App\Http\Controllers\HomeController::class, 'index'])->middl
 Route::patch('upload-verifikasi/{id}', [App\Http\Controllers\HomeController::class, 'upload'])->middleware('role:guru|siswa|adm_lembaga|adm_instansi')->name('upload.verifikasi');
 
 Route::resource('instansi-pendidikan', App\Http\Controllers\InstansiPendidikanController::class)->middleware('role:adm_instansi');
+Route::post('nonaktif-lembaga', [App\Http\Controllers\InstansiPendidikanController::class, 'nonaktif_lembaga'])->name('nonaktif.lembaga')->middleware('role:adm_sistem');
 
-Route::resource('list-instansi', App\Http\Controllers\InstansiSiswaController::class)->middleware('role:siswa|guru');
+
+Route::resource('list-instansi', App\Http\Controllers\InstansiSiswaController::class)->middleware('role:siswa|guru|adm_sistem');
 Route::post('show_kelas_program', [App\Http\Controllers\InstansiSiswaController::class, 'show_kelas_program'])->name('show.kelas_program')->middleware('role:siswa');
 Route::post('select_rombongan', [App\Http\Controllers\InstansiSiswaController::class, 'select_rombongan'])->name('select.rombongan')->middleware('role:siswa');
 Route::post('daftar_siswa', [App\Http\Controllers\InstansiSiswaController::class, 'daftar_siswa'])->name('daftar.siswa')->middleware('role:siswa');
@@ -83,7 +85,7 @@ Route::post('hapus_soal', [App\Http\Controllers\PaketSoalController::class, 'hap
 
 Route::resource('profile', App\Http\Controllers\ProfileController::class)->middleware('role:siswa|guru|adm_instansi|adm_sistem');
 Route::get('rating-guru/{rating_guru}', [App\Http\Controllers\ProfileController::class, 'show'])->name('rating.guru')->middleware('role:siswa|adm_instansi');
-Route::get('rating-instansi/{rating_instansi}', [App\Http\Controllers\ProfileController::class, 'show'])->name('rating.instansi')->middleware('role:siswa|guru');
+Route::get('rating-instansi/{rating_instansi}', [App\Http\Controllers\ProfileController::class, 'show'])->name('rating.instansi')->middleware('role:siswa|guru|adm_sistem');
 
 Route::post('show_kota', [App\Http\Controllers\InstansiPendidikanController::class, 'show_kota'])->name('show.kota')->middleware('role:adm_instansi');
 Route::post('show_kecamatan', [App\Http\Controllers\InstansiPendidikanController::class, 'show_kecamatan'])->name('show.kecamatan')->middleware('role:adm_instansi');

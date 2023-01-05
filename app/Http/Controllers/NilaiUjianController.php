@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail; //jangan lupa import ini
+use DB;
 
 class NilaiUjianController extends Controller
 {
@@ -115,17 +116,19 @@ class NilaiUjianController extends Controller
             ->where('users.id', '=', $id_user)
             ->get();
 
-        $data_siswas = NilaiUjian::select('nilai_ujians.id as id_nilai_ujian','nilai_ujians.*','user_siswas.id as id_user_siswa','user_siswas.*','users.id as id_user','users.*','master_ruang_ujians.id as id_master_ruang_ujian','master_ruang_ujians.*','kelas_programs.deskripsi as nama_kelas_program')
+        $data_siswas = NilaiUjian::select('nilai_ujians.id as id_nilai_ujian','nilai_ujians.*','user_siswas.id as id_user_siswa','user_siswas.*','users.id as id_user','users.*','master_ruang_ujians.id as id_master_ruang_ujian','master_ruang_ujians.*','kelas_programs.deskripsi as nama_kelas_program',DB::raw("MAX(total_nilai) as total_nilaii"))
             ->join('master_ruang_ujians', 'nilai_ujians.master_ruang_ujian_id', '=', 'master_ruang_ujians.id')
             ->join('kelas_programs', 'master_ruang_ujians.kelas_program_id', '=', 'kelas_programs.id')
             ->join('users', 'nilai_ujians.user_siswa_id', '=', 'users.id')
             ->join('user_siswas', 'users.id', '=', 'user_siswas.user_id')
-            // ->groupBy('master_ruang_ujian_id')
-            // ->orderBy('total_nilai','desc')
             ->where('nilai_ujians.user_siswa_id',$id)
-            ->whereRaw('total_nilai in (select max(total_nilai) from nilai_ujians group by (master_ruang_ujian_id))')
+            ->orderBy('total_nilai','desc')
+            ->groupBy('master_ruang_ujian_id')
+            // ->max('total_nilai')
+            // ->whereRaw('total_nilai in (select max(total_nilai) from nilai_ujians group by master_ruang_ujian_id)')
             ->get();
 
+        // return $data_siswas;
         foreach($data_siswas as $ds){
             $id_master_ruang_ujian[]=$ds->id_master_ruang_ujian;
         }
@@ -183,15 +186,16 @@ class NilaiUjianController extends Controller
             ->where('users.id',Auth::user()->id)
             ->get();
 
-        $data_siswas = NilaiUjian::select('nilai_ujians.id as id_nilai_ujian','nilai_ujians.*','user_siswas.id as id_user_siswa','user_siswas.*','users.id as id_user','users.*','master_ruang_ujians.id as id_master_ruang_ujian','master_ruang_ujians.*','kelas_programs.deskripsi as nama_kelas_program','master_tahun_ajarans.id as id_tahun_ajaran')
+        $data_siswas = NilaiUjian::select('nilai_ujians.id as id_nilai_ujian','nilai_ujians.*','user_siswas.id as id_user_siswa','user_siswas.*','users.id as id_user','users.*','master_ruang_ujians.id as id_master_ruang_ujian','master_ruang_ujians.*','kelas_programs.deskripsi as nama_kelas_program','master_tahun_ajarans.id as id_tahun_ajaran',DB::raw("MAX(total_nilai) as total_nilaii"))
             ->join('master_ruang_ujians', 'nilai_ujians.master_ruang_ujian_id', '=', 'master_ruang_ujians.id')
             ->join('kelas_programs', 'master_ruang_ujians.kelas_program_id', '=', 'kelas_programs.id')
             ->join('master_tahun_ajarans', 'master_ruang_ujians.master_tahun_ajaran_id', '=', 'master_tahun_ajarans.id')
             ->join('users', 'nilai_ujians.user_siswa_id', '=', 'users.id')
             ->join('user_siswas', 'users.id', '=', 'user_siswas.user_id')
             ->where('user_siswa_id',$request->id_user)
+            ->orderBy('total_nilai','desc')
+            ->groupBy('master_ruang_ujian_id')
             ->get();
-
             
         
         foreach($data_siswas as $data_siswa){

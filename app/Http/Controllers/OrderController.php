@@ -58,6 +58,7 @@ class OrderController extends Controller
         
         // kalau kelas/program kursus gratis, skip pembayaran
         else if($harga_kelas->harga=='0'){
+            // return "gratis";
             
             $cek_rombel=RombonganBelajar::where('kelas_program_id',$order->input('id_kelas_program'))
                 ->where('user_siswa_id',$id_siswa->id)
@@ -132,7 +133,16 @@ class OrderController extends Controller
                     ]); 
                 }
 
-                return view('AdminLTE/invoice', compact('update_order', 'snapToken'));
+                $data_siswa=UserSiswa::join('users','user_siswas.user_id','=','users.id')
+                    ->where('user_siswas.id',$update_order->user_siswa_id)
+                    ->first();
+                $data_kelas_program=KelasProgram::select('kelas_programs.*','harga_kelas_programs.jumlah_bulan','harga_kelas_programs.harga','instansi_pendidikans.nama','instansi_pendidikans.alamat')
+                    ->join('harga_kelas_programs','kelas_programs.id','=','harga_kelas_programs.kelas_program_id')
+                    ->join('instansi_pendidikans','kelas_programs.instansi_pendidikan_id','=','instansi_pendidikans.id')
+                    ->where('kelas_programs.id',$update_order->kelas_program_id)
+                    ->first();
+                    // return $data_kelas_program;
+                return view('AdminLTE/invoice', compact('update_order', 'snapToken','data_siswa','data_kelas_program'));
             }
             else {
                 $new_order=RombonganBelajar::select('rombongan_belajars.*','rombongan_belajars.id as id_rombel',
@@ -156,7 +166,15 @@ class OrderController extends Controller
                     'bukti_bayar' => $snapToken,
                 ]); 
 
-                return view('AdminLTE/invoice', compact('update_order', 'snapToken'));
+                $data_siswa=UserSiswa::join('users','user_siswas.user_id','=','users.id')
+                    ->where('user_siswas.id',$update_order->user_siswa_id)
+                    ->first();
+                $data_kelas_program=KelasProgram::select('kelas_programs.*','harga_kelas_programs.jumlah_bulan','harga_kelas_programs.harga','instansi_pendidikans.nama','instansi_pendidikans.alamat')
+                    ->join('harga_kelas_programs','kelas_programs.id','=','harga_kelas_programs.kelas_program_id')
+                    ->join('instansi_pendidikans','kelas_programs.instansi_pendidikan_id','=','instansi_pendidikans.id')
+                    ->where('kelas_programs.id',$update_order->kelas_program_id)
+                    ->first();
+                return view('AdminLTE/invoice', compact('update_order', 'snapToken','data_siswa','data_kelas_program'));
             }
         }
 

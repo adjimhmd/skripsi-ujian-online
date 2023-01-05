@@ -50,6 +50,7 @@
     @else @php($tanda=' - '.ucwords($data_kelas->jurusan))
     @endif
 
+    @if ($status_bayar)
     <div class="row mt-3 mb-2">
 
       <!-- Rombongan Belajar -->
@@ -140,9 +141,10 @@
         <!-- /.card -->
 
       </div>
-      
+
     </div>
     <!-- /.row -->
+    @endif
 
 
     <!-- Materi Pembelajaran -->
@@ -241,71 +243,77 @@
                 @if (Auth::user()->hasRole('siswa'))
 
 
-                @if ($status_bayar->status=='1')
-                <!-- Materi Berbayar -->
-                <div class="card card-light">
+                @if ($status_bayar)
+                  @if ($status_bayar->status=='1')
+                  <!-- Materi Berbayar -->
+                  <div class="card card-light">
 
-                  <div class="card-header">
-                    <h4 class="card-title w-100">
-                      <a class="d-block w-100" data-toggle="collapse" href="#collapseThree">
-                          <b>Materi Berbayar</b>
-                          <span class="badge bg-purple ml-1">
-                            @php ($jml_private = 0)
+                    <div class="card-header">
+                      <h4 class="card-title w-100">
+                        <a class="d-block w-100" data-toggle="collapse" href="#collapseThree">
+                            <b>Materi Berbayar</b>
+                            <span class="badge bg-purple ml-1">
+                              @php ($jml_private = 0)
+                              @foreach($master_materi_tepilihs as $master_materi)
+                              @if($master_materi->status=='private')
+                                @php ($jml_private++)
+                              @endif
+                              @endforeach
+                              {{$jml_private}} 
+                            </span>
+                        </a>
+                      </h4>
+                    </div>
+
+                    <div id="collapseThree" class="collapse" data-parent="#accordion">
+                      <div class="card-body">
+
+                        <table class="table table-hover table-valign-middle" id="example2">
+                          <thead>
+                            <tr>
+                              <th style="width: 4%; text-align: center;">No</th>
+                              <th style="width: 30%;">Deskripsi</th>
+                              <th style="width: 30%;">Kelas & Mata Pelajaran</th>
+                              <th style="width: 25%;">Guru</th>
+                              @if($roles=='guru')
+                              <th style="width: 11%; text-align: center;">Aksi</th>
+                              @endif
+                            </tr>
+                          </thead>
+                          <tbody>
+                            @php ($no = 1)
                             @foreach($master_materi_tepilihs as $master_materi)
                             @if($master_materi->status=='private')
-                              @php ($jml_private++)
+                            <tr>
+                              <td style="text-align: center;">{{$no++}}</td>
+                              <td>
+                                <b>{{$master_materi->deskripsi}}</b><a href="{{$master_materi->link_gdrive}}" target="_blank"> (Lihat Materi)</a><br>
+                              </td>
+                              <td>
+                                <span class="badge bg-secondary shadow-sm">{{'Kelas '. $master_materi->kelas.' '.$master_materi->tingkat.'/sederajat'}}</span>
+                                <span class="badge bg-secondary shadow-sm">{{ucwords($master_materi->nama)}}</span>
+                              </td>
+                              @if($master_materi->foto==null)
+                                <td><img src="{{asset('AdminLTE/dist/img/default-150x150.png')}}" class='img-circle mr-3' alt='User Image' style='max-width:40px'>{{$master_materi->name}}</td>
+                              @else
+                                <td><img src="{{'/'.$master_materi->foto}}" class='img-circle mr-3' alt='User Image' style='max-width:40px'>{{$master_materi->name}}</td>
+                              @endif
+                              @if($roles=='guru')
+                              <td style="text-align: center;">
+                                <button onclick="return false" id="delete_materi" class="btn btn-sm bg-maroon"data-id="{{ $master_materi->id_materi_kelas_program }}">Delete</button>
+                              </td>
+                              @endif
+                            </tr>
                             @endif
                             @endforeach
-                            {{$jml_private}} 
-                          </span>
-                      </a>
-                    </h4>
-                  </div>
+                          </tbody>
+                        </table>
 
-                  <div id="collapseThree" class="collapse" data-parent="#accordion">
-                    <div class="card-body">
-
-                      <table class="table table-hover table-valign-middle" id="example2">
-                        <thead>
-                          <tr>
-                            <th style="width: 4%; text-align: center;">No</th>
-                            <th style="width: 30%;">Deskripsi</th>
-                            <th style="width: 30%;">Kelas & Mata Pelajaran</th>
-                            <th style="width: 25%;">Guru</th>
-                            <th style="width: 11%; text-align: center;">Aksi</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          @php ($no = 1)
-                          @foreach($master_materi_tepilihs as $master_materi)
-                          @if($master_materi->status=='private')
-                          <tr>
-                            <td style="text-align: center;">{{$no++}}</td>
-                            <td>
-                              <b>{{$master_materi->deskripsi}}</b><a href="{{$master_materi->link_gdrive}}" target="_blank"> (Lihat Materi)</a><br>
-                            </td>
-                            <td>
-                              <span class="badge bg-secondary shadow-sm">{{'Kelas '. $master_materi->kelas.' '.$master_materi->tingkat.'/sederajat'}}</span>
-                              <span class="badge bg-secondary shadow-sm">{{ucwords($master_materi->nama)}}</span>
-                            </td>
-                            @if($master_materi->foto==null)
-                              <td><img src="{{asset('AdminLTE/dist/img/default-150x150.png')}}" class='img-circle mr-3' alt='User Image' style='max-width:40px'>{{$master_materi->name}}</td>
-                            @else
-                              <td><img src="{{'/'.$master_materi->foto}}" class='img-circle mr-3' alt='User Image' style='max-width:40px'>{{$master_materi->name}}</td>
-                            @endif
-                            <td style="text-align: center;">
-                              <button onclick="return false" id="delete_materi" class="btn btn-sm bg-maroon"data-id="{{ $master_materi->id_materi_kelas_program }}">Delete</button>
-                            </td>
-                          </tr>
-                          @endif
-                          @endforeach
-                        </tbody>
-                      </table>
-
+                      </div>
                     </div>
+                    
                   </div>
-                  
-                </div>
+                  @endif
                 @endif
 
                 <!-- Materi Gratis -->
@@ -338,7 +346,9 @@
                             <th style="width: 30%;">Deskripsi</th>
                             <th style="width: 30%;">Kelas & Mata Pelajaran</th>
                             <th style="width: 25%;">Guru</th>
+                            @if($roles=='guru')
                             <th style="width: 11%; text-align: center;">Aksi</th>
+                            @endif
                           </tr>
                         </thead>
                         <tbody>
@@ -359,9 +369,11 @@
                             @else
                               <td><img src="{{'/'.$master_materi->foto}}" class='img-circle mr-3' alt='User Image' style='max-width:40px'>{{$master_materi->name}}</td>
                             @endif
+                            @if($roles=='guru')
                             <td style="text-align: center;">
                               <button onclick="return false" id="delete_materi" class="btn btn-sm bg-maroon"data-id="{{ $master_materi->id_materi_kelas_program }}">Delete</button>
                             </td>
+                            @endif
                           </tr>
                           @endif
                           @endforeach
@@ -421,8 +433,8 @@
                               </div> -->
                               <div class="form-group">
                                 <div class="custom-control custom-switch">
-                                  <input type="checkbox" class="custom-control-input" id="{{$master_materi->deskripsi.'_'.$master_materi->id_materi_kelas_program}}" {{$master_materi->status == 'public' ? 'checked' : ''}}>
-                                  <label class="custom-control-label" for="{{$master_materi->deskripsi.'_'.$master_materi->id_materi_kelas_program}}">Aktifkan untuk public</label>
+                                  <input type="checkbox" class="custom-control-input" id="{{$master_materi->id_materi_kelas_program}}" {{$master_materi->status == 'public' ? 'checked' : ''}}>
+                                  <label class="custom-control-label" for="{{$master_materi->id_materi_kelas_program}}">Aktifkan untuk public</label>
                                 </div>
                               </div>
                             </td>
@@ -625,7 +637,7 @@
                           <!-- <button id="btn1">Set Text</button> -->
                           <input id="id" name="id" hidden value="">
                           @if($data_kelas->harga!='0')
-                          <a id="link_bukti" href="#" class="btn btn-sm btn-secondary" target="_blank"><i class="fas fa-file-invoice-dollar"></i> Lihat Bukti Pembayaran</a>
+                          <!-- <a id="link_bukti" href="#" class="btn btn-sm btn-secondary" target="_blank"><i class="fas fa-file-invoice-dollar"></i> Lihat Bukti Pembayaran</a> -->
                           @endif
                           <button id="submit" type="submit" class="btn bg-purple btn-sm btn_terima" hidden><i class="fas fa-user-check"></i> Valid</button>
                         </div>
@@ -733,21 +745,23 @@
     // update private materi
     $('.custom-control-input').click(function () {
       var id_materi_kelas_program = $(this).attr('id');
-      var id = id_materi_kelas_program.split("_");
+      // var id = id_materi_kelas_program.split("_");
       var status = 'private';
 
       if ($('#'+id_materi_kelas_program).is(":checked")){
           status = 'public';
       }
 
+      alert('#'+id_materi_kelas_program);
+
       $.ajax({
           url: "{{ route('update.private') }}",
           type:'POST',
-          data: {_token:'{{ csrf_token() }}',id_materi_kelas_program:id[1],status:status},
+          data: {_token:'{{ csrf_token() }}',id_materi_kelas_program:id_materi_kelas_program,status:status},
           cache: false,
           dataType: 'json',
           success: function(dataResult){
-            toastr.success('Berhasil, materi '+id[0]+' menjadi '+status+'!');
+            toastr.success('Berhasil, materi menjadi '+status+'!');
             // window.location.reload();
           }
       });

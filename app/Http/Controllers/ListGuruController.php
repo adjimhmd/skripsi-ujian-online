@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\GuruInstansi;
+use App\Models\GuruPaketSoal;
 use App\Models\User;
 use App\Models\UserAdminInstansi;
 use App\Models\UserGuru;
@@ -142,9 +143,10 @@ class ListGuruController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        //
-        // dd($request->input('nama'));
+        //return 
+        // dd($request->input('guru_id'));
         GuruInstansi::destroy($id);
+        GuruPaketSoal::where('user_guru_id', $request->input('guru_id'))->delete();
 
         $request->session()->flash('danger', 'Guru '.$request->input('nama').' berhasil dihapus!');
     

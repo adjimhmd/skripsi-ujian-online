@@ -587,7 +587,7 @@ class RuangUjianController extends Controller
             ->where('users.id', '=', $id_user)
             ->get();
 
-        $bank_soals=DetailUjian::select('bank_soals.*','users.name','users.foto')
+        $bank_soals=DetailUjian::select('bank_soals.*','users.name','users.foto','users.id as id_user')
             ->join('bank_soals','detail_ujians.bank_soal_id','=','bank_soals.id')
             ->join('users','bank_soals.user_id','=','users.id')
             ->where('master_ruang_ujian_id',$master_ruang_ujian_id)
@@ -626,7 +626,7 @@ class RuangUjianController extends Controller
         }
 
         
-        return view('AdminLTE/ruang-ujian-detail', compact('nama_instansis','foto_profil','user_admin_instansis','bank_soals','jawabans','detail_ujians','nama_siswa','master_ruang_ujian_id','komentar_ujian'));
+        return view('AdminLTE/ruang-ujian-detail', compact('nama_instansis','foto_profil','user_admin_instansis','bank_soals','jawabans','detail_ujians','nama_siswa','master_ruang_ujian_id','komentar_ujian','id_user'));
 
     }
 

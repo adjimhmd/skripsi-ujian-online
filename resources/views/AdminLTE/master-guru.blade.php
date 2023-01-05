@@ -134,7 +134,7 @@
                   <td style="text-align: center;">{{$list_guru->nuptk}}</td>
                   <td><i class="fas fa-envelope-open-text mr-1"></i>{{$list_guru->email}}<br><i class="fas fa-phone-alt mr-1"></i>{{$list_guru->no_telp}}</td>
                   <td style="text-align: center;">
-                    <button  onclick="return false" class="btn btn-block bg-maroon btn-sm shadow-sm delete_soal" data-id="{{$list_guru->id_guru_instansi}}" data-nama="{{$list_guru->name}}">Hapus</button>
+                    <button  onclick="return false" class="btn btn-block bg-maroon btn-sm shadow-sm delete_soal" data-id="{{$list_guru->id_guru_instansi}}" data-guru="{{$list_guru->user_guru_id}}" data-nama="{{$list_guru->name}}">Hapus</button>
                   </td>
                 </tr>
                 @endif
@@ -213,6 +213,7 @@
   
   $('body').on('click', '.delete_soal', function (event) {
     var id = $(this).data('id');
+    var guru_id = $(this).data('guru');
     var nama = $(this).data('nama');
 
     Swal.fire({
@@ -230,6 +231,7 @@
             _method: "DELETE",
             _token: "{{ csrf_token() }}",
             nama: nama,
+            guru_id: guru_id,
           },
           dataType: 'json',
           success: function (data) {

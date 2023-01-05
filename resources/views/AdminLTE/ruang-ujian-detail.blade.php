@@ -180,8 +180,12 @@
                             
                             <div class="form-group row mb-0">
                               <b class="col-auto col-form-label">Nilai </b>
-                              <div class="col-1 my-auto">
+                              <div class="col-2 my-auto">
+                                @if($id_user==$bank_soal->id_user)
                                 <input type="number" step="0.1" class="form-control form-control-sm" value="{{$detail_ujian->nilai}}" id="nilai_subjektif_{{$detail_ujian->id}}" maxlength="1" min="0" max="1">
+                                @else
+                                <input disabled type="number" step="0.1" class="form-control form-control-sm" value="{{$detail_ujian->nilai}}" id="nilai_subjektif_{{$detail_ujian->id}}" maxlength="1" min="0" max="1">
+                                @endif
                               </div>
                               <div class="col-auto my-auto">
                                 <button type="button" class="btn btn-warning btn-sm update_nilai shadow-sm" data-id-detail-ujian="{{ $detail_ujian->id }}" data-jumlah-soal="{{ $jumlah_soal }}">Update Nilai</button>

@@ -82,7 +82,7 @@
                 @php ($id_master_ruang_ujian='.')
                 @php ($total_nilai='.')
                 @foreach($data_siswas as $data_siswa)
-                  <!-- {{$id_master_ruang_ujian.'!='.$data_siswa->id_master_ruang_ujian.' and '.$total_nilai.'!='.$data_siswa->total_nilai}}<br> -->
+                  <!-- {{$id_master_ruang_ujian.'!='.$data_siswa->id_master_ruang_ujian.' and '.$total_nilai.'!='.$data_siswa->total_nilaii}}<br> -->
                   @if($id_master_ruang_ujian!=$data_siswa->id_master_ruang_ujian)
                   <tr>
                     <td style="text-align: center;">
@@ -100,7 +100,7 @@
                       {{$data_siswa->deskripsi}}
                     </td>
                     <td style="text-align: center;">
-                      {{$data_siswa->total_nilai}}
+                      {{$data_siswa->total_nilaii}}
                     </td>
                     <td>
                       @foreach($komentar_ujian as $ku)
@@ -125,7 +125,7 @@
                   </tr>
                   @endif
                   @php($id_master_ruang_ujian=$data_siswa->id_master_ruang_ujian)
-                  @php($total_nilai=$data_siswa->total_nilai)
+                  @php($total_nilai=$data_siswa->total_nilaii)
                 @endforeach
               </tbody>
             </table>

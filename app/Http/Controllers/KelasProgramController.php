@@ -23,6 +23,7 @@ use App\Models\UserSiswa;
 use DB;
 use Illuminate\Support\Facades\Validator;
 use PDO;
+use Illuminate\Support\Facades\Route;
 
 class KelasProgramController extends Controller
 {
@@ -319,6 +320,7 @@ class KelasProgramController extends Controller
         }
 
         $status_bayar='';
+
         if ($roles=='siswa'){
 
             $user_siswa = UserSiswa::select('id')->where('user_id',$id_user)->first();
@@ -352,7 +354,7 @@ class KelasProgramController extends Controller
                 ->get();
         }
 
-        return view('AdminLTE/kelas_program_detail',compact('nama_instansis','foto_profil','id','user_admin_instansis','data_kelas','siswa_permintaans','tipe_siswa','master_materis','master_materi_tepilihs','status_bayar'));
+        return view('AdminLTE/kelas_program_detail',compact('nama_instansis','foto_profil','id','user_admin_instansis','data_kelas','siswa_permintaans','tipe_siswa','master_materis','master_materi_tepilihs','status_bayar','roles'));
 
             
     }

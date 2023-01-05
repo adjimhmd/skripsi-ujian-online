@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\InstansiPendidikan;
+use App\Models\UserAdminInstansi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Auth;
@@ -48,6 +49,14 @@ class HomeController extends Controller
             return redirect()->route('list-instansi.index');
         }
         else if (Auth::user()->hasRole('adm_instansi')){
+            $id_instansi=UserAdminInstansi::select('instansi_pendidikan_id')->where('user_id',$id)->first();
+            $status_instansi=InstansiPendidikan::select('status')->where('id',$id_instansi->instansi_pendidikan_id)->first();
+            // return $status_instansi->status;
+
+            if($status_instansi->status=="0"){
+                return view('AdminLTE/view_blokir_instansi',compact('user_admin_instansis','foto_profil'));
+            }
+
             return redirect()->route('list-guru.index');
         }
         else if (Auth::user()->hasRole('guru')){

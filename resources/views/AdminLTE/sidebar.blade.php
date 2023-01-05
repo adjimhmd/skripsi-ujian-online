@@ -407,6 +407,15 @@
           </li>
           
           <li class="nav-item">
+            <a href="{{ route('list-instansi.index') }}" class="nav-link {{ Route::currentRouteNamed('list-instansi.index') || Route::currentRouteNamed('show.kelas_program') ? 'active' : '' }}">
+              <i class="nav-icon fas fa-university"></i>
+              <p>
+                Instansi Pendidikan
+              </p>
+            </a>
+          </li>
+          
+          <li class="nav-item">
             <a href="{{ route('profile.index') }}" class="nav-link {{ Route::currentRouteNamed('profile.index') ? 'active' : '' }}">
               <i class="nav-icon nav-icon fas fa-user-cog"></i>
               <p>

@@ -129,7 +129,7 @@
                     @if($nama_instansi->nama!=NULL) <small><i> ({{$nama_instansi->nama}})</i></small> @endif
                   @endforeach</h1>
                 @elseif (Route::currentRouteNamed('kelas-program.index') || Route::currentRouteNamed('kelas-program.show') || Route::currentRouteNamed('show.kelas_program'))
-                  <h1 class="m-0">Data {{$text}}
+                  <h1 class="m-0">Data 
                   @foreach($nama_instansis as $nama_instansi)
                     @if($nama_instansi->nama!=NULL) <small><i> ({{$nama_instansi->nama}})</i></small> @endif
                   @endforeach</h1>
@@ -196,7 +196,7 @@
                     <li class="breadcrumb-item active">Paket Soal</li>
                   @elseif (Route::currentRouteNamed('kelas-program.index') || Route::currentRouteNamed('kelas-program.show') || Route::currentRouteNamed('show.kelas_program'))
                     <li class="breadcrumb-item"><a href="/">Beranda</a></li>
-                    <li class="breadcrumb-item active">Data {{$text}}</li>
+                    <li class="breadcrumb-item active">Data </li>
                   @elseif (Route::currentRouteNamed('ruang-ujian.index') || Route::currentRouteNamed('ruang-ujian.show') || Route::currentRouteNamed('hasil.ujian'))
                     <li class="breadcrumb-item"><a href="/">Beranda</a></li>
                     <li class="breadcrumb-item active">Ruang Ujian</li>

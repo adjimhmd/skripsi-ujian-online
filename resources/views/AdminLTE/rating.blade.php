@@ -220,8 +220,8 @@
                         <small>(Tidak ada penilaian.)</small>
                       @else
                         @for($i=0; $i<$rating->angka; $i++)
-                          @if($i==0)<img class="ml-2" style="width:10px;" src="{{asset('img/star-select.png')}}">@endif
                           <img style="width:10px;" src="{{asset('img/star-select.png')}}">
+
                         @endfor
                       @endif<br></p>
 

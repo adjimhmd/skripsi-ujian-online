@@ -23,6 +23,7 @@ class InstansiPendidikan extends Model
         'tipe',
         'nomor_induk',
         'desa_id',
+        'status',
     ];
 
     public function user_admins()
